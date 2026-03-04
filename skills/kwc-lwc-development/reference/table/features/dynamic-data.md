@@ -1,0 +1,394 @@
+# 动态数据更新
+
+[返回目录](../SKILL.md)
+
+## 功能说明
+
+Table 组件支持动态更新数据源，包括添加数据、删除数据、清空并重新加载等操作。在 LWC 中，需要通过 `@track` 装饰器或重新赋值数组来触发响应式更新。
+
+## 代码示例
+
+### 示例1：添加数据
+
+动态向表格添加新数据行。
+
+**index.html**
+```html
+<template>
+    <div class="toolbar">
+        <sl-button variant="primary" onclick={handleAdd}>添加一行</sl-button>
+        <sl-button onclick={handleAddMultiple}>添加多行</sl-button>
+        <span class="count">共 {dataCount} 条数据</span>
+    </div>
+    <sl-table
+        row-key="id"
+        columns={columns}
+        data-source={dataSource}
+    ></sl-table>
+</template>
+```
+
+**index.js**
+```js
+import { LightningElement, track } from 'lwc';
+import '@kdcloudjs/shoelace/dist/components/table/table.js';
+import '@kdcloudjs/shoelace/dist/components/button/button.js';
+
+export default class AddDataTable extends LightningElement {
+    @track dataSource = [
+        { id: '1', name: '张三', age: 28, department: '研发部' },
+        { id: '2', name: '李四', age: 32, department: '产品部' }
+    ];
+    
+    @track counter = 3;
+
+    columns = [
+        { title: 'ID', dataIndex: 'id', width: 80 },
+        { title: '姓名', dataIndex: 'name', width: 150 },
+        { title: '年龄', dataIndex: 'age', width: 100 },
+        { title: '部门', dataIndex: 'department' }
+    ];
+
+    get dataCount() {
+        return this.dataSource.length;
+    }
+
+    handleAdd() {
+        const newItem = {
+            id: String(this.counter),
+            name: `新员工${this.counter}`,
+            age: 20 + Math.floor(Math.random() * 20),
+            department: ['研发部', '产品部', '设计部'][Math.floor(Math.random() * 3)]
+        };
+        // 必须重新赋值数组以触发更新
+        this.dataSource = [...this.dataSource, newItem];
+        this.counter++;
+    }
+
+    handleAddMultiple() {
+        const newItems = Array.from({ length: 5 }, (_, i) => ({
+            id: String(this.counter + i),
+            name: `批量员工${this.counter + i}`,
+            age: 20 + Math.floor(Math.random() * 20),
+            department: ['研发部', '产品部', '设计部'][Math.floor(Math.random() * 3)]
+        }));
+        this.dataSource = [...this.dataSource, ...newItems];
+        this.counter += 5;
+    }
+}
+```
+
+**index.css**
+```css
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+.count {
+    color: #666;
+    font-size: 14px;
+}
+```
+
+---
+
+### 示例2：删除数据
+
+从表格中删除指定数据行。
+
+**index.html**
+```html
+<template>
+    <sl-table
+        row-key="id"
+        columns={columns}
+        data-source={dataSource}
+    >
+        <template for:each={dataSource} for:item="row">
+            <div key={row.id} slot={row.actionSlot} class="action-cell">
+                <sl-button 
+                    size="small" 
+                    variant="danger"
+                    onclick={handleDelete}
+                    data-id={row.id}
+                >
+                    删除
+                </sl-button>
+            </div>
+        </template>
+    </sl-table>
+</template>
+```
+
+**index.js**
+```js
+import { LightningElement, track } from 'lwc';
+import '@kdcloudjs/shoelace/dist/components/table/table.js';
+import '@kdcloudjs/shoelace/dist/components/button/button.js';
+
+export default class DeleteDataTable extends LightningElement {
+    @track rawData = [
+        { id: '1', name: '张三', email: 'zhangsan@example.com' },
+        { id: '2', name: '李四', email: 'lisi@example.com' },
+        { id: '3', name: '王五', email: 'wangwu@example.com' },
+        { id: '4', name: '赵六', email: 'zhaoliu@example.com' }
+    ];
+
+    columns = [
+        { title: '姓名', dataIndex: 'name', width: 150 },
+        { title: '邮箱', dataIndex: 'email', width: 250 },
+        { title: '操作', dataIndex: 'action', width: 100, slot: true }
+    ];
+
+    get dataSource() {
+        return this.rawData.map(item => ({
+            ...item,
+            actionSlot: `custom-cell-action-${item.id}`
+        }));
+    }
+
+    handleDelete(event) {
+        const id = event.target.dataset.id;
+        this.rawData = this.rawData.filter(item => item.id !== id);
+    }
+}
+```
+
+**index.css**
+```css
+.action-cell {
+    display: flex;
+    justify-content: center;
+}
+```
+
+---
+
+### 示例3：清空并重新加载
+
+清空表格数据并重新加载。
+
+**index.html**
+```html
+<template>
+    <div class="toolbar">
+        <sl-button variant="primary" onclick={handleReload}>重新加载</sl-button>
+        <sl-button variant="default" onclick={handleClear}>清空数据</sl-button>
+    </div>
+    <sl-table
+        row-key="id"
+        loading={isLoading}
+        columns={columns}
+        data-source={dataSource}
+    ></sl-table>
+</template>
+```
+
+**index.js**
+```js
+import { LightningElement, track } from 'lwc';
+import '@kdcloudjs/shoelace/dist/components/table/table.js';
+import '@kdcloudjs/shoelace/dist/components/button/button.js';
+
+export default class ReloadDataTable extends LightningElement {
+    @track isLoading = false;
+    @track dataSource = [];
+
+    columns = [
+        { title: 'ID', dataIndex: 'id', width: 80 },
+        { title: '任务名称', dataIndex: 'task', width: 200 },
+        { title: '状态', dataIndex: 'status', width: 100 },
+        { title: '创建时间', dataIndex: 'createdAt' }
+    ];
+
+    connectedCallback() {
+        this.loadData();
+    }
+
+    handleClear() {
+        this.dataSource = [];
+    }
+
+    handleReload() {
+        this.loadData();
+    }
+
+    async loadData() {
+        this.isLoading = true;
+        this.dataSource = [];  // 先清空
+        
+        // 模拟异步请求
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // 生成新数据
+        const now = new Date();
+        this.dataSource = Array.from({ length: 10 }, (_, index) => ({
+            id: String(index + 1),
+            task: `任务${index + 1}`,
+            status: ['待处理', '进行中', '已完成'][index % 3],
+            createdAt: new Date(now - index * 86400000).toLocaleDateString()
+        }));
+        
+        this.isLoading = false;
+    }
+}
+```
+
+**index.css**
+```css
+.toolbar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+```
+
+---
+
+### 示例4：编辑数据
+
+实现行数据的编辑功能。
+
+**index.html**
+```html
+<template>
+    <sl-table
+        row-key="id"
+        columns={columns}
+        data-source={dataSource}
+    >
+        <template for:each={dataSource} for:item="row">
+            <div key={row.id} slot={row.actionSlot} class="action-cell">
+                <sl-button 
+                    size="small" 
+                    variant="text"
+                    onclick={handleEdit}
+                    data-id={row.id}
+                >
+                    编辑
+                </sl-button>
+            </div>
+        </template>
+    </sl-table>
+    
+    <!-- 编辑弹窗 -->
+    <sl-dialog label="编辑用户" open={isDialogOpen} onsl-hide={handleDialogClose}>
+        <div class="form-item">
+            <label>姓名:</label>
+            <sl-input value={editingName} onsl-input={handleNameChange}></sl-input>
+        </div>
+        <div class="form-item">
+            <label>年龄:</label>
+            <sl-input type="number" value={editingAge} onsl-input={handleAgeChange}></sl-input>
+        </div>
+        <sl-button slot="footer" variant="primary" onclick={handleSave}>保存</sl-button>
+        <sl-button slot="footer" onclick={handleDialogClose}>取消</sl-button>
+    </sl-dialog>
+</template>
+```
+
+**index.js**
+```js
+import { LightningElement, track } from 'lwc';
+import '@kdcloudjs/shoelace/dist/components/table/table.js';
+import '@kdcloudjs/shoelace/dist/components/button/button.js';
+import '@kdcloudjs/shoelace/dist/components/dialog/dialog.js';
+import '@kdcloudjs/shoelace/dist/components/input/input.js';
+
+export default class EditDataTable extends LightningElement {
+    @track rawData = [
+        { id: '1', name: '张三', age: 28 },
+        { id: '2', name: '李四', age: 32 },
+        { id: '3', name: '王五', age: 25 }
+    ];
+    
+    @track isDialogOpen = false;
+    @track editingId = null;
+    @track editingName = '';
+    @track editingAge = '';
+
+    columns = [
+        { title: '姓名', dataIndex: 'name', width: 150 },
+        { title: '年龄', dataIndex: 'age', width: 100 },
+        { title: '操作', dataIndex: 'action', width: 100, slot: true }
+    ];
+
+    get dataSource() {
+        return this.rawData.map(item => ({
+            ...item,
+            actionSlot: `custom-cell-action-${item.id}`
+        }));
+    }
+
+    handleEdit(event) {
+        const id = event.target.dataset.id;
+        const item = this.rawData.find(d => d.id === id);
+        if (item) {
+            this.editingId = id;
+            this.editingName = item.name;
+            this.editingAge = String(item.age);
+            this.isDialogOpen = true;
+        }
+    }
+
+    handleNameChange(event) {
+        this.editingName = event.target.value;
+    }
+
+    handleAgeChange(event) {
+        this.editingAge = event.target.value;
+    }
+
+    handleSave() {
+        this.rawData = this.rawData.map(item => {
+            if (item.id === this.editingId) {
+                return {
+                    ...item,
+                    name: this.editingName,
+                    age: parseInt(this.editingAge, 10)
+                };
+            }
+            return item;
+        });
+        this.handleDialogClose();
+    }
+
+    handleDialogClose() {
+        this.isDialogOpen = false;
+        this.editingId = null;
+        this.editingName = '';
+        this.editingAge = '';
+    }
+}
+```
+
+**index.css**
+```css
+.action-cell {
+    display: flex;
+    justify-content: center;
+}
+.form-item {
+    margin-bottom: 16px;
+}
+.form-item label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 14px;
+    color: #333;
+}
+```
+
+---
+
+## 注意事项
+
+1. **响应式更新**：在 LWC 中，必须通过 `@track` 装饰器声明数据，且需要重新赋值数组（如 `this.data = [...this.data, newItem]`）才能触发视图更新
+2. **避免直接修改**：不要使用 `push`、`splice` 等方法直接修改数组，需要创建新数组
+3. **rowKey 唯一性**：添加新数据时确保 `rowKey` 字段值唯一
+4. **slot 更新**：动态数据场景下，自定义单元格 slot 名称需要在 getter 中动态生成
+5. **性能考虑**：大量数据频繁更新时，建议配合虚拟滚动使用
+
+[返回目录](../SKILL.md)

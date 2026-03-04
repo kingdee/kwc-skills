@@ -1,0 +1,89 @@
+# KWC LWC 开发硬性约束 (Hard Rules)
+
+所有 KWC LWC 开发工作必须严格遵守以下约束。违反这些规则的代码将无法运行或无法通过审查。
+
+## 1. 核心框架与继承
+- **必须使用 KingdeeElement**：所有组件必须继承 `KingdeeElement`。
+  - ❌ 禁止：`import { LightningElement } from 'lwc';`
+  - ✅ 必须：`import { KingdeeElement } from '@kdcloudjs/kwc';`
+- **类定义**：`export default class MyComponent extends KingdeeElement { ... }`
+
+## 2. 模板约束 (Template)
+- **禁止 JavaScript 表达式**：HTML 模板中禁止使用任何 JS 表达式（如 `{a ? b : c}`, `{count + 1}`）。仅允许绑定属性 `{prop}` 或 getter `{getterName}`。
+- **禁止自闭合标签**：自定义组件禁止自闭合（如 `<sl-input />`），必须使用完整闭合标签（`<sl-input></sl-input>`）。
+- **属性绑定**：属性绑定禁止使用引号包裹表达式。
+  - ❌ 禁止：`value="{val}"`
+  - ✅ 必须：`value={val}`
+- **禁止 ID 选择器**：禁止在元素上定义 `id` 属性用于 CSS 或 JS 获取。必须使用 `class`，并通过 `this.template.querySelector('.class')` 获取。
+
+## 3. Shoelace 组件集成规范
+- **通用规则**：
+  - **库说明**：`@kdcloudjs/shoelace` 是 `@shoelace-style/shoelace` 的 **100% 克隆**，标准组件 API **完全一致**，仅新增了部分 KWC 专用组件（如 Table、DatePicker 等）。
+  - **包名**：必须使用 `@kdcloudjs/shoelace`，禁止使用 `@shoelace-style/shoelace`。
+  - **属性名**：HTML 属性名使用小写（kebab-case），如 `readonly`、`help-text`。
+  - **样式**：默认不手工导入主题 CSS，平台通常已注入。
+- **kwc:external 使用规则**：
+  - ✅ **所有Shoelace 组件**（`sl-*`）：**必须**添加 `kwc:external`。
+  - ❌ **KWC 内部组件**（`kwc-*`）：**绝对禁止**添加 `kwc:external`。
+- **属性命名**：属性名必须全小写（kebab-case）。
+  - ❌ 禁止：`pageSize={...}`
+  - ✅ 必须：`page-size={...}`
+- **导入规范**：使用组件前必须导入对应的 `.js` 定义文件。
+  - 示例：`import '@kdcloudjs/shoelace/dist/components/button/button.js';`
+
+## 4. 事件绑定约束 (Event Binding)
+- **HTML 中仅限原生事件**：HTML 模板中只能绑定原生交互事件（`click`, `focus`, `blur`, 键盘/鼠标事件）。
+- **禁止在 HTML 绑定 Shoelace 事件**：严禁在 HTML 中使用 `onslchange`, `onslinput` 等。
+- **JS 中绑定 Shoelace 事件**：
+  - 必须在 `renderedCallback` 中通过 `this.template.querySelector` 获取元素并使用 `addEventListener` 绑定。
+  - **防止重复绑定**：需设置标志位（如 `_eventsBound`）确保只绑定一次。
+- **自定义事件 (子传父)**：
+  - 必须使用 `CustomEvent`，数据存放在 `detail` 中。
+  - 示例：`this.dispatchEvent(new CustomEvent('change', { detail: { value: 'data' } }));`
+
+## 5. JavaScript 与 DOM 规范
+- **禁止引入 CSS 文件**：JS 文件中不需要也不允许引入 CSS 文件（如 `import './exampleComponent.css'`）。样式应通过同名 `.css` 文件自动加载。
+- **DOM 访问限制**：
+  - ❌ 禁止：`document.getElementById`, `window.document`。
+  - ✅ 必须：`this.template.querySelector('.class-name')`。
+- **生命周期**：
+  - ❌ 禁止：调用 `super.connectedCallback()` 或 `super.renderedCallback()`。
+- **数据响应式**：
+  - 修改对象属性或数组元素时，必须通过**重赋值**触发更新（Immutable Pattern）。
+  - ✅ 推荐：`this.items = [...this.items, newItem];`
+
+## 6. KWC 扩展组件文档与约束
+- **标准组件**（Button/Input/Dialog/Icon 等）：参考官网 [https://shoelace.style/](https://shoelace.style/)
+- **扩展组件**：以下组件为 KWC 专用扩展组件（不在 Shoelace 官网），当任务涉及这些组件时，**必须立即调用 Read 工具读取并学习**对应的 reference 文档，严禁凭空猜测 API：
+
+- **表格 (Table)**:
+  - 文档：`./reference/table/index.md` (**涉及表格开发时必须读取**)
+  - `sl-table` 不支持 `sl-table-column`，必须通过 `columns` 属性定义列。
+  - 需导入 `@kdcloudjs/shoelace/dist/components/table/table.js`。
+  - 查阅文档排查 `sl-table` 列未显示等问题。
+- **日期选择器 (DatePicker)**:
+  - 文档：`./reference/sl-datepicker.md`
+  - 严禁使用 `<sl-input type="date">`，必须使用 `<sl-datepicker kwc:external>`。
+  - 需导入 `@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js`。
+- **时间选择器 (TimePicker)**:
+  - 文档：`./reference/sl-timepicker.md`
+- **分页器 (Pagination)**:
+  - 文档：`./reference/sl-pagination.md`
+
+## 7. 常见排障
+1. **构建报错 `(!) Unresolved dependencies`**：例如提示 `sl/tabPanel` 无法解析。这是因为 HTML 中 Shoelace 组件缺少 `kwc:external` 属性，导致编译器将其误判为 LWC 组件。
+2. **组件不渲染样式**：如果构建正常但页面组件无样式（显示为原生标签），检查 JS 中是否导入了组件定义文件。
+3. **事件未触发**：检查是否在 JS 中通过 `addEventListener` 绑定，HTML 中禁止绑定自定义事件。
+4. **找不到 Table 文档**：使用 `reference/table/index.md`，不要查 Shoelace 官网。
+
+## 8. 开发工具与环境约束 (Tools & Environment)
+- **严禁运行 ESLint/Prettier 修复与校验**：**绝对禁止**运行任何形式的 lint fix 命令（无论是手动还是自动，如 `eslint --fix`）。同时，**不需要**关注或修复 ESLint 格式报错。KWC LWC 的特殊语法（如无表达式模板）可能与通用规则冲突，强行修复会导致代码损坏。
+- **严禁修改既有配置**：严禁修改 `.eslintrc`, `.prettierrc` 或 `package.json` 中的构建脚本。
+
+## 9. 强制自检清单
+- [ ] 继承自 `KingdeeElement` 而非 `LightningElement`
+- [ ] **所有Shoelace 组件**（`sl-*`）有 `kwc:external`，**所有KWC 内部组件**（`kwc-*`）没有 `kwc:external`
+- [ ] HTML 无 JS 表达式，无自闭合标签
+- [ ] Shoelace 事件 (`sl-change`) 在 JS 中绑定
+- [ ] 扩展组件（Table/DatePicker等）已参考本地 reference 文档
+- [ ] **未运行**任何 ESLint/Prettier 修复命令，并**忽略**了所有 ESLint 格式报错
