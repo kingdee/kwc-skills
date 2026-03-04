@@ -62,7 +62,7 @@
   - 需导入 `@kdcloudjs/shoelace/dist/components/table/table.js`。
   - 查阅文档排查 `sl-table` 列未显示等问题。
 - **日期选择器 (DatePicker)**:
-  - 文档：`./reference/sl-datepicker.md`
+  - 文档：`./reference/datepicker/index.md`
   - 严禁使用 `<sl-input type="date">`，必须使用 `<sl-datepicker kwc:external>`。
   - 需导入 `@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js`。
 - **时间选择器 (TimePicker)**:
