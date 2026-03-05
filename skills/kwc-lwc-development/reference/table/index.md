@@ -42,13 +42,8 @@
    - `title` 为表头显示文字
    - 建议为每列设置 `width`，未设置宽度的列会自动分配剩余空间
 
-3. **LWC 框架规范**
-   - 模板文件使用 `<template>` 作为根标签
-   - 属性绑定使用 `{property}` 语法
-   - 事件绑定使用 `oneventname={handler}` 格式（如 `onchange={handleChange}`）
-   - 响应式属性使用 `@track` 装饰器
+3. **KWC 框架规范**
    - **布尔属性必须显式赋值**：使用 `bordered="true"` 而非仅写 `bordered`（在 LWC 动态绑定中使用 `bordered={isBordered}`）
-   - 对象/数组类型属性（如 `columns`、`data-source`、`row-selection`）必须通过 JS 属性绑定
 
 4. **组件标签名**
    - 标签名为 `sl-table`
