@@ -22,6 +22,7 @@
   - **包名**：必须使用 `@kdcloudjs/shoelace`，禁止使用 `@shoelace-style/shoelace`。
   - **属性名**：HTML 属性名使用小写（kebab-case），如 `readonly`、`help-text`。
   - **样式**：默认不手工导入主题 CSS，平台通常已注入。
+  - **布尔属性必须显式赋值**：使用 `bordered="true"` 而非仅写 `bordered`（在 KWC 动态绑定中使用 `bordered={isBordered}`）
 - **kwc:external 使用规则**：
   - ✅ **所有Shoelace 组件**（`sl-*`）：**必须**添加 `kwc:external`。
   - ❌ **KWC 内部组件**（`kwc-*`）：**绝对禁止**添加 `kwc:external`。

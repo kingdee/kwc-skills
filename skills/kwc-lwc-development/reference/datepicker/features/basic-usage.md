@@ -74,25 +74,10 @@ export default class DefaultValueDatepicker extends KingdeeElement {
     renderedCallback() {
         if (this._eventsBound) return;
         this._eventsBound = true;
-        this.bindShoelaceEvents();
-    }
-
-    get shoelaceEventBindings() {
-        return [
-            ['.datepicker-el', 'sl-change', this.handleChange]
-        ];
-    }
-
-    bindShoelaceEvents() {
-        this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
-            const el = this.template.querySelector(selector);
-            if (el) {
-                const boundHandler = handler.bind(this);
-                el.addEventListener(event, boundHandler);
-                return { el, event, boundHandler };
-            }
-            return null;
-        }).filter(Boolean);
+        const datepicker = this.template.querySelector('.datepicker-el');
+        if (datepicker) {
+            datepicker.addEventListener('sl-change', this.handleChange.bind(this));
+        }
     }
 
     handleChange(event) {
@@ -337,26 +322,11 @@ export default class ManualInputDatepicker extends KingdeeElement {
     renderedCallback() {
         if (this._eventsBound) return;
         this._eventsBound = true;
-        this.bindShoelaceEvents();
-    }
-
-    get shoelaceEventBindings() {
-        return [
-            ['.datepicker-el', 'sl-change', this.handleChange],
-            ['.datepicker-el', 'sl-input', this.handleInput]
-        ];
-    }
-
-    bindShoelaceEvents() {
-        this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
-            const el = this.template.querySelector(selector);
-            if (el) {
-                const boundHandler = handler.bind(this);
-                el.addEventListener(event, boundHandler);
-                return { el, event, boundHandler };
-            }
-            return null;
-        }).filter(Boolean);
+        const datepicker = this.template.querySelector('.datepicker-el');
+        if (datepicker) {
+            datepicker.addEventListener('sl-change', this.handleChange.bind(this));
+            datepicker.addEventListener('sl-input', this.handleInput.bind(this));
+        }
     }
 
     handleChange(event) {

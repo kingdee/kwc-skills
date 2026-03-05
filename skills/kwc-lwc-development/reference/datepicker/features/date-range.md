@@ -53,25 +53,10 @@ export default class MinDatePicker extends KingdeeElement {
     renderedCallback() {
         if (this._eventsBound) return;
         this._eventsBound = true;
-        this.bindShoelaceEvents();
-    }
-
-    get shoelaceEventBindings() {
-        return [
-            ['.datepicker-el', 'sl-change', this.handleChange]
-        ];
-    }
-
-    bindShoelaceEvents() {
-        this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
-            const el = this.template.querySelector(selector);
-            if (el) {
-                const boundHandler = handler.bind(this);
-                el.addEventListener(event, boundHandler);
-                return { el, event, boundHandler };
-            }
-            return null;
-        }).filter(Boolean);
+        const datepicker = this.template.querySelector('.datepicker-el');
+        if (datepicker) {
+            datepicker.addEventListener('sl-change', this.handleChange.bind(this));
+        }
     }
 
     get today() {
@@ -142,25 +127,10 @@ export default class MaxDatePicker extends KingdeeElement {
     renderedCallback() {
         if (this._eventsBound) return;
         this._eventsBound = true;
-        this.bindShoelaceEvents();
-    }
-
-    get shoelaceEventBindings() {
-        return [
-            ['.datepicker-el', 'sl-change', this.handleChange]
-        ];
-    }
-
-    bindShoelaceEvents() {
-        this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
-            const el = this.template.querySelector(selector);
-            if (el) {
-                const boundHandler = handler.bind(this);
-                el.addEventListener(event, boundHandler);
-                return { el, event, boundHandler };
-            }
-            return null;
-        }).filter(Boolean);
+        const datepicker = this.template.querySelector('.datepicker-el');
+        if (datepicker) {
+            datepicker.addEventListener('sl-change', this.handleChange.bind(this));
+        }
     }
 
     get today() {
@@ -220,25 +190,10 @@ export default class DateRangePicker extends KingdeeElement {
     renderedCallback() {
         if (this._eventsBound) return;
         this._eventsBound = true;
-        this.bindShoelaceEvents();
-    }
-
-    get shoelaceEventBindings() {
-        return [
-            ['.datepicker-el', 'sl-change', this.handleChange]
-        ];
-    }
-
-    bindShoelaceEvents() {
-        this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
-            const el = this.template.querySelector(selector);
-            if (el) {
-                const boundHandler = handler.bind(this);
-                el.addEventListener(event, boundHandler);
-                return { el, event, boundHandler };
-            }
-            return null;
-        }).filter(Boolean);
+        const datepicker = this.template.querySelector('.datepicker-el');
+        if (datepicker) {
+            datepicker.addEventListener('sl-change', this.handleChange.bind(this));
+        }
     }
 
     handleChange(event) {
@@ -401,16 +356,15 @@ export default class DynamicRangePicker extends KingdeeElement {
     handleChange(event) {
         console.log('选中日期:', event.target.value);
     }
-
-    disconnectedCallback() {
-        if (this._boundHandlers) {
-            this._boundHandlers.forEach(({ el, event, boundHandler }) => {
-                el.removeEventListener(event, boundHandler);
-            });
-            this._boundHandlers = [];
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        const datepicker = this.template.querySelector('.datepicker-el');
+        if (datepicker) {
+            datepicker.addEventListener('sl-change', this.handleChange.bind(this));
         }
-        this._eventsBound = false;
     }
+
 }
 ```
 
