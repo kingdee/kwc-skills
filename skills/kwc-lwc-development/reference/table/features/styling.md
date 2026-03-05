@@ -1,4 +1,4 @@
-[< 返回 Table 主文档](../SKILL.md)
+[< 返回 Table 主文档](../index.md)
 
 # 样式定制 (Styling Customization)
 
@@ -50,7 +50,7 @@ Table 组件提供丰富的 CSS 自定义属性和 CSS Part，允许深度定制
 ```html
 <template>
   <div class="custom-theme-table">
-    <sl-table
+    <sl-table kwc:external
       row-key="id"
       columns={columns}
       data-source={dataSource}
@@ -63,10 +63,10 @@ Table 组件提供丰富的 CSS 自定义属性和 CSS Part，允许深度定制
 
 ### index.js
 ```javascript
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class CustomThemeTable extends LightningElement {
+export default class CustomThemeTable extends KingdeeElement {
   @track columns = [
     { dataIndex: 'id', title: 'ID', width: 80 },
     { dataIndex: 'name', title: '姓名', width: 150 },
@@ -105,11 +105,11 @@ export default class CustomThemeTable extends LightningElement {
 <template>
   <div class={wrapperClass}>
     <div class="toolbar">
-      <sl-button onclick={toggleDarkMode}>
+      <sl-button kwc:external onclick={toggleDarkMode}>
         {toggleButtonText}
       </sl-button>
     </div>
-    <sl-table
+    <sl-table kwc:external
       row-key="id"
       columns={columns}
       data-source={dataSource}
@@ -122,11 +122,11 @@ export default class CustomThemeTable extends LightningElement {
 
 ### index.js
 ```javascript
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class DarkModeTable extends LightningElement {
+export default class DarkModeTable extends KingdeeElement {
   @track isDarkMode = false;
 
   @track columns = [
@@ -159,23 +159,23 @@ export default class DarkModeTable extends LightningElement {
 ### index.css
 ```css
 .table-wrapper {
-  padding: 16px;
-  border-radius: 8px;
+  padding: var(--sl-spacing-medium);
+  border-radius: var(--sl-border-radius-large);
   transition: all 0.3s ease;
 }
 
 .toolbar {
-  margin-bottom: 16px;
+  margin-bottom: var(--sl-spacing-medium);
 }
 
 /* 浅色模式 */
 .light-mode {
-  background-color: #ffffff;
+  background-color: var(--sl-color-neutral-0);
 }
 
 .light-mode sl-table {
   --sl-table-cell-color: #374151;
-  --sl-table-cell-background: #ffffff;
+  --sl-table-cell-background: var(--sl-color-neutral-0);
   --sl-table-header-background: #f9fafb;
   --sl-table-cell-border: #e5e7eb;
   --sl-table-row-background-hover: #f3f4f6;
@@ -207,7 +207,7 @@ export default class DarkModeTable extends LightningElement {
 ```html
 <template>
   <div class="parts-styled-table">
-    <sl-table
+    <sl-table kwc:external
       row-key="id"
       columns={columns}
       data-source={dataSource}
@@ -220,10 +220,10 @@ export default class DarkModeTable extends LightningElement {
 
 ### index.js
 ```javascript
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class PartsStyledTable extends LightningElement {
+export default class PartsStyledTable extends KingdeeElement {
   @track columns = [
     { dataIndex: 'rank', title: '排名', width: 80 },
     { dataIndex: 'team', title: '球队', width: 200 },
@@ -285,14 +285,14 @@ export default class PartsStyledTable extends LightningElement {
 <template>
   <div class="density-demo">
     <div class="toolbar">
-      <sl-button-group>
-        <sl-button onclick={setCompact} variant={compactVariant}>紧凑</sl-button>
-        <sl-button onclick={setDefault} variant={defaultVariant}>默认</sl-button>
-        <sl-button onclick={setLoose} variant={looseVariant}>宽松</sl-button>
+      <sl-button-group kwc:external>
+        <sl-button kwc:external onclick={setCompact} variant={compactVariant}>紧凑</sl-button>
+        <sl-button kwc:external onclick={setDefault} variant={defaultVariant}>默认</sl-button>
+        <sl-button kwc:external onclick={setLoose} variant={looseVariant}>宽松</sl-button>
       </sl-button-group>
     </div>
     <div class={tableClass}>
-      <sl-table
+      <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -306,12 +306,12 @@ export default class PartsStyledTable extends LightningElement {
 
 ### index.js
 ```javascript
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 import '@kdcloudjs/shoelace/dist/components/button-group/button-group.js';
 
-export default class DensityTable extends LightningElement {
+export default class DensityTable extends KingdeeElement {
   @track density = 'default'; // compact | default | loose
 
   @track columns = [
@@ -362,30 +362,30 @@ export default class DensityTable extends LightningElement {
 ### index.css
 ```css
 .density-demo .toolbar {
-  margin-bottom: 16px;
+  margin-bottom: var(--sl-spacing-medium);
 }
 
 /* 紧凑模式 */
 .table-compact sl-table {
-  --sl-table-font-size: 12px;
-  --sl-table-cell-padding: 8px;
+  --sl-table-font-size: var(--sl-font-size-x-small);
+  --sl-table-cell-padding: var(--sl-spacing-x-small);
   --sl-table-cell-line-height: 32px;
   --sl-table-header-line-height: 36px;
-  --sl-table-column-header-padding: 8px;
+  --sl-table-column-header-padding: var(--sl-spacing-x-small);
 }
 
 /* 默认模式 */
 .table-default sl-table {
-  --sl-table-font-size: 14px;
-  --sl-table-cell-padding: 16px;
+  --sl-table-font-size: var(--sl-font-size-small);
+  --sl-table-cell-padding: var(--sl-spacing-medium);
   --sl-table-cell-line-height: 48px;
   --sl-table-header-line-height: 44px;
-  --sl-table-column-header-padding: 16px;
+  --sl-table-column-header-padding: var(--sl-spacing-medium);
 }
 
 /* 宽松模式 */
 .table-loose sl-table {
-  --sl-table-font-size: 16px;
+  --sl-table-font-size: var(--sl-font-size-medium);
   --sl-table-cell-padding: 24px;
   --sl-table-cell-line-height: 64px;
   --sl-table-header-line-height: 56px;
@@ -404,15 +404,15 @@ export default class DensityTable extends LightningElement {
 <template>
   <div class="brand-demo">
     <div class="toolbar">
-      <sl-select value={brand} onsl-change={handleBrandChange}>
-        <sl-option value="default">默认品牌</sl-option>
-        <sl-option value="brand-a">品牌 A（蓝色）</sl-option>
-        <sl-option value="brand-b">品牌 B（绿色）</sl-option>
-        <sl-option value="brand-c">品牌 C（橙色）</sl-option>
+      <sl-select kwc:external class="brand-select" value={brand}>
+        <sl-option kwc:external value="default">默认品牌</sl-option>
+        <sl-option kwc:external value="brand-a">品牌 A（蓝色）</sl-option>
+        <sl-option kwc:external value="brand-b">品牌 B（绿色）</sl-option>
+        <sl-option kwc:external value="brand-c">品牌 C（橙色）</sl-option>
       </sl-select>
     </div>
     <div class={brand}>
-      <sl-table
+      <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -427,12 +427,12 @@ export default class DensityTable extends LightningElement {
 
 ### index.js
 ```javascript
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/select/select.js';
 import '@kdcloudjs/shoelace/dist/components/option/option.js';
 
-export default class BrandTable extends LightningElement {
+export default class BrandTable extends KingdeeElement {
   @track brand = 'default';
 
   @track columns = [
@@ -452,6 +452,15 @@ export default class BrandTable extends LightningElement {
     type: 'checkbox'
   };
 
+  renderedCallback() {
+    if (this._eventsBound) return;
+    this._eventsBound = true;
+    const select = this.template.querySelector('.brand-select');
+    if (select) {
+      select.addEventListener('sl-change', this.handleBrandChange.bind(this));
+    }
+  }
+
   handleBrandChange(event) {
     this.brand = event.target.value;
   }
@@ -461,7 +470,7 @@ export default class BrandTable extends LightningElement {
 ### index.css
 ```css
 .brand-demo .toolbar {
-  margin-bottom: 16px;
+  margin-bottom: var(--sl-spacing-medium);
 }
 
 .brand-demo sl-select {
@@ -513,7 +522,7 @@ export default class BrandTable extends LightningElement {
 ```html
 <template>
   <div class="striped-table">
-    <sl-table
+    <sl-table kwc:external
       row-key="id"
       columns={columns}
       data-source={dataSource}
@@ -526,10 +535,10 @@ export default class BrandTable extends LightningElement {
 
 ### index.js
 ```javascript
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class StripedTable extends LightningElement {
+export default class StripedTable extends KingdeeElement {
   @track columns = [
     { dataIndex: 'date', title: '日期', width: 150 },
     { dataIndex: 'event', title: '事件', width: 250 },
@@ -562,7 +571,7 @@ export default class StripedTable extends LightningElement {
 
 /* 偶数行（0, 2, 4...） */
 .striped-table :global(.row-even) td {
-  background-color: #ffffff !important;
+  background-color: var(--sl-color-neutral-0) !important;
 }
 
 /* 奇数行（1, 3, 5...） */
@@ -595,4 +604,4 @@ export default class StripedTable extends LightningElement {
 
 7. **响应式设计**：可结合媒体查询动态调整表格密度，在移动端使用紧凑模式，桌面端使用默认或宽松模式。
 
-[< 返回 Table 主文档](../SKILL.md)
+[< 返回 Table 主文档](../index.md)

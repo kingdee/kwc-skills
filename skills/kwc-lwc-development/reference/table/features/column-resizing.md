@@ -1,6 +1,6 @@
 # 列宽调整
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -33,7 +33,7 @@ Table 组件支持通过拖拽调整列宽。通过设置 `enable-column-resizin
 ```html
 <template>
     <p class="tip">拖拽列边框可调整列宽</p>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         bordered="true"
         enable-column-resizing="true"
@@ -45,10 +45,10 @@ Table 组件支持通过拖拽调整列宽。通过设置 `enable-column-resizin
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class ResizableTable extends LightningElement {
+export default class ResizableTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { title: '年龄', dataIndex: 'age', width: 100 },
@@ -67,9 +67,9 @@ export default class ResizableTable extends LightningElement {
 **index.css**
 ```css
 .tip {
-    margin-bottom: 12px;
-    color: #666;
-    font-size: 14px;
+    margin-bottom: var(--sl-spacing-small);
+    color: var(--sl-color-neutral-600);
+    font-size: var(--sl-font-size-small);
 }
 ```
 
@@ -83,7 +83,7 @@ export default class ResizableTable extends LightningElement {
 ```html
 <template>
     <p class="tip">「年龄」列不可调整宽度</p>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         bordered="true"
         enable-column-resizing="true"
@@ -95,10 +95,10 @@ export default class ResizableTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class PartialResizableTable extends LightningElement {
+export default class PartialResizableTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { title: '年龄', dataIndex: 'age', width: 100, enableResizing: false },  // 禁止调整
@@ -117,9 +117,9 @@ export default class PartialResizableTable extends LightningElement {
 **index.css**
 ```css
 .tip {
-    margin-bottom: 12px;
-    color: #faad14;
-    font-size: 14px;
+    margin-bottom: var(--sl-spacing-small);
+    color: var(--sl-color-warning-600);
+    font-size: var(--sl-font-size-small);
 }
 ```
 
@@ -136,7 +136,7 @@ export default class PartialResizableTable extends LightningElement {
         <p>列宽信息:</p>
         <pre>{columnSizes}</pre>
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         bordered="true"
         enable-column-resizing="true"
@@ -149,10 +149,10 @@ export default class PartialResizableTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class ResizeCallbackTable extends LightningElement {
+export default class ResizeCallbackTable extends KingdeeElement {
     @track columnSizes = '{}';
 
     columns = [
@@ -180,21 +180,21 @@ export default class ResizeCallbackTable extends LightningElement {
 **index.css**
 ```css
 .info-panel {
-    margin-bottom: 16px;
-    padding: 12px;
-    background: #f5f5f5;
-    border-radius: 4px;
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-neutral-100);
+    border-radius: var(--sl-border-radius-medium);
 }
 .info-panel p {
-    margin: 0 0 8px;
+    margin: 0 0 var(--sl-spacing-x-small);
 }
 .info-panel pre {
     margin: 0;
-    padding: 8px;
-    background: #fff;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
-    font-size: 12px;
+    padding: var(--sl-spacing-x-small);
+    background: var(--sl-color-neutral-0);
+    border: 1px solid var(--sl-color-neutral-300);
+    border-radius: var(--sl-border-radius-medium);
+    font-size: var(--sl-font-size-x-small);
     max-height: 100px;
     overflow: auto;
 }
@@ -210,9 +210,9 @@ export default class ResizeCallbackTable extends LightningElement {
 ```html
 <template>
     <div class="toolbar">
-        <sl-button size="small" onclick={resetColumnWidths}>重置列宽</sl-button>
+        <sl-button kwc:external size="small" onclick={resetColumnWidths}>重置列宽</sl-button>
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         bordered="true"
         enable-column-resizing="true"
@@ -225,7 +225,7 @@ export default class ResizeCallbackTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
@@ -237,7 +237,7 @@ const DEFAULT_WIDTHS = {
     address: 250
 };
 
-export default class PersistentWidthTable extends LightningElement {
+export default class PersistentWidthTable extends KingdeeElement {
     @track savedWidths = {};
 
     dataSource = [
@@ -280,7 +280,7 @@ export default class PersistentWidthTable extends LightningElement {
 **index.css**
 ```css
 .toolbar {
-    margin-bottom: 16px;
+    margin-bottom: var(--sl-spacing-medium);
 }
 ```
 
@@ -294,4 +294,4 @@ export default class PersistentWidthTable extends LightningElement {
 4. **table-layout**：启用列宽调整后，表格使用 `table-layout: auto`，不启用时使用 `table-layout: fixed`
 5. **回调参数**：`on-column-resize` 回调参数是一个对象，key 为 dataIndex，value 为新的宽度值
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

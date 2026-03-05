@@ -1,6 +1,6 @@
 # 日期范围限制
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -30,14 +30,13 @@
 **index.html**
 ```html
 <template>
-    <sl-datepicker
+    <sl-datepicker kwc:external class="datepicker-el"
         label="预约日期"
         min={today}
         placeholder="只能选择今天及之后"
         help-text={helpText}
-        onsl-change={handleChange}
     ></sl-datepicker>
-    <div class="result" lwc:if={selectedDate}>
+    <div class="result" kwc:if={selectedDate}>
         选中日期: {selectedDate}
     </div>
 </template>
@@ -45,11 +44,20 @@
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 
-export default class MinDatePicker extends LightningElement {
+export default class MinDatePicker extends KingdeeElement {
     @track selectedDate = '';
+
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        const datepicker = this.template.querySelector('.datepicker-el');
+        if (datepicker) {
+            datepicker.addEventListener('sl-change', this.handleChange.bind(this));
+        }
+    }
 
     get today() {
         const now = new Date();
@@ -72,11 +80,11 @@ export default class MinDatePicker extends LightningElement {
 **index.css**
 ```css
 .result {
-    margin-top: 12px;
-    padding: 12px;
-    background: #f6ffed;
-    border-radius: 4px;
-    font-size: 14px;
+    margin-top: var(--sl-spacing-small);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-success-100);
+    border-radius: var(--sl-border-radius-medium);
+    font-size: var(--sl-font-size-small);
 }
 ```
 
@@ -89,23 +97,31 @@ export default class MinDatePicker extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-datepicker
+    <sl-datepicker kwc:external class="datepicker-el"
         label="出生日期"
         max={today}
         placeholder="请选择出生日期"
         help-text="不能选择未来的日期"
-        onsl-change={handleChange}
     ></sl-datepicker>
 </template>
 ```
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 
-export default class MaxDatePicker extends LightningElement {
+export default class MaxDatePicker extends KingdeeElement {
     @track selectedDate = '';
+
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        const datepicker = this.template.querySelector('.datepicker-el');
+        if (datepicker) {
+            datepicker.addEventListener('sl-change', this.handleChange.bind(this));
+        }
+    }
 
     get today() {
         const now = new Date();
@@ -130,15 +146,14 @@ export default class MaxDatePicker extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-datepicker
+    <sl-datepicker kwc:external class="datepicker-el"
         label="活动报名日期"
         min="2024-03-01"
         max="2024-03-31"
         placeholder="请选择 3 月份的日期"
         help-text="报名时间：2024年3月1日 至 2024年3月31日"
-        onsl-change={handleChange}
     ></sl-datepicker>
-    <div class="result" lwc:if={selectedDate}>
+    <div class="result" kwc:if={selectedDate}>
         报名日期: {selectedDate}
     </div>
 </template>
@@ -146,11 +161,20 @@ export default class MaxDatePicker extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 
-export default class DateRangePicker extends LightningElement {
+export default class DateRangePicker extends KingdeeElement {
     @track selectedDate = '';
+
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        const datepicker = this.template.querySelector('.datepicker-el');
+        if (datepicker) {
+            datepicker.addEventListener('sl-change', this.handleChange.bind(this));
+        }
+    }
 
     handleChange(event) {
         this.selectedDate = event.target.value;
@@ -161,11 +185,11 @@ export default class DateRangePicker extends LightningElement {
 **index.css**
 ```css
 .result {
-    margin-top: 12px;
-    padding: 12px;
-    background: #e6f7ff;
-    border-radius: 4px;
-    font-size: 14px;
+    margin-top: var(--sl-spacing-small);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-primary-100);
+    border-radius: var(--sl-border-radius-medium);
+    font-size: var(--sl-font-size-small);
 }
 ```
 
@@ -182,39 +206,38 @@ export default class DateRangePicker extends LightningElement {
         <div class="form-item">
             <label>范围类型</label>
             <div class="button-group">
-                <sl-button
+                <sl-button kwc:external
                     variant={isThisWeek}
                     onclick={setThisWeek}
                 >本周</sl-button>
-                <sl-button
+                <sl-button kwc:external
                     variant={isThisMonth}
                     onclick={setThisMonth}
                 >本月</sl-button>
-                <sl-button
+                <sl-button kwc:external
                     variant={isThisYear}
                     onclick={setThisYear}
                 >本年</sl-button>
             </div>
         </div>
     </div>
-    <sl-datepicker
+    <sl-datepicker kwc:external class="datepicker-el"
         label="选择日期"
         min={minDate}
         max={maxDate}
         placeholder="请在范围内选择"
         help-text={rangeText}
-        onsl-change={handleChange}
     ></sl-datepicker>
 </template>
 ```
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class DynamicRangePicker extends LightningElement {
+export default class DynamicRangePicker extends KingdeeElement {
     @track minDate = '';
     @track maxDate = '';
     @track rangeType = 'week';
@@ -279,23 +302,32 @@ export default class DynamicRangePicker extends LightningElement {
     handleChange(event) {
         console.log('选中日期:', event.target.value);
     }
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        const datepicker = this.template.querySelector('.datepicker-el');
+        if (datepicker) {
+            datepicker.addEventListener('sl-change', this.handleChange.bind(this));
+        }
+    }
+
 }
 ```
 
 **index.css**
 ```css
 .form-row {
-    margin-bottom: 16px;
+    margin-bottom: var(--sl-spacing-medium);
 }
 .form-item label {
     display: block;
-    font-size: 14px;
+    font-size: var(--sl-font-size-small);
     font-weight: 500;
-    margin-bottom: 8px;
+    margin-bottom: var(--sl-spacing-x-small);
 }
 .button-group {
     display: flex;
-    gap: 8px;
+    gap: var(--sl-spacing-x-small);
 }
 ```
 
@@ -309,25 +341,23 @@ export default class DynamicRangePicker extends LightningElement {
 ```html
 <template>
     <div class="date-range-group">
-        <sl-datepicker
+        <sl-datepicker kwc:external class="start-datepicker"
             label="开始日期"
             max={endDate}
             placeholder="选择开始日期"
             value={startDate}
-            onsl-change={handleStartChange}
         ></sl-datepicker>
 
         <span class="separator">至</span>
 
-        <sl-datepicker
+        <sl-datepicker kwc:external class="end-datepicker"
             label="结束日期"
             min={startDate}
             placeholder="选择结束日期"
             value={endDate}
-            onsl-change={handleEndChange}
         ></sl-datepicker>
     </div>
-    <div class="result" lwc:if={rangeText}>
+    <div class="result" kwc:if={rangeText}>
         选择的日期范围: {rangeText}
     </div>
 </template>
@@ -335,12 +365,25 @@ export default class DynamicRangePicker extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 
-export default class LinkedDateRange extends LightningElement {
+export default class LinkedDateRange extends KingdeeElement {
     @track startDate = '';
     @track endDate = '';
+
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        const start_datepicker = this.template.querySelector('.start-datepicker');
+        if (start_datepicker) {
+            start_datepicker.addEventListener('sl-change', this.handleStartChange.bind(this));
+        }
+        const end_datepicker = this.template.querySelector('.end-datepicker');
+        if (end_datepicker) {
+            end_datepicker.addEventListener('sl-change', this.handleEndChange.bind(this));
+        }
+    }
 
     get rangeText() {
         if (this.startDate && this.endDate) {
@@ -370,19 +413,19 @@ export default class LinkedDateRange extends LightningElement {
 .date-range-group {
     display: flex;
     align-items: flex-end;
-    gap: 12px;
+    gap: var(--sl-spacing-small);
 }
 .separator {
-    padding-bottom: 8px;
-    color: #999;
-    font-size: 14px;
+    padding-bottom: var(--sl-spacing-x-small);
+    color: var(--sl-color-neutral-500);
+    font-size: var(--sl-font-size-small);
 }
 .result {
-    margin-top: 16px;
-    padding: 12px;
-    background: #e6f7ff;
-    border-radius: 4px;
-    font-size: 14px;
+    margin-top: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-primary-100);
+    border-radius: var(--sl-border-radius-medium);
+    font-size: var(--sl-font-size-small);
 }
 ```
 
@@ -396,4 +439,4 @@ export default class LinkedDateRange extends LightningElement {
 4. **"今天"按钮**：日历面板底部的"今天"快捷按钮在今天日期不在 min/max 范围内时也会被禁用
 5. **动态更新**：修改 `min` 或 `max` 后，日历面板会自动更新禁用状态
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

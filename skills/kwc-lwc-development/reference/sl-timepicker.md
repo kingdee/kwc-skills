@@ -114,7 +114,7 @@ export default class TimepickerPlaceholder extends KingdeeElement {}
 .timepicker-group {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--sl-spacing-small);
   width: 230px;
 }
 ```
@@ -184,7 +184,7 @@ export default class TimepickerPill extends KingdeeElement {}
 .timepicker-group {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sl-spacing-medium);
   width: 230px;
 }
 ```
@@ -249,7 +249,7 @@ export default class TimepickerReadonly extends KingdeeElement {}
 .time-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sl-spacing-medium);
   width: 230px;
 }
 ```
@@ -291,8 +291,8 @@ export default class TimepickerRequired extends KingdeeElement {
 ```css
 .overflow-container {
   overflow: hidden;
-  border: 1px solid #ccc;
-  padding: 16px;
+  border: 1px solid var(--sl-color-neutral-300);
+  padding: var(--sl-spacing-medium);
   height: 80px;
 }
 ```
@@ -325,17 +325,17 @@ export default class TimepickerHoist extends KingdeeElement {}
 .timepicker-demo {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sl-spacing-medium);
   width: 280px;
 }
 .event-info {
-  padding: 12px;
-  background: #f5f7fa;
-  border-radius: 4px;
+  padding: var(--sl-spacing-small);
+  background: var(--sl-color-neutral-100);
+  border-radius: var(--sl-border-radius-medium);
 }
 .event-info p {
-  margin: 4px 0;
-  font-size: 14px;
+  margin: var(--sl-spacing-2x-small) 0;
+  font-size: var(--sl-font-size-small);
 }
 ```
 ```javascript
@@ -407,12 +407,12 @@ export default class TimepickerEvent extends KingdeeElement {
 .timepicker-demo {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--sl-spacing-small);
   width: 230px;
 }
 .event-log {
-  font-size: 14px;
-  color: #666;
+  font-size: var(--sl-font-size-small);
+  color: var(--sl-color-neutral-600);
 }
 ```
 ```javascript
@@ -476,12 +476,12 @@ export default class TimepickerFocusBlur extends KingdeeElement {
 .timepicker-demo {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sl-spacing-medium);
   width: 280px;
 }
 .controls {
   display: flex;
-  gap: 8px;
+  gap: var(--sl-spacing-x-small);
 }
 ```
 ```javascript
@@ -547,7 +547,7 @@ export default class TimepickerDynamic extends KingdeeElement {
 .timepicker-demo {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--sl-spacing-small);
   width: 280px;
 }
 ```
@@ -625,11 +625,11 @@ export default class TimepickerValidation extends KingdeeElement {
 .time-range {
   display: flex;
   align-items: flex-end;
-  gap: 8px;
+  gap: var(--sl-spacing-x-small);
 }
 .range-separator {
   line-height: 40px;
-  color: #999;
+  color: var(--sl-color-neutral-500);
 }
 ```
 ```javascript

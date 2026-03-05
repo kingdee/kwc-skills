@@ -1,6 +1,6 @@
 # 校验
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -50,34 +50,42 @@
 <template>
     <form onsubmit={handleSubmit}>
         <div class="form-group">
-            <sl-datepicker
+            <sl-datepicker kwc:external class="datepicker-el"
                 name="birthday"
                 label="出生日期"
                 required="true"
                 placeholder="此字段必填"
-                onsl-invalid={handleInvalid}
             ></sl-datepicker>
         </div>
-        <sl-button type="submit" variant="primary">提交</sl-button>
+        <sl-button kwc:external type="submit" variant="primary">提交</sl-button>
     </form>
-    <div class="message error" lwc:if={errorMsg}>{errorMsg}</div>
-    <div class="message success" lwc:if={successMsg}>{successMsg}</div>
+    <div class="message error" kwc:if={errorMsg}>{errorMsg}</div>
+    <div class="message success" kwc:if={successMsg}>{successMsg}</div>
 </template>
 ```
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class RequiredValidation extends LightningElement {
+export default class RequiredValidation extends KingdeeElement {
     @track errorMsg = '';
     @track successMsg = '';
 
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        const datepicker = this.template.querySelector('.datepicker-el');
+        if (datepicker) {
+            datepicker.addEventListener('sl-invalid', this.handleInvalid.bind(this));
+        }
+    }
+
     handleSubmit(event) {
         event.preventDefault();
-        const picker = this.template.querySelector('sl-datepicker');
+        const picker = this.template.querySelector('.datepicker-el');
 
         if (picker.reportValidity()) {
             this.errorMsg = '';
@@ -95,24 +103,24 @@ export default class RequiredValidation extends LightningElement {
 **index.css**
 ```css
 .form-group {
-    margin-bottom: 16px;
+    margin-bottom: var(--sl-spacing-medium);
     max-width: 300px;
 }
 .message {
-    margin-top: 12px;
-    padding: 12px;
-    border-radius: 4px;
-    font-size: 14px;
+    margin-top: var(--sl-spacing-small);
+    padding: var(--sl-spacing-small);
+    border-radius: var(--sl-border-radius-medium);
+    font-size: var(--sl-font-size-small);
 }
 .error {
-    background: #fff2f0;
-    border: 1px solid #ffccc7;
-    color: #ff4d4f;
+    background: var(--sl-color-danger-50);
+    border: 1px solid var(--sl-color-danger-200);
+    color: var(--sl-color-danger-600);
 }
 .success {
-    background: #f6ffed;
-    border: 1px solid #b7eb8f;
-    color: #52c41a;
+    background: var(--sl-color-success-100);
+    border: 1px solid var(--sl-color-success-300);
+    color: var(--sl-color-success-600);
 }
 ```
 
@@ -126,25 +134,33 @@ export default class RequiredValidation extends LightningElement {
 ```html
 <template>
     <div class="form-group">
-        <sl-datepicker
+        <sl-datepicker kwc:external class="datepicker-el"
             label="项目截止日期"
             placeholder="选择截止日期"
-            onsl-change={handleChange}
         ></sl-datepicker>
     </div>
-    <sl-button variant="primary" onclick={validateDate}>校验日期</sl-button>
+    <sl-button kwc:external variant="primary" onclick={validateDate}>校验日期</sl-button>
 </template>
 ```
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class CustomValidationMessage extends LightningElement {
+export default class CustomValidationMessage extends KingdeeElement {
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        const datepicker = this.template.querySelector('.datepicker-el');
+        if (datepicker) {
+            datepicker.addEventListener('sl-change', this.handleChange.bind(this));
+        }
+    }
+
     get datepicker() {
-        return this.template.querySelector('sl-datepicker');
+        return this.template.querySelector('.datepicker-el');
     }
 
     handleChange() {
@@ -182,7 +198,7 @@ export default class CustomValidationMessage extends LightningElement {
 **index.css**
 ```css
 .form-group {
-    margin-bottom: 16px;
+    margin-bottom: var(--sl-spacing-medium);
     max-width: 300px;
 }
 ```
@@ -197,14 +213,13 @@ export default class CustomValidationMessage extends LightningElement {
 ```html
 <template>
     <div class="form-group">
-        <sl-datepicker
+        <sl-datepicker kwc:external class="datepicker-el"
             label="发货日期"
             placeholder="仅工作日可选"
             help-text="发货仅支持工作日（周一至周五）"
-            onsl-change={validateWorkday}
         ></sl-datepicker>
     </div>
-    <div class="status" lwc:if={statusText}>
+    <div class="status" kwc:if={statusText}>
         <span class={statusClass}>{statusText}</span>
     </div>
 </template>
@@ -212,19 +227,28 @@ export default class CustomValidationMessage extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 
-export default class WorkdayValidation extends LightningElement {
+export default class WorkdayValidation extends KingdeeElement {
     @track statusText = '';
     @track isValid = false;
+
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        const datepicker = this.template.querySelector('.datepicker-el');
+        if (datepicker) {
+            datepicker.addEventListener('sl-change', this.validateWorkday.bind(this));
+        }
+    }
 
     get statusClass() {
         return this.isValid ? 'valid' : 'invalid';
     }
 
     get datepicker() {
-        return this.template.querySelector('sl-datepicker');
+        return this.template.querySelector('.datepicker-el');
     }
 
     validateWorkday(event) {
@@ -258,19 +282,19 @@ export default class WorkdayValidation extends LightningElement {
 **index.css**
 ```css
 .form-group {
-    margin-bottom: 16px;
+    margin-bottom: var(--sl-spacing-medium);
     max-width: 300px;
 }
 .status {
-    padding: 12px;
-    border-radius: 4px;
-    font-size: 14px;
+    padding: var(--sl-spacing-small);
+    border-radius: var(--sl-border-radius-medium);
+    font-size: var(--sl-font-size-small);
 }
 .valid {
-    color: #52c41a;
+    color: var(--sl-color-success-600);
 }
 .invalid {
-    color: #ff4d4f;
+    color: var(--sl-color-danger-600);
 }
 ```
 
@@ -285,36 +309,33 @@ export default class WorkdayValidation extends LightningElement {
 <template>
     <form onsubmit={handleSubmit}>
         <div class="form-group">
-            <sl-datepicker
+            <sl-datepicker kwc:external class="start-datepicker"
                 name="startDate"
                 label="开始日期"
                 required="true"
                 placeholder="选择开始日期"
-                onsl-change={handleStartChange}
             ></sl-datepicker>
         </div>
         <div class="form-group">
-            <sl-datepicker
+            <sl-datepicker kwc:external class="end-datepicker"
                 name="endDate"
                 label="结束日期"
                 required="true"
                 placeholder="选择结束日期"
-                onsl-change={handleEndChange}
             ></sl-datepicker>
         </div>
         <div class="form-group">
-            <sl-datepicker
+            <sl-datepicker kwc:external class="report-datepicker"
                 name="reportDate"
                 label="报告日期"
                 required="true"
                 placeholder="选择报告日期"
                 help-text="报告日期必须在结束日期之后"
-                onsl-change={handleReportChange}
             ></sl-datepicker>
         </div>
-        <sl-button type="submit" variant="primary">提交</sl-button>
+        <sl-button kwc:external type="submit" variant="primary">提交</sl-button>
     </form>
-    <div class="errors" lwc:if={hasErrors}>
+    <div class="errors" kwc:if={hasErrors}>
         <h4>校验错误:</h4>
         <template for:each={errors} for:item="error">
             <div key={error} class="error-item">{error}</div>
@@ -325,12 +346,29 @@ export default class WorkdayValidation extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class MultiFieldValidation extends LightningElement {
+export default class MultiFieldValidation extends KingdeeElement {
     @track errors = [];
+
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        const start_datepicker = this.template.querySelector('.start-datepicker');
+        if (start_datepicker) {
+            start_datepicker.addEventListener('sl-change', this.handleStartChange.bind(this));
+        }
+        const end_datepicker = this.template.querySelector('.end-datepicker');
+        if (end_datepicker) {
+            end_datepicker.addEventListener('sl-change', this.handleEndChange.bind(this));
+        }
+        const report_datepicker = this.template.querySelector('.report-datepicker');
+        if (report_datepicker) {
+            report_datepicker.addEventListener('sl-change', this.handleReportChange.bind(this));
+        }
+    }
 
     get hasErrors() {
         return this.errors.length > 0;
@@ -405,25 +443,25 @@ export default class MultiFieldValidation extends LightningElement {
 **index.css**
 ```css
 .form-group {
-    margin-bottom: 16px;
+    margin-bottom: var(--sl-spacing-medium);
     max-width: 300px;
 }
 .errors {
-    margin-top: 16px;
-    padding: 16px;
-    background: #fff2f0;
-    border: 1px solid #ffccc7;
-    border-radius: 4px;
+    margin-top: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-medium);
+    background: var(--sl-color-danger-50);
+    border: 1px solid var(--sl-color-danger-200);
+    border-radius: var(--sl-border-radius-medium);
 }
 .errors h4 {
-    margin: 0 0 8px 0;
-    color: #ff4d4f;
-    font-size: 14px;
+    margin: 0 0 var(--sl-spacing-x-small) 0;
+    color: var(--sl-color-danger-600);
+    font-size: var(--sl-font-size-small);
 }
 .error-item {
-    color: #ff4d4f;
+    color: var(--sl-color-danger-600);
     font-size: 13px;
-    margin-bottom: 4px;
+    margin-bottom: var(--sl-spacing-2x-small);
 }
 ```
 
@@ -437,18 +475,17 @@ export default class MultiFieldValidation extends LightningElement {
 ```html
 <template>
     <div class="form-group">
-        <sl-datepicker
+        <sl-datepicker kwc:external class="datepicker-el"
             label="会议日期"
             required="true"
             placeholder="请选择会议日期"
-            onsl-change={handleChange}
         ></sl-datepicker>
     </div>
     <div class="actions">
-        <sl-button variant="primary" onclick={silentCheck}>静默校验 (checkValidity)</sl-button>
-        <sl-button variant="default" onclick={reportCheck}>UI 校验 (reportValidity)</sl-button>
+        <sl-button kwc:external variant="primary" onclick={silentCheck}>静默校验 (checkValidity)</sl-button>
+        <sl-button kwc:external variant="default" onclick={reportCheck}>UI 校验 (reportValidity)</sl-button>
     </div>
-    <div class="result" lwc:if={checkResult}>
+    <div class="result" kwc:if={checkResult}>
         校验结果: {checkResult}
     </div>
 </template>
@@ -456,15 +493,24 @@ export default class MultiFieldValidation extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class SilentValidation extends LightningElement {
+export default class SilentValidation extends KingdeeElement {
     @track checkResult = '';
 
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        const datepicker = this.template.querySelector('.datepicker-el');
+        if (datepicker) {
+            datepicker.addEventListener('sl-change', this.handleChange.bind(this));
+        }
+    }
+
     get datepicker() {
-        return this.template.querySelector('sl-datepicker');
+        return this.template.querySelector('.datepicker-el');
     }
 
     handleChange() {
@@ -492,19 +538,19 @@ export default class SilentValidation extends LightningElement {
 **index.css**
 ```css
 .form-group {
-    margin-bottom: 16px;
+    margin-bottom: var(--sl-spacing-medium);
     max-width: 300px;
 }
 .actions {
     display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
+    gap: var(--sl-spacing-x-small);
+    margin-bottom: var(--sl-spacing-medium);
 }
 .result {
-    padding: 12px;
-    background: #f5f5f5;
-    border-radius: 4px;
-    font-size: 14px;
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-neutral-100);
+    border-radius: var(--sl-border-radius-medium);
+    font-size: var(--sl-font-size-small);
     font-family: monospace;
 }
 ```
@@ -519,4 +565,4 @@ export default class SilentValidation extends LightningElement {
 4. **清除时的校验**：清除值后再次校验会触发 `required` 的必填校验
 5. **validity 属性**：`validity` 是只读的 `ValidityState` 对象，包含 `valid`、`valueMissing` 等标准属性
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

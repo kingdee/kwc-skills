@@ -28,7 +28,7 @@
 2. **LWC 框架规范**
    - 模板文件使用 `<template>` 作为根标签
    - 属性绑定使用 `{property}` 语法
-   - 事件绑定使用 `oneventname={handler}` 格式（如 `onsl-change={handleChange}`）
+   - 事件绑定：原生事件（如 `click`）使用 `oneventname={handler}` 格式；Shoelace 自定义事件（如 `sl-change`）必须在 `renderedCallback()` 中通过 `addEventListener` 绑定
    - 响应式属性使用 `@track` 装饰器
    - **布尔属性必须显式赋值**：使用 `disabled="true"` 而非 `disabled`
 
@@ -49,20 +49,28 @@ import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 **index.html**
 ```html
 <template>
-    <sl-datepicker
+    <sl-datepicker kwc:external class="datepicker-el"
         label="选择日期"
         placeholder="请选择日期"
-        onsl-change={handleChange}
     ></sl-datepicker>
 </template>
 ```
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 
-export default class QuickStartDatepicker extends LightningElement {
+export default class QuickStartDatepicker extends KingdeeElement {
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        const datepicker = this.template.querySelector('.datepicker-el');
+        if (datepicker) {
+            datepicker.addEventListener('sl-change', this.handleChange.bind(this));
+        }
+    }
+
     handleChange(event) {
         console.log('选中日期:', event.target.value);
     }
@@ -165,8 +173,4 @@ export default class QuickStartDatepicker extends LightningElement {
 4. **表单集成**：配合 `name`、`required`、`form` 属性可无缝集成到表单中
 5. **移动端适配**：组件自动检测屏幕宽度，≤ 500px 时切换为移动端底部抽屉面板
 
-## 相关资源
 
-- [Datepicker 组件源码](../../../src/components/datepicker/)
-- [Calendar 日历子组件源码](../../../src/components/calendar/)
-- [DatePanel 日期面板子组件源码](../../../src/components/date-panel/)

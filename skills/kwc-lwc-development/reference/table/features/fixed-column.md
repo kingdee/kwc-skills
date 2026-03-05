@@ -1,6 +1,6 @@
 # 固定列
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -31,7 +31,7 @@ Table 组件支持固定列功能，通过在列配置中设置 `fixed` 属性�
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -42,10 +42,10 @@ Table 组件支持固定列功能，通过在列配置中设置 `fixed` 属性�
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class FixedLeftTable extends LightningElement {
+export default class FixedLeftTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 100, fixed: 'left' },
         { title: '年龄', dataIndex: 'age', width: 80 },
@@ -87,23 +87,23 @@ export default class FixedLeftTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
         table-scroll={tableScroll}
     >
         <div slot="custom-cell-action-1" class="action-cell">
-            <sl-button size="small" variant="text">编辑</sl-button>
-            <sl-button size="small" variant="text" class="danger">删除</sl-button>
+            <sl-button kwc:external size="small" variant="text">编辑</sl-button>
+            <sl-button kwc:external size="small" variant="text" class="danger">删除</sl-button>
         </div>
         <div slot="custom-cell-action-2" class="action-cell">
-            <sl-button size="small" variant="text">编辑</sl-button>
-            <sl-button size="small" variant="text" class="danger">删除</sl-button>
+            <sl-button kwc:external size="small" variant="text">编辑</sl-button>
+            <sl-button kwc:external size="small" variant="text" class="danger">删除</sl-button>
         </div>
         <div slot="custom-cell-action-3" class="action-cell">
-            <sl-button size="small" variant="text">编辑</sl-button>
-            <sl-button size="small" variant="text" class="danger">删除</sl-button>
+            <sl-button kwc:external size="small" variant="text">编辑</sl-button>
+            <sl-button kwc:external size="small" variant="text" class="danger">删除</sl-button>
         </div>
     </sl-table>
 </template>
@@ -111,11 +111,11 @@ export default class FixedLeftTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class FixedRightTable extends LightningElement {
+export default class FixedRightTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 100 },
         { title: '年龄', dataIndex: 'age', width: 80 },
@@ -139,10 +139,10 @@ export default class FixedRightTable extends LightningElement {
 ```css
 .action-cell {
     display: flex;
-    gap: 4px;
+    gap: var(--sl-spacing-2x-small);
 }
 .action-cell .danger {
-    color: #ff4d4f;
+    color: var(--sl-color-danger-600);
 }
 ```
 
@@ -155,7 +155,7 @@ export default class FixedRightTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         bordered="true"
         columns={columns}
@@ -163,13 +163,13 @@ export default class FixedRightTable extends LightningElement {
         table-scroll={tableScroll}
     >
         <div slot="custom-cell-action-1" class="action-cell">
-            <sl-button size="small" variant="primary">查看</sl-button>
+            <sl-button kwc:external size="small" variant="primary">查看</sl-button>
         </div>
         <div slot="custom-cell-action-2" class="action-cell">
-            <sl-button size="small" variant="primary">查看</sl-button>
+            <sl-button kwc:external size="small" variant="primary">查看</sl-button>
         </div>
         <div slot="custom-cell-action-3" class="action-cell">
-            <sl-button size="small" variant="primary">查看</sl-button>
+            <sl-button kwc:external size="small" variant="primary">查看</sl-button>
         </div>
     </sl-table>
 </template>
@@ -177,11 +177,11 @@ export default class FixedRightTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class FixedBothTable extends LightningElement {
+export default class FixedBothTable extends KingdeeElement {
     columns = [
         { title: 'ID', dataIndex: 'id', width: 80, fixed: 'left' },
         { title: '姓名', dataIndex: 'name', width: 100, fixed: 'left' },
@@ -235,4 +235,4 @@ export default class FixedBothTable extends LightningElement {
 4. **宽度设置**：固定列建议设置明确的 `width`，避免列宽计算问题
 5. **性能考虑**：固定列会增加 DOM 复杂度，大数据量时建议配合虚拟滚动使用
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

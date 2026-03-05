@@ -1,6 +1,6 @@
 # 事件监听
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -32,7 +32,7 @@ Table 组件提供统一的 `change` 事件，用于监听排序、筛选、分�
         <h4>事件日志</h4>
         <div class="log-content">{logContent}</div>
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -44,10 +44,10 @@ Table 组件提供统一的 `change` 事件，用于监听排序、筛选、分�
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class ChangeEventTable extends LightningElement {
+export default class ChangeEventTable extends KingdeeElement {
     @track logContent = '等待操作...';
 
     columns = [
@@ -95,22 +95,22 @@ export default class ChangeEventTable extends LightningElement {
 **index.css**
 ```css
 .log-panel {
-    margin-bottom: 16px;
-    padding: 12px;
-    background: #f5f5f5;
-    border-radius: 4px;
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-neutral-100);
+    border-radius: var(--sl-border-radius-medium);
 }
 .log-panel h4 {
-    margin: 0 0 8px;
-    font-size: 14px;
+    margin: 0 0 var(--sl-spacing-x-small);
+    font-size: var(--sl-font-size-small);
 }
 .log-content {
-    padding: 8px;
-    background: #fff;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
+    padding: var(--sl-spacing-x-small);
+    background: var(--sl-color-neutral-0);
+    border: 1px solid var(--sl-color-neutral-300);
+    border-radius: var(--sl-border-radius-medium);
     font-family: monospace;
-    font-size: 12px;
+    font-size: var(--sl-font-size-x-small);
     white-space: pre-wrap;
     max-height: 150px;
     overflow: auto;
@@ -131,7 +131,7 @@ export default class ChangeEventTable extends LightningElement {
         <span class="status-item">筛选: {filterStatus}</span>
         <span class="status-item">分页: {pageStatus}</span>
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -143,10 +143,10 @@ export default class ChangeEventTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class ChangeTypeTable extends LightningElement {
+export default class ChangeTypeTable extends KingdeeElement {
     @track sortStatus = '无';
     @track filterStatus = '无';
     @track pageStatus = '第1页';
@@ -221,14 +221,14 @@ export default class ChangeTypeTable extends LightningElement {
 .status-bar {
     display: flex;
     gap: 24px;
-    margin-bottom: 16px;
-    padding: 12px;
-    background: #e6f7ff;
-    border-radius: 4px;
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-primary-100);
+    border-radius: var(--sl-border-radius-medium);
 }
 .status-item {
-    font-size: 14px;
-    color: #1890ff;
+    font-size: var(--sl-font-size-small);
+    color: var(--sl-color-primary-600);
 }
 ```
 
@@ -245,7 +245,7 @@ export default class ChangeTypeTable extends LightningElement {
         <p>最近请求参数:</p>
         <pre>{requestParams}</pre>
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         loading={isLoading}
         columns={columns}
@@ -258,10 +258,10 @@ export default class ChangeTypeTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class EventLinkageTable extends LightningElement {
+export default class EventLinkageTable extends KingdeeElement {
     @track isLoading = false;
     @track dataSource = [];
     @track requestParams = '{}';
@@ -368,22 +368,22 @@ export default class EventLinkageTable extends LightningElement {
 **index.css**
 ```css
 .request-info {
-    margin-bottom: 16px;
-    padding: 12px;
-    background: #f5f5f5;
-    border-radius: 4px;
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-neutral-100);
+    border-radius: var(--sl-border-radius-medium);
 }
 .request-info p {
-    margin: 0 0 8px;
+    margin: 0 0 var(--sl-spacing-x-small);
     font-weight: bold;
 }
 .request-info pre {
     margin: 0;
-    padding: 8px;
-    background: #fff;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
-    font-size: 12px;
+    padding: var(--sl-spacing-x-small);
+    background: var(--sl-color-neutral-0);
+    border: 1px solid var(--sl-color-neutral-300);
+    border-radius: var(--sl-border-radius-medium);
+    font-size: var(--sl-font-size-x-small);
     max-height: 120px;
     overflow: auto;
 }
@@ -399,4 +399,4 @@ export default class EventLinkageTable extends LightningElement {
 4. **重置页码**：排序和筛选变化时，通常需要重置页码到第一页
 5. **防抖处理**：如果事件处理中涉及服务端请求，建议添加防抖避免频繁请求
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

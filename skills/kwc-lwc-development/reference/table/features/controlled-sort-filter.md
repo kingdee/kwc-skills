@@ -1,6 +1,6 @@
 # 受控排序筛选与服务端数据
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -28,9 +28,9 @@
 <template>
     <div class="info-panel">
         <p>当前排序: {sortInfo}</p>
-        <sl-button size="small" onclick={clearSort}>清除排序</sl-button>
+        <sl-button kwc:external size="small" onclick={clearSort}>清除排序</sl-button>
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -41,11 +41,11 @@
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class ControlledSortTable extends LightningElement {
+export default class ControlledSortTable extends KingdeeElement {
     @track currentSortOrder = null;
     @track sortInfo = '无';
 
@@ -95,11 +95,11 @@ export default class ControlledSortTable extends LightningElement {
 .info-panel {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 16px;
-    padding: 12px;
-    background: #f5f5f5;
-    border-radius: 4px;
+    gap: var(--sl-spacing-medium);
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-neutral-100);
+    border-radius: var(--sl-border-radius-medium);
 }
 .info-panel p {
     margin: 0;
@@ -117,9 +117,9 @@ export default class ControlledSortTable extends LightningElement {
 <template>
     <div class="info-panel">
         <p>当前筛选: {filterInfo}</p>
-        <sl-button size="small" onclick={clearFilter}>清除筛选</sl-button>
+        <sl-button kwc:external size="small" onclick={clearFilter}>清除筛选</sl-button>
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -130,11 +130,11 @@ export default class ControlledSortTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class ControlledFilterTable extends LightningElement {
+export default class ControlledFilterTable extends KingdeeElement {
     @track currentFilterValue = [];
     @track filterInfo = '无';
 
@@ -190,11 +190,11 @@ export default class ControlledFilterTable extends LightningElement {
 .info-panel {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 16px;
-    padding: 12px;
-    background: #f5f5f5;
-    border-radius: 4px;
+    gap: var(--sl-spacing-medium);
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-neutral-100);
+    border-radius: var(--sl-border-radius-medium);
 }
 .info-panel p {
     margin: 0;
@@ -213,7 +213,7 @@ export default class ControlledFilterTable extends LightningElement {
     <div class="info-panel">
         <p>请求参数: {requestParams}</p>
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         loading={isLoading}
         columns={columns}
@@ -225,10 +225,10 @@ export default class ControlledFilterTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class ServerSideTable extends LightningElement {
+export default class ServerSideTable extends KingdeeElement {
     @track isLoading = false;
     @track dataSource = [];
     @track currentSortOrder = null;
@@ -336,16 +336,16 @@ export default class ServerSideTable extends LightningElement {
 **index.css**
 ```css
 .info-panel {
-    margin-bottom: 16px;
-    padding: 12px;
-    background: #f5f5f5;
-    border-radius: 4px;
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-neutral-100);
+    border-radius: var(--sl-border-radius-medium);
 }
 .info-panel p {
     margin: 0;
     white-space: pre-wrap;
     font-family: monospace;
-    font-size: 12px;
+    font-size: var(--sl-font-size-x-small);
 }
 ```
 
@@ -359,4 +359,4 @@ export default class ServerSideTable extends LightningElement {
 4. **loading 状态**：服务端请求时建议设置 `loading` 状态，提升用户体验
 5. **清空受控值**：将 `sortOrder` 设为 `null`、`filteredValue` 设为空数组可清除对应状态
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

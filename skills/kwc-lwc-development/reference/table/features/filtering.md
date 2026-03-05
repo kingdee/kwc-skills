@@ -1,6 +1,6 @@
 # 列筛选
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -38,7 +38,7 @@ Table 组件支持列筛选功能，通过在列配置中设置 `filters` 筛选
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -48,10 +48,10 @@ Table 组件支持列筛选功能，通过在列配置中设置 `filters` 筛选
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class FilterTable extends LightningElement {
+export default class FilterTable extends KingdeeElement {
     columns = [
         { 
             title: '姓名', 
@@ -96,7 +96,7 @@ export default class FilterTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -106,10 +106,10 @@ export default class FilterTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class SingleFilterTable extends LightningElement {
+export default class SingleFilterTable extends KingdeeElement {
     columns = [
         { title: '商品名称', dataIndex: 'name', width: 200 },
         { title: '价格', dataIndex: 'price', width: 100 },
@@ -146,7 +146,7 @@ export default class SingleFilterTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -156,10 +156,10 @@ export default class SingleFilterTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class DefaultFilterTable extends LightningElement {
+export default class DefaultFilterTable extends KingdeeElement {
     columns = [
         { title: '任务名称', dataIndex: 'task', width: 200 },
         { title: '负责人', dataIndex: 'owner', width: 120 },
@@ -199,7 +199,7 @@ export default class DefaultFilterTable extends LightningElement {
     <div class="log-panel">
         筛选框状态: {filterStatus}
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -209,10 +209,10 @@ export default class DefaultFilterTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class FilterCallbackTable extends LightningElement {
+export default class FilterCallbackTable extends KingdeeElement {
     @track filterStatus = '已关闭';
 
     get columns() {
@@ -247,12 +247,12 @@ export default class FilterCallbackTable extends LightningElement {
 **index.css**
 ```css
 .log-panel {
-    margin-bottom: 16px;
-    padding: 12px;
-    background: #e6f7ff;
-    border: 1px solid #91d5ff;
-    border-radius: 4px;
-    color: #1890ff;
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-primary-100);
+    border: 1px solid var(--sl-color-primary-300);
+    border-radius: var(--sl-border-radius-medium);
+    color: var(--sl-color-primary-600);
 }
 ```
 
@@ -269,7 +269,7 @@ export default class FilterCallbackTable extends LightningElement {
         <p>当前筛选条件:</p>
         <pre>{filterJson}</pre>
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -280,10 +280,10 @@ export default class FilterCallbackTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class FilterChangeTable extends LightningElement {
+export default class FilterChangeTable extends KingdeeElement {
     @track filterJson = '无';
 
     columns = [
@@ -333,18 +333,18 @@ export default class FilterChangeTable extends LightningElement {
 **index.css**
 ```css
 .filter-info {
-    margin-bottom: 16px;
-    padding: 12px;
-    background: #f5f5f5;
-    border-radius: 4px;
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-neutral-100);
+    border-radius: var(--sl-border-radius-medium);
 }
 .filter-info pre {
-    margin: 8px 0 0;
-    padding: 8px;
-    background: #fff;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
-    font-size: 12px;
+    margin: var(--sl-spacing-x-small) 0 0;
+    padding: var(--sl-spacing-x-small);
+    background: var(--sl-color-neutral-0);
+    border: 1px solid var(--sl-color-neutral-300);
+    border-radius: var(--sl-border-radius-medium);
+    font-size: var(--sl-font-size-x-small);
 }
 ```
 
@@ -358,4 +358,4 @@ export default class FilterChangeTable extends LightningElement {
 4. **筛选图标**：有筛选功能的列会显示筛选图标，悬停时显示，筛选激活时高亮
 5. **重置筛选**：点击筛选下拉框中的「重置」按钮可清空当前列的筛选条件
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

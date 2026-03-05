@@ -1,6 +1,6 @@
 # 表单集成
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -38,7 +38,7 @@ Datepicker 配合表单使用，通过 `name` 属性设置表单字段名。
 <template>
     <form onsubmit={handleSubmit}>
         <div class="form-group">
-            <sl-datepicker
+            <sl-datepicker kwc:external
                 name="birthday"
                 label="出生日期"
                 required="true"
@@ -46,18 +46,18 @@ Datepicker 配合表单使用，通过 `name` 属性设置表单字段名。
             ></sl-datepicker>
         </div>
         <div class="form-group">
-            <sl-datepicker
+            <sl-datepicker kwc:external
                 name="joinDate"
                 label="入职日期"
                 placeholder="请选择入职日期"
             ></sl-datepicker>
         </div>
         <div class="form-actions">
-            <sl-button type="submit" variant="primary">提交</sl-button>
-            <sl-button type="reset" variant="default">重置</sl-button>
+            <sl-button kwc:external type="submit" variant="primary">提交</sl-button>
+            <sl-button kwc:external type="reset" variant="default">重置</sl-button>
         </div>
     </form>
-    <div class="result" lwc:if={submitResult}>
+    <div class="result" kwc:if={submitResult}>
         提交数据: {submitResult}
     </div>
 </template>
@@ -65,11 +65,11 @@ Datepicker 配合表单使用，通过 `name` 属性设置表单字段名。
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class FormDatepicker extends LightningElement {
+export default class FormDatepicker extends KingdeeElement {
     @track submitResult = '';
 
     handleSubmit(event) {
@@ -88,21 +88,21 @@ export default class FormDatepicker extends LightningElement {
 **index.css**
 ```css
 .form-group {
-    margin-bottom: 16px;
+    margin-bottom: var(--sl-spacing-medium);
     max-width: 300px;
 }
 .form-actions {
     display: flex;
-    gap: 8px;
+    gap: var(--sl-spacing-x-small);
     margin-top: 24px;
 }
 .result {
-    margin-top: 16px;
-    padding: 12px;
-    background: #f5f5f5;
-    border-radius: 4px;
+    margin-top: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-neutral-100);
+    border-radius: var(--sl-border-radius-medium);
     font-family: monospace;
-    font-size: 14px;
+    font-size: var(--sl-font-size-small);
     white-space: pre;
 }
 ```
@@ -118,7 +118,7 @@ export default class FormDatepicker extends LightningElement {
 <template>
     <form onsubmit={handleSubmit}>
         <div class="form-group">
-            <sl-datepicker
+            <sl-datepicker kwc:external
                 name="startDate"
                 label="项目开始日期"
                 required="true"
@@ -127,25 +127,25 @@ export default class FormDatepicker extends LightningElement {
             ></sl-datepicker>
         </div>
         <div class="form-group">
-            <sl-datepicker
+            <sl-datepicker kwc:external
                 name="endDate"
                 label="项目结束日期"
                 placeholder="选填项"
                 help-text="此字段为选填"
             ></sl-datepicker>
         </div>
-        <sl-button type="submit" variant="primary">提交</sl-button>
+        <sl-button kwc:external type="submit" variant="primary">提交</sl-button>
     </form>
 </template>
 ```
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class RequiredDatepicker extends LightningElement {
+export default class RequiredDatepicker extends KingdeeElement {
     handleSubmit(event) {
         event.preventDefault();
 
@@ -169,7 +169,7 @@ export default class RequiredDatepicker extends LightningElement {
 **index.css**
 ```css
 .form-group {
-    margin-bottom: 16px;
+    margin-bottom: var(--sl-spacing-medium);
     max-width: 300px;
 }
 ```
@@ -185,14 +185,14 @@ export default class RequiredDatepicker extends LightningElement {
 <template>
     <form id="myForm" onsubmit={handleSubmit}>
         <div class="form-group">
-            <sl-input name="username" label="用户名" placeholder="请输入用户名"></sl-input>
+            <sl-input kwc:external name="username" label="用户名" placeholder="请输入用户名"></sl-input>
         </div>
-        <sl-button type="submit" variant="primary">提交</sl-button>
+        <sl-button kwc:external type="submit" variant="primary">提交</sl-button>
     </form>
 
     <!-- datepicker 在 form 标签外部，通过 form 属性关联 -->
     <div class="external-field">
-        <sl-datepicker
+        <sl-datepicker kwc:external
             name="eventDate"
             label="活动日期（外部字段）"
             form="myForm"
@@ -204,12 +204,12 @@ export default class RequiredDatepicker extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 import '@kdcloudjs/shoelace/dist/components/input/input.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class ExternalFormDatepicker extends LightningElement {
+export default class ExternalFormDatepicker extends KingdeeElement {
     handleSubmit(event) {
         event.preventDefault();
         const formData = new FormData(event.target);
@@ -225,15 +225,15 @@ export default class ExternalFormDatepicker extends LightningElement {
 **index.css**
 ```css
 .form-group {
-    margin-bottom: 16px;
+    margin-bottom: var(--sl-spacing-medium);
     max-width: 300px;
 }
 .external-field {
     margin-top: 24px;
-    padding: 16px;
-    background: #fafafa;
-    border: 1px dashed #d9d9d9;
-    border-radius: 4px;
+    padding: var(--sl-spacing-medium);
+    background: var(--sl-color-neutral-50);
+    border: 1px dashed var(--sl-color-neutral-300);
+    border-radius: var(--sl-border-radius-medium);
     max-width: 300px;
 }
 ```
@@ -248,18 +248,17 @@ export default class ExternalFormDatepicker extends LightningElement {
 ```html
 <template>
     <div class="form-group">
-        <sl-datepicker
+        <sl-datepicker kwc:external class="datepicker-el"
             label="交付日期"
             required="true"
             placeholder="请选择交付日期"
-            onsl-change={handleDateChange}
         ></sl-datepicker>
     </div>
     <div class="actions">
-        <sl-button variant="primary" onclick={validate}>校验</sl-button>
-        <sl-button variant="default" onclick={resetValidation}>重置校验</sl-button>
+        <sl-button kwc:external variant="primary" onclick={validate}>校验</sl-button>
+        <sl-button kwc:external variant="default" onclick={resetValidation}>重置校验</sl-button>
     </div>
-    <div class={resultClass} lwc:if={validationMessage}>
+    <div class={resultClass} kwc:if={validationMessage}>
         {validationMessage}
     </div>
 </template>
@@ -267,16 +266,25 @@ export default class ExternalFormDatepicker extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class ProgrammaticValidation extends LightningElement {
+export default class ProgrammaticValidation extends KingdeeElement {
     @track validationMessage = '';
     @track isValid = false;
 
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        const datepicker = this.template.querySelector('.datepicker-el');
+        if (datepicker) {
+            datepicker.addEventListener('sl-change', this.handleDateChange.bind(this));
+        }
+    }
+
     get datepicker() {
-        return this.template.querySelector('sl-datepicker');
+        return this.template.querySelector('.datepicker-el');
     }
 
     get resultClass() {
@@ -328,28 +336,28 @@ export default class ProgrammaticValidation extends LightningElement {
 **index.css**
 ```css
 .form-group {
-    margin-bottom: 16px;
+    margin-bottom: var(--sl-spacing-medium);
     max-width: 300px;
 }
 .actions {
     display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
+    gap: var(--sl-spacing-x-small);
+    margin-bottom: var(--sl-spacing-medium);
 }
 .result {
-    padding: 12px;
-    border-radius: 4px;
-    font-size: 14px;
+    padding: var(--sl-spacing-small);
+    border-radius: var(--sl-border-radius-medium);
+    font-size: var(--sl-font-size-small);
 }
 .result-success {
-    background: #f6ffed;
-    border: 1px solid #b7eb8f;
-    color: #52c41a;
+    background: var(--sl-color-success-100);
+    border: 1px solid var(--sl-color-success-300);
+    color: var(--sl-color-success-600);
 }
 .result-error {
-    background: #fff2f0;
-    border: 1px solid #ffccc7;
-    color: #ff4d4f;
+    background: var(--sl-color-danger-50);
+    border: 1px solid var(--sl-color-danger-200);
+    color: var(--sl-color-danger-600);
 }
 ```
 
@@ -363,4 +371,4 @@ export default class ProgrammaticValidation extends LightningElement {
 4. **自定义校验**：使用 `setCustomValidity(message)` 设置自定义错误信息，传入空字符串 `''` 清除校验错误
 5. **表单重置**：原生表单的 `reset` 事件会将 Datepicker 恢复到 `defaultValue`
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

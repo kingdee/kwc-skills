@@ -122,11 +122,11 @@ export default class PaginationDefaultPage extends KingdeeElement {}
 .pagination-demo {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sl-spacing-medium);
 }
 .page-info {
-  font-size: 14px;
-  color: #666;
+  font-size: var(--sl-font-size-small);
+  color: var(--sl-color-neutral-600);
 }
 ```
 ```javascript
@@ -253,16 +253,16 @@ export default class PaginationDisabled extends KingdeeElement {}
 .pagination-demo {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sl-spacing-medium);
 }
 .event-info {
-  padding: 12px;
-  background: #f5f7fa;
-  border-radius: 4px;
+  padding: var(--sl-spacing-small);
+  background: var(--sl-color-neutral-100);
+  border-radius: var(--sl-border-radius-medium);
 }
 .event-info p {
-  margin: 4px 0;
-  font-size: 14px;
+  margin: var(--sl-spacing-2x-small) 0;
+  font-size: var(--sl-font-size-small);
 }
 ```
 ```javascript
@@ -343,12 +343,12 @@ export default class PaginationEvent extends KingdeeElement {
 .table-with-pagination {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sl-spacing-medium);
 }
 .pagination-wrapper {
   display: flex;
   justify-content: flex-end;
-  padding: 8px 0;
+  padding: var(--sl-spacing-x-small) 0;
 }
 ```
 ```javascript
@@ -468,12 +468,12 @@ export default class TableWithPagination extends KingdeeElement {
 ```
 ```css
 .custom-pagination {
-  --sl-pagination-text-color: #333;
-  --sl-pagination-current-page-color: #1890ff;
-  --sl-pagination-font-size: 14px;
+  --sl-pagination-text-color: var(--sl-color-neutral-700);
+  --sl-pagination-current-page-color: var(--sl-color-primary-600);
+  --sl-pagination-font-size: var(--sl-font-size-small);
   --sl-pagination-icon-font-size: 18px;
-  --sl-pagination-icon-font: #666;
-  --sl-pagination-icon-font-hover: #1890ff;
+  --sl-pagination-icon-font: var(--sl-color-neutral-600);
+  --sl-pagination-icon-font-hover: var(--sl-color-primary-600);
   --sl-pagination-current-page-border-radius: 6px;
   --sl-pagination-current-page-sizing-width: 4rem;
 }
@@ -509,11 +509,11 @@ export default class PaginationCustomStyle extends KingdeeElement {}
 .pagination-demo {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sl-spacing-medium);
 }
 .controls {
   display: flex;
-  gap: 8px;
+  gap: var(--sl-spacing-x-small);
 }
 ```
 ```javascript

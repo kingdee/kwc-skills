@@ -71,7 +71,7 @@ import '@kdcloudjs/shoelace/dist/components/table/table.js';
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -81,10 +81,10 @@ import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class QuickStartTable extends LightningElement {
+export default class QuickStartTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { title: '年龄', dataIndex: 'age', width: 100 },
@@ -256,8 +256,4 @@ export default class QuickStartTable extends LightningElement {
 5. **自定义单元格**：通过 `slot: true` 配合对应 slot 名称实现自定义渲染
 6. **服务端数据**：通过监听 `change` 事件，结合 `sortOrder`、`filteredValue` 受控属性实现服务端排序/筛选
 
-## 相关资源
 
-- [Table 组件源码](../../../src/components/table/)
-- [Pagination 分页组件源码](../../../src/components/pagination/)
-- [Checkbox 组件源码](../../../src/components/checkbox/)

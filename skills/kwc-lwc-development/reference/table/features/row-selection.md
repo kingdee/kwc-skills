@@ -1,6 +1,6 @@
 # 行选择
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -34,7 +34,7 @@ Table 组件支持通过 `row-selection` 配置行选择功能，包括 checkbox
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -45,10 +45,10 @@ Table 组件支持通过 `row-selection` 配置行选择功能，包括 checkbox
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class CheckboxTable extends LightningElement {
+export default class CheckboxTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { title: '年龄', dataIndex: 'age', width: 100 },
@@ -76,7 +76,7 @@ export default class CheckboxTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -87,10 +87,10 @@ export default class CheckboxTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class DefaultSelectedTable extends LightningElement {
+export default class DefaultSelectedTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { title: '年龄', dataIndex: 'age', width: 100 },
@@ -123,7 +123,7 @@ export default class DefaultSelectedTable extends LightningElement {
         <p>已选择 {selectedCount} 项</p>
         <p>选中的姓名: {selectedNames}</p>
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -134,10 +134,10 @@ export default class DefaultSelectedTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class OnChangeTable extends LightningElement {
+export default class OnChangeTable extends KingdeeElement {
     @track selectedCount = 0;
     @track selectedNames = '无';
 
@@ -169,13 +169,13 @@ export default class OnChangeTable extends LightningElement {
 **index.css**
 ```css
 .selection-info {
-    margin-bottom: 16px;
-    padding: 12px;
-    background: #f5f5f5;
-    border-radius: 4px;
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-neutral-100);
+    border-radius: var(--sl-border-radius-medium);
 }
 .selection-info p {
-    margin: 4px 0;
+    margin: var(--sl-spacing-2x-small) 0;
 }
 ```
 
@@ -192,7 +192,7 @@ export default class OnChangeTable extends LightningElement {
         <p>操作日志:</p>
         <div class="log-content">{logText}</div>
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -203,10 +203,10 @@ export default class OnChangeTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class OnSelectAllTable extends LightningElement {
+export default class OnSelectAllTable extends KingdeeElement {
     @track logText = '暂无操作';
 
     columns = [
@@ -240,14 +240,14 @@ export default class OnSelectAllTable extends LightningElement {
 **index.css**
 ```css
 .log-panel {
-    margin-bottom: 16px;
-    padding: 12px;
-    background: #e6f7ff;
-    border: 1px solid #91d5ff;
-    border-radius: 4px;
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-primary-100);
+    border: 1px solid var(--sl-color-primary-300);
+    border-radius: var(--sl-border-radius-medium);
 }
 .log-content {
-    color: #1890ff;
+    color: var(--sl-color-primary-600);
 }
 ```
 
@@ -263,7 +263,7 @@ export default class OnSelectAllTable extends LightningElement {
     <div class="selection-info">
         当前选中: {selectedName}
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -274,10 +274,10 @@ export default class OnSelectAllTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class RadioTable extends LightningElement {
+export default class RadioTable extends KingdeeElement {
     @track selectedName = '无';
 
     columns = [
@@ -307,10 +307,10 @@ export default class RadioTable extends LightningElement {
 **index.css**
 ```css
 .selection-info {
-    margin-bottom: 16px;
-    padding: 12px;
-    background: #f5f5f5;
-    border-radius: 4px;
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-neutral-100);
+    border-radius: var(--sl-border-radius-medium);
 }
 ```
 
@@ -323,7 +323,7 @@ export default class RadioTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -334,10 +334,10 @@ export default class RadioTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class RadioDefaultTable extends LightningElement {
+export default class RadioDefaultTable extends KingdeeElement {
     columns = [
         { title: '套餐名称', dataIndex: 'name', width: 150 },
         { title: '价格', dataIndex: 'price', width: 100 },
@@ -367,7 +367,7 @@ export default class RadioDefaultTable extends LightningElement {
 ```html
 <template>
     <p class="tip">注意：已离职员工无法选择</p>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -378,10 +378,10 @@ export default class RadioDefaultTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class DisabledRowTable extends LightningElement {
+export default class DisabledRowTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { title: '状态', dataIndex: 'status', width: 100 },
@@ -407,9 +407,9 @@ export default class DisabledRowTable extends LightningElement {
 **index.css**
 ```css
 .tip {
-    margin-bottom: 12px;
-    color: #ff4d4f;
-    font-size: 14px;
+    margin-bottom: var(--sl-spacing-small);
+    color: var(--sl-color-danger-600);
+    font-size: var(--sl-font-size-small);
 }
 ```
 
@@ -422,7 +422,7 @@ export default class DisabledRowTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -433,10 +433,10 @@ export default class DisabledRowTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class HiddenSelectionTable extends LightningElement {
+export default class HiddenSelectionTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { title: '年龄', dataIndex: 'age', width: 100 },
@@ -466,7 +466,7 @@ export default class HiddenSelectionTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         bordered="true"
         columns={columns}
@@ -478,10 +478,10 @@ export default class HiddenSelectionTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class CustomWidthTable extends LightningElement {
+export default class CustomWidthTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { title: '年龄', dataIndex: 'age', width: 100 },
@@ -511,7 +511,7 @@ export default class CustomWidthTable extends LightningElement {
 ```html
 <template>
     <p class="tip">表头全选已禁用，只能单独选择每行</p>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -522,10 +522,10 @@ export default class CustomWidthTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class DisabledAllSelectTable extends LightningElement {
+export default class DisabledAllSelectTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { title: '年龄', dataIndex: 'age', width: 100 },
@@ -548,9 +548,9 @@ export default class DisabledAllSelectTable extends LightningElement {
 **index.css**
 ```css
 .tip {
-    margin-bottom: 12px;
-    color: #faad14;
-    font-size: 14px;
+    margin-bottom: var(--sl-spacing-small);
+    color: var(--sl-color-warning-600);
+    font-size: var(--sl-font-size-small);
 }
 ```
 
@@ -564,4 +564,4 @@ export default class DisabledAllSelectTable extends LightningElement {
 4. **回调函数中的 this**：在 LWC 中使用 getter 返回 `rowSelection` 对象时，回调函数中需要通过闭包保存 `this` 引用
 5. **defaultSelectedRowKeys 只在初始化时生效**：后续选择变化不会更新此属性，需要通过回调自行管理状态
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

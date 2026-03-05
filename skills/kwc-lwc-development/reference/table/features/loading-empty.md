@@ -1,6 +1,6 @@
 # 加载状态与空数据
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -29,7 +29,7 @@ Table 组件提供加载状态展示和空数据处理功能。`loading` 属性�
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         loading="true"
         columns={columns}
@@ -40,10 +40,10 @@ Table 组件提供加载状态展示和空数据处理功能。`loading` 属性�
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class LoadingTable extends LightningElement {
+export default class LoadingTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { title: '年龄', dataIndex: 'age', width: 100 },
@@ -67,11 +67,11 @@ export default class LoadingTable extends LightningElement {
 ```html
 <template>
     <div class="toolbar">
-        <sl-button variant="primary" onclick={loadData}>
+        <sl-button kwc:external variant="primary" onclick={loadData}>
             {buttonText}
         </sl-button>
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         loading={isLoading}
         columns={columns}
@@ -82,11 +82,11 @@ export default class LoadingTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class ToggleLoadingTable extends LightningElement {
+export default class ToggleLoadingTable extends KingdeeElement {
     @track isLoading = false;
     @track dataSource = [];
 
@@ -120,7 +120,7 @@ export default class ToggleLoadingTable extends LightningElement {
 **index.css**
 ```css
 .toolbar {
-    margin-bottom: 16px;
+    margin-bottom: var(--sl-spacing-medium);
 }
 ```
 
@@ -133,7 +133,7 @@ export default class ToggleLoadingTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={emptyData}
@@ -143,10 +143,10 @@ export default class ToggleLoadingTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class EmptyTable extends LightningElement {
+export default class EmptyTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { title: '年龄', dataIndex: 'age', width: 100 },
@@ -166,16 +166,16 @@ export default class EmptyTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={emptyData}
     >
         <div slot="table-empty" class="custom-empty">
-            <sl-icon name="inbox" style="font-size: 48px; color: #ccc;"></sl-icon>
+            <sl-icon kwc:external name="inbox" style="font-size: var(--sl-font-size-3x-large); color: var(--sl-color-neutral-300);"></sl-icon>
             <p class="empty-title">暂无数据</p>
             <p class="empty-desc">请尝试调整筛选条件或添加新数据</p>
-            <sl-button variant="primary" size="small" onclick={handleAdd}>
+            <sl-button kwc:external variant="primary" size="small" onclick={handleAdd}>
                 添加数据
             </sl-button>
         </div>
@@ -185,12 +185,12 @@ export default class EmptyTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/icon/icon.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class CustomEmptyTable extends LightningElement {
+export default class CustomEmptyTable extends KingdeeElement {
     @track emptyData = [];
 
     columns = [
@@ -214,19 +214,19 @@ export default class CustomEmptyTable extends LightningElement {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 48px 24px;
+    padding: var(--sl-spacing-3x-large) 24px;
 }
 
 .empty-title {
-    margin: 16px 0 8px;
-    font-size: 16px;
-    color: #333;
+    margin: var(--sl-spacing-medium) 0 var(--sl-spacing-x-small);
+    font-size: var(--sl-font-size-medium);
+    color: var(--sl-color-neutral-700);
 }
 
 .empty-desc {
-    margin: 0 0 16px;
-    font-size: 14px;
-    color: #999;
+    margin: 0 0 var(--sl-spacing-medium);
+    font-size: var(--sl-font-size-small);
+    color: var(--sl-color-neutral-500);
 }
 ```
 
@@ -239,4 +239,4 @@ export default class CustomEmptyTable extends LightningElement {
 3. **自定义空状态样式**：使用 `table-empty` slot 时，需要自行设置内容的布局和样式
 4. **加载完成后清除状态**：异步请求完成后记得将 `loading` 设置为 `false`
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

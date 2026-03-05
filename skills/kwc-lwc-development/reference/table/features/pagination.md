@@ -1,6 +1,6 @@
 # 分页
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -34,7 +34,7 @@ Table 组件支持分页功能，通过 `pagination` 属性配置。支持设置
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -45,10 +45,10 @@ Table 组件支持分页功能，通过 `pagination` 属性配置。支持设置
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class PaginationTable extends LightningElement {
+export default class PaginationTable extends KingdeeElement {
     columns = [
         { title: 'ID', dataIndex: 'id', width: 80 },
         { title: '姓名', dataIndex: 'name', width: 150 },
@@ -81,7 +81,7 @@ export default class PaginationTable extends LightningElement {
 <template>
     <div class="demo-group">
         <h4>顶部居右 (topEnd)</h4>
-        <sl-table
+        <sl-table kwc:external
             row-key="id"
             columns={columns}
             data-source={dataSource}
@@ -91,7 +91,7 @@ export default class PaginationTable extends LightningElement {
     
     <div class="demo-group">
         <h4>底部居中 (bottomCenter)</h4>
-        <sl-table
+        <sl-table kwc:external
             row-key="id"
             columns={columns}
             data-source={dataSource}
@@ -103,10 +103,10 @@ export default class PaginationTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class PaginationPositionTable extends LightningElement {
+export default class PaginationPositionTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { title: '年龄', dataIndex: 'age', width: 100 }
@@ -138,8 +138,8 @@ export default class PaginationPositionTable extends LightningElement {
     margin-bottom: 32px;
 }
 .demo-group h4 {
-    margin: 0 0 12px;
-    color: #333;
+    margin: 0 0 var(--sl-spacing-small);
+    color: var(--sl-color-neutral-700);
 }
 ```
 
@@ -152,7 +152,7 @@ export default class PaginationPositionTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -163,10 +163,10 @@ export default class PaginationPositionTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class CustomPageSizeTable extends LightningElement {
+export default class CustomPageSizeTable extends KingdeeElement {
     columns = [
         { title: 'ID', dataIndex: 'id', width: 80 },
         { title: '姓名', dataIndex: 'name', width: 150 },
@@ -196,7 +196,7 @@ export default class CustomPageSizeTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -207,10 +207,10 @@ export default class CustomPageSizeTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class SimplePaginationTable extends LightningElement {
+export default class SimplePaginationTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { title: '邮箱', dataIndex: 'email' }
@@ -242,7 +242,7 @@ export default class SimplePaginationTable extends LightningElement {
     <div class="info">
         当前页: {currentPage}, 每页: {pageSize} 条
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -253,10 +253,10 @@ export default class SimplePaginationTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class PaginationCallbackTable extends LightningElement {
+export default class PaginationCallbackTable extends KingdeeElement {
     @track currentPage = 1;
     @track pageSize = 10;
 
@@ -292,10 +292,10 @@ export default class PaginationCallbackTable extends LightningElement {
 **index.css**
 ```css
 .info {
-    margin-bottom: 12px;
-    padding: 8px 12px;
-    background: #f5f5f5;
-    border-radius: 4px;
+    margin-bottom: var(--sl-spacing-small);
+    padding: var(--sl-spacing-x-small) var(--sl-spacing-small);
+    background: var(--sl-color-neutral-100);
+    border-radius: var(--sl-border-radius-medium);
 }
 ```
 
@@ -308,7 +308,7 @@ export default class PaginationCallbackTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         loading={isLoading}
         columns={columns}
@@ -320,10 +320,10 @@ export default class PaginationCallbackTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class ServerPaginationTable extends LightningElement {
+export default class ServerPaginationTable extends KingdeeElement {
     @track isLoading = false;
     @track dataSource = [];
     @track currentPage = 1;
@@ -391,4 +391,4 @@ export default class ServerPaginationTable extends LightningElement {
 5. **currentPage 受控**：设置 `currentPage` 后进入受控模式，需手动管理页码变化
 6. **change 事件联动**：分页变化也会触发表格的 `change` 事件，`changeType` 为 `'pagination'`
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
