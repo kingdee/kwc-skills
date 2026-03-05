@@ -1,6 +1,6 @@
 # 文本省略与列对齐
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -27,7 +27,7 @@ Table 组件支持单元格内容超出时自动省略显示（`ellipsis`），�
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -37,10 +37,10 @@ Table 组件支持单元格内容超出时自动省略显示（`ellipsis`），�
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class EllipsisTable extends LightningElement {
+export default class EllipsisTable extends KingdeeElement {
     columns = [
         { title: '标题', dataIndex: 'title', width: 150, ellipsis: true },
         { title: '描述', dataIndex: 'description', width: 200, ellipsis: true },
@@ -79,7 +79,7 @@ export default class EllipsisTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         bordered="true"
         columns={columns}
@@ -90,10 +90,10 @@ export default class EllipsisTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class AlignTable extends LightningElement {
+export default class AlignTable extends KingdeeElement {
     columns = [
         { title: '商品名称', dataIndex: 'name', width: 200, align: 'left' },
         { title: '数量', dataIndex: 'quantity', width: 100, align: 'center' },
@@ -118,7 +118,7 @@ export default class AlignTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -128,10 +128,10 @@ export default class AlignTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class ClassNameTable extends LightningElement {
+export default class ClassNameTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { title: '状态', dataIndex: 'status', width: 100, className: 'status-column' },
@@ -154,7 +154,7 @@ export default class ClassNameTable extends LightningElement {
     font-weight: bold;
 }
 .score-column {
-    color: #1890ff;
+    color: var(--sl-color-primary-600);
 }
 ```
 
@@ -167,7 +167,7 @@ export default class ClassNameTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         bordered="true"
         columns={columns}
@@ -178,10 +178,10 @@ export default class ClassNameTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class CombinedTable extends LightningElement {
+export default class CombinedTable extends KingdeeElement {
     columns = [
         { 
             title: 'ID', 
@@ -255,11 +255,11 @@ export default class CombinedTable extends LightningElement {
 **index.css**
 ```css
 .id-column {
-    background-color: #fafafa;
+    background-color: var(--sl-color-neutral-50);
 }
 .budget-column {
     font-family: 'Courier New', monospace;
-    color: #52c41a;
+    color: var(--sl-color-success-600);
 }
 ```
 
@@ -273,4 +273,4 @@ export default class CombinedTable extends LightningElement {
 4. **className 作用范围**：`className` 会应用到该列的所有单元格（包括表头）
 5. **样式优先级**：通过 `className` 添加的样式可能需要适当提高优先级才能覆盖默认样式
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

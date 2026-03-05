@@ -122,11 +122,11 @@ export default class PaginationDefaultPage extends KingdeeElement {}
 .pagination-demo {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sl-spacing-medium);
 }
 .page-info {
-  font-size: 14px;
-  color: #666;
+  font-size: var(--sl-font-size-small);
+  color: var(--sl-color-neutral-600);
 }
 ```
 ```javascript
@@ -183,7 +183,9 @@ export default class PaginationControlled extends KingdeeElement {
       this._boundHandlers.forEach(({ el, event, boundHandler }) => {
         el.removeEventListener(event, boundHandler);
       });
+      this._boundHandlers = [];
     }
+    this._eventsBound = false;
   }
 }
 ```
@@ -253,16 +255,16 @@ export default class PaginationDisabled extends KingdeeElement {}
 .pagination-demo {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sl-spacing-medium);
 }
 .event-info {
-  padding: 12px;
-  background: #f5f7fa;
-  border-radius: 4px;
+  padding: var(--sl-spacing-small);
+  background: var(--sl-color-neutral-100);
+  border-radius: var(--sl-border-radius-medium);
 }
 .event-info p {
-  margin: 4px 0;
-  font-size: 14px;
+  margin: var(--sl-spacing-2x-small) 0;
+  font-size: var(--sl-font-size-small);
 }
 ```
 ```javascript
@@ -317,7 +319,9 @@ export default class PaginationEvent extends KingdeeElement {
       this._boundHandlers.forEach(({ el, event, boundHandler }) => {
         el.removeEventListener(event, boundHandler);
       });
+      this._boundHandlers = [];
     }
+    this._eventsBound = false;
   }
 }
 ```
@@ -343,12 +347,12 @@ export default class PaginationEvent extends KingdeeElement {
 .table-with-pagination {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sl-spacing-medium);
 }
 .pagination-wrapper {
   display: flex;
   justify-content: flex-end;
-  padding: 8px 0;
+  padding: var(--sl-spacing-x-small) 0;
 }
 ```
 ```javascript
@@ -448,7 +452,9 @@ export default class TableWithPagination extends KingdeeElement {
       this._boundHandlers.forEach(({ el, event, boundHandler }) => {
         el.removeEventListener(event, boundHandler);
       });
+      this._boundHandlers = [];
     }
+    this._eventsBound = false;
   }
 }
 ```
@@ -468,12 +474,12 @@ export default class TableWithPagination extends KingdeeElement {
 ```
 ```css
 .custom-pagination {
-  --sl-pagination-text-color: #333;
-  --sl-pagination-current-page-color: #1890ff;
-  --sl-pagination-font-size: 14px;
+  --sl-pagination-text-color: var(--sl-color-neutral-700);
+  --sl-pagination-current-page-color: var(--sl-color-primary-600);
+  --sl-pagination-font-size: var(--sl-font-size-small);
   --sl-pagination-icon-font-size: 18px;
-  --sl-pagination-icon-font: #666;
-  --sl-pagination-icon-font-hover: #1890ff;
+  --sl-pagination-icon-font: var(--sl-color-neutral-600);
+  --sl-pagination-icon-font-hover: var(--sl-color-primary-600);
   --sl-pagination-current-page-border-radius: 6px;
   --sl-pagination-current-page-sizing-width: 4rem;
 }
@@ -509,11 +515,11 @@ export default class PaginationCustomStyle extends KingdeeElement {}
 .pagination-demo {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sl-spacing-medium);
 }
 .controls {
   display: flex;
-  gap: 8px;
+  gap: var(--sl-spacing-x-small);
 }
 ```
 ```javascript
@@ -525,39 +531,59 @@ export default class PaginationDynamic extends KingdeeElement {
   renderedCallback() {
     if (this._eventsBound) return;
     this._eventsBound = true;
-    this.bindEvents();
+    this.bindShoelaceEvents();
   }
 
-  bindEvents() {
-    const btnSetPage = this.template.querySelector('.btn-set-page');
-    const btnSetSize = this.template.querySelector('.btn-set-size');
-    const btnReset = this.template.querySelector('.btn-reset');
+  get shoelaceEventBindings() {
+    return [
+      ['.btn-set-page', 'click', this.handleSetPageClick],
+      ['.btn-set-size', 'click', this.handleSetSizeClick],
+      ['.btn-reset', 'click', this.handleResetClick]
+    ];
+  }
+
+  bindShoelaceEvents() {
+    this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+      const el = this.template.querySelector(selector);
+      if (el) {
+        const boundHandler = handler.bind(this);
+        el.addEventListener(event, boundHandler);
+        return { el, event, boundHandler };
+      }
+      return null;
+    }).filter(Boolean);
+  }
+
+  handleSetPageClick() {
     const pagination = this.template.querySelector('.pagination-el');
-
-    if (btnSetPage) {
-      btnSetPage.addEventListener('click', () => {
-        if (pagination) {
-          pagination.currentPage = 5;
-        }
-      });
+    if (pagination) {
+      pagination.currentPage = 5;
     }
+  }
 
-    if (btnSetSize) {
-      btnSetSize.addEventListener('click', () => {
-        if (pagination) {
-          pagination.pageSize = 50;
-        }
-      });
+  handleSetSizeClick() {
+    const pagination = this.template.querySelector('.pagination-el');
+    if (pagination) {
+      pagination.pageSize = 50;
     }
+  }
 
-    if (btnReset) {
-      btnReset.addEventListener('click', () => {
-        if (pagination) {
-          pagination.currentPage = 1;
-          pagination.pageSize = 20;
-        }
-      });
+  handleResetClick() {
+    const pagination = this.template.querySelector('.pagination-el');
+    if (pagination) {
+      pagination.currentPage = 1;
+      pagination.pageSize = 20;
     }
+  }
+
+  disconnectedCallback() {
+    if (this._boundHandlers) {
+      this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+        el.removeEventListener(event, boundHandler);
+      });
+      this._boundHandlers = [];
+    }
+    this._eventsBound = false;
   }
 }
 ```
@@ -590,17 +616,41 @@ export default class PaginationDynamic extends KingdeeElement {
 renderedCallback() {
   if (this._eventsBound) return;
   this._eventsBound = true;
-  
-  const pagination = this.template.querySelector('.pagination-el');
-  if (pagination) {
-    pagination.addEventListener('sl-page-change', this.handlePageChange.bind(this));
-  }
+  this.bindShoelaceEvents();
+}
+
+get shoelaceEventBindings() {
+  return [
+    ['.pagination-el', 'sl-page-change', this.handlePageChange]
+  ];
+}
+
+bindShoelaceEvents() {
+  this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+    const el = this.template.querySelector(selector);
+    if (el) {
+      const boundHandler = handler.bind(this);
+      el.addEventListener(event, boundHandler);
+      return { el, event, boundHandler };
+    }
+    return null;
+  }).filter(Boolean);
 }
 
 handlePageChange(event) {
   const { pageNumber, pageSize } = event.detail;
   console.log('当前页:', pageNumber);
   console.log('每页条数:', pageSize);
+}
+
+disconnectedCallback() {
+  if (this._boundHandlers) {
+    this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+      el.removeEventListener(event, boundHandler);
+    });
+    this._boundHandlers = [];
+  }
+  this._eventsBound = false;
 }
 ```
 
@@ -662,12 +712,25 @@ import '@kdcloudjs/shoelace/dist/components/pagination/pagination.js';
 renderedCallback() {
   if (this._eventsBound) return;
   this._eventsBound = true;
-  
-  const pagination = this.template.querySelector('.pagination-el');
-  if (pagination) {
-    this._handlePageChange = this.handlePageChange.bind(this);
-    pagination.addEventListener('sl-page-change', this._handlePageChange);
-  }
+  this.bindShoelaceEvents();
+}
+
+get shoelaceEventBindings() {
+  return [
+    ['.pagination-el', 'sl-page-change', this.handlePageChange]
+  ];
+}
+
+bindShoelaceEvents() {
+  this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+    const el = this.template.querySelector(selector);
+    if (el) {
+      const boundHandler = handler.bind(this);
+      el.addEventListener(event, boundHandler);
+      return { el, event, boundHandler };
+    }
+    return null;
+  }).filter(Boolean);
 }
 ```
 
@@ -675,10 +738,13 @@ renderedCallback() {
 
 ```javascript
 disconnectedCallback() {
-  const pagination = this.template.querySelector('.pagination-el');
-  if (pagination && this._handlePageChange) {
-    pagination.removeEventListener('sl-page-change', this._handlePageChange);
+  if (this._boundHandlers) {
+    this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+      el.removeEventListener(event, boundHandler);
+    });
+    this._boundHandlers = [];
   }
+  this._eventsBound = false;
 }
 ```
 

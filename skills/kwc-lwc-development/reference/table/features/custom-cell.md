@@ -1,6 +1,6 @@
 # 自定义单元格
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -34,22 +34,22 @@ Table 组件支持通过 slot 自定义单元格内容。在列配置中设置 `
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
     >
         <div slot="custom-cell-action-1" class="action-cell">
-            <sl-button size="small" variant="primary" onclick={handleEdit} data-id="1">编辑</sl-button>
-            <sl-button size="small" variant="danger" onclick={handleDelete} data-id="1">删除</sl-button>
+            <sl-button kwc:external size="small" variant="primary" onclick={handleEdit} data-id="1">编辑</sl-button>
+            <sl-button kwc:external size="small" variant="danger" onclick={handleDelete} data-id="1">删除</sl-button>
         </div>
         <div slot="custom-cell-action-2" class="action-cell">
-            <sl-button size="small" variant="primary" onclick={handleEdit} data-id="2">编辑</sl-button>
-            <sl-button size="small" variant="danger" onclick={handleDelete} data-id="2">删除</sl-button>
+            <sl-button kwc:external size="small" variant="primary" onclick={handleEdit} data-id="2">编辑</sl-button>
+            <sl-button kwc:external size="small" variant="danger" onclick={handleDelete} data-id="2">删除</sl-button>
         </div>
         <div slot="custom-cell-action-3" class="action-cell">
-            <sl-button size="small" variant="primary" onclick={handleEdit} data-id="3">编辑</sl-button>
-            <sl-button size="small" variant="danger" onclick={handleDelete} data-id="3">删除</sl-button>
+            <sl-button kwc:external size="small" variant="primary" onclick={handleEdit} data-id="3">编辑</sl-button>
+            <sl-button kwc:external size="small" variant="danger" onclick={handleDelete} data-id="3">删除</sl-button>
         </div>
     </sl-table>
 </template>
@@ -57,11 +57,11 @@ Table 组件支持通过 slot 自定义单元格内容。在列配置中设置 `
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class CustomCellTable extends LightningElement {
+export default class CustomCellTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { title: '年龄', dataIndex: 'age', width: 100 },
@@ -91,7 +91,7 @@ export default class CustomCellTable extends LightningElement {
 ```css
 .action-cell {
     display: flex;
-    gap: 8px;
+    gap: var(--sl-spacing-x-small);
 }
 ```
 
@@ -104,31 +104,31 @@ export default class CustomCellTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
     >
         <!-- 状态列 -->
         <div slot="custom-cell-status-1" class="status-cell">
-            <sl-tag variant="success">在职</sl-tag>
+            <sl-tag kwc:external variant="success">在职</sl-tag>
         </div>
         <div slot="custom-cell-status-2" class="status-cell">
-            <sl-tag variant="danger">离职</sl-tag>
+            <sl-tag kwc:external variant="danger">离职</sl-tag>
         </div>
         <div slot="custom-cell-status-3" class="status-cell">
-            <sl-tag variant="warning">休假</sl-tag>
+            <sl-tag kwc:external variant="warning">休假</sl-tag>
         </div>
         
         <!-- 头像列 -->
         <div slot="custom-cell-avatar-1" class="avatar-cell">
-            <sl-avatar initials="张"></sl-avatar>
+            <sl-avatar kwc:external initials="张"></sl-avatar>
         </div>
         <div slot="custom-cell-avatar-2" class="avatar-cell">
-            <sl-avatar initials="李"></sl-avatar>
+            <sl-avatar kwc:external initials="李"></sl-avatar>
         </div>
         <div slot="custom-cell-avatar-3" class="avatar-cell">
-            <sl-avatar initials="王"></sl-avatar>
+            <sl-avatar kwc:external initials="王"></sl-avatar>
         </div>
     </sl-table>
 </template>
@@ -136,12 +136,12 @@ export default class CustomCellTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/tag/tag.js';
 import '@kdcloudjs/shoelace/dist/components/avatar/avatar.js';
 
-export default class MultiCustomCellTable extends LightningElement {
+export default class MultiCustomCellTable extends KingdeeElement {
     columns = [
         { title: '头像', dataIndex: 'avatar', width: 80, slot: true },
         { title: '姓名', dataIndex: 'name', width: 150 },
@@ -176,14 +176,14 @@ export default class MultiCustomCellTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
     >
         <template for:each={dataSource} for:item="row">
             <div key={row.id} slot={row.actionSlot} class="action-cell">
-                <sl-button 
+                <sl-button kwc:external 
                     size="small" 
                     variant="text" 
                     onclick={handleView}
@@ -191,7 +191,7 @@ export default class MultiCustomCellTable extends LightningElement {
                 >
                     查看
                 </sl-button>
-                <sl-button 
+                <sl-button kwc:external 
                     size="small" 
                     variant="text"
                     onclick={handleEdit}
@@ -207,11 +207,11 @@ export default class MultiCustomCellTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class DynamicSlotTable extends LightningElement {
+export default class DynamicSlotTable extends KingdeeElement {
     columns = [
         { title: '任务名称', dataIndex: 'task', width: 200 },
         { title: '负责人', dataIndex: 'owner', width: 120 },
@@ -252,7 +252,7 @@ export default class DynamicSlotTable extends LightningElement {
 ```css
 .action-cell {
     display: flex;
-    gap: 4px;
+    gap: var(--sl-spacing-2x-small);
 }
 ```
 
@@ -265,14 +265,14 @@ export default class DynamicSlotTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
     >
         <template for:each={dataSource} for:item="row">
             <div key={row.id} slot={row.progressSlot} class="progress-cell">
-                <sl-progress-bar value={row.progress}></sl-progress-bar>
+                <sl-progress-bar kwc:external value={row.progress}></sl-progress-bar>
                 <span class="progress-text">{row.progress}%</span>
             </div>
         </template>
@@ -282,11 +282,11 @@ export default class DynamicSlotTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/progress-bar/progress-bar.js';
 
-export default class DataBindingSlotTable extends LightningElement {
+export default class DataBindingSlotTable extends KingdeeElement {
     columns = [
         { title: '项目名称', dataIndex: 'project', width: 200 },
         { title: '负责人', dataIndex: 'owner', width: 120 },
@@ -314,7 +314,7 @@ export default class DataBindingSlotTable extends LightningElement {
 .progress-cell {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--sl-spacing-x-small);
 }
 .progress-cell sl-progress-bar {
     flex: 1;
@@ -322,8 +322,8 @@ export default class DataBindingSlotTable extends LightningElement {
 .progress-text {
     min-width: 40px;
     text-align: right;
-    font-size: 12px;
-    color: #666;
+    font-size: var(--sl-font-size-x-small);
+    color: var(--sl-color-neutral-600);
 }
 ```
 
@@ -337,4 +337,4 @@ export default class DataBindingSlotTable extends LightningElement {
 4. **slot 内容为空**：如果某个 slot 没有提供内容，会显示该单元格的原始数据值
 5. **性能考虑**：大量自定义单元格会增加 DOM 复杂度，大数据量时建议配合虚拟滚动
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

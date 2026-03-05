@@ -1,6 +1,6 @@
 # 日期时间模式
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -34,13 +34,12 @@
 **index.html**
 ```html
 <template>
-    <sl-datepicker
+    <sl-datepicker kwc:external class="datepicker-el"
         label="选择日期时间"
         type="datetime"
         placeholder="请选择日期和时间"
-        onsl-change={handleChange}
     ></sl-datepicker>
-    <div class="result" lwc:if={selectedDatetime}>
+    <div class="result" kwc:if={selectedDatetime}>
         选中的日期时间: {selectedDatetime}
     </div>
 </template>
@@ -48,14 +47,48 @@
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 
-export default class BasicDatetimePicker extends LightningElement {
+export default class BasicDatetimePicker extends KingdeeElement {
     @track selectedDatetime = '';
+
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        this.bindShoelaceEvents();
+    }
+
+    get shoelaceEventBindings() {
+        return [
+            ['.datepicker-el', 'sl-change', this.handleChange]
+        ];
+    }
+
+    bindShoelaceEvents() {
+        this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+            const el = this.template.querySelector(selector);
+            if (el) {
+                const boundHandler = handler.bind(this);
+                el.addEventListener(event, boundHandler);
+                return { el, event, boundHandler };
+            }
+            return null;
+        }).filter(Boolean);
+    }
 
     handleChange(event) {
         this.selectedDatetime = event.target.value;
+    }
+
+    disconnectedCallback() {
+        if (this._boundHandlers) {
+            this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+                el.removeEventListener(event, boundHandler);
+            });
+            this._boundHandlers = [];
+        }
+        this._eventsBound = false;
     }
 }
 ```
@@ -63,11 +96,11 @@ export default class BasicDatetimePicker extends LightningElement {
 **index.css**
 ```css
 .result {
-    margin-top: 12px;
-    padding: 12px;
-    background: #e6f7ff;
-    border-radius: 4px;
-    font-size: 14px;
+    margin-top: var(--sl-spacing-small);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-primary-100);
+    border-radius: var(--sl-border-radius-medium);
+    font-size: var(--sl-font-size-small);
 }
 ```
 
@@ -80,11 +113,10 @@ export default class BasicDatetimePicker extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-datepicker
+    <sl-datepicker kwc:external class="datepicker-el"
         label="会议时间"
         type="datetime"
         value="2024-06-15 09:30:00"
-        onsl-change={handleChange}
     ></sl-datepicker>
     <div class="result">当前值: {currentValue}</div>
 </template>
@@ -92,14 +124,48 @@ export default class BasicDatetimePicker extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 
-export default class DefaultDatetimePicker extends LightningElement {
+export default class DefaultDatetimePicker extends KingdeeElement {
     @track currentValue = '2024-06-15 09:30:00';
+
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        this.bindShoelaceEvents();
+    }
+
+    get shoelaceEventBindings() {
+        return [
+            ['.datepicker-el', 'sl-change', this.handleChange]
+        ];
+    }
+
+    bindShoelaceEvents() {
+        this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+            const el = this.template.querySelector(selector);
+            if (el) {
+                const boundHandler = handler.bind(this);
+                el.addEventListener(event, boundHandler);
+                return { el, event, boundHandler };
+            }
+            return null;
+        }).filter(Boolean);
+    }
 
     handleChange(event) {
         this.currentValue = event.target.value;
+    }
+
+    disconnectedCallback() {
+        if (this._boundHandlers) {
+            this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+                el.removeEventListener(event, boundHandler);
+            });
+            this._boundHandlers = [];
+        }
+        this._eventsBound = false;
     }
 }
 ```
@@ -107,9 +173,9 @@ export default class DefaultDatetimePicker extends LightningElement {
 **index.css**
 ```css
 .result {
-    margin-top: 12px;
-    color: #666;
-    font-size: 14px;
+    margin-top: var(--sl-spacing-small);
+    color: var(--sl-color-neutral-600);
+    font-size: var(--sl-font-size-small);
 }
 ```
 
@@ -124,21 +190,19 @@ export default class DefaultDatetimePicker extends LightningElement {
 <template>
     <div class="comparison">
         <div class="picker-wrapper">
-            <sl-datepicker
+            <sl-datepicker kwc:external class="datepicker-el"
                 label="日期模式 (date)"
                 type="date"
                 placeholder="选择日期"
-                onsl-change={handleDateChange}
             ></sl-datepicker>
             <div class="value">值: {dateValue}</div>
         </div>
 
         <div class="picker-wrapper">
-            <sl-datepicker
+            <sl-datepicker kwc:external class="time-datepicker"
                 label="日期时间模式 (datetime)"
                 type="datetime"
                 placeholder="选择日期和时间"
-                onsl-change={handleDatetimeChange}
             ></sl-datepicker>
             <div class="value">值: {datetimeValue}</div>
         </div>
@@ -148,12 +212,37 @@ export default class DefaultDatetimePicker extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 
-export default class ComparisonDatepicker extends LightningElement {
+export default class ComparisonDatepicker extends KingdeeElement {
     @track dateValue = '（未选择）';
     @track datetimeValue = '（未选择）';
+
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        this.bindShoelaceEvents();
+    }
+
+    get shoelaceEventBindings() {
+        return [
+            ['.datepicker-el', 'sl-change', this.handleDateChange],
+            ['.time-datepicker', 'sl-change', this.handleDatetimeChange]
+        ];
+    }
+
+    bindShoelaceEvents() {
+        this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+            const el = this.template.querySelector(selector);
+            if (el) {
+                const boundHandler = handler.bind(this);
+                el.addEventListener(event, boundHandler);
+                return { el, event, boundHandler };
+            }
+            return null;
+        }).filter(Boolean);
+    }
 
     handleDateChange(event) {
         this.dateValue = event.target.value || '（未选择）';
@@ -161,6 +250,16 @@ export default class ComparisonDatepicker extends LightningElement {
 
     handleDatetimeChange(event) {
         this.datetimeValue = event.target.value || '（未选择）';
+    }
+
+    disconnectedCallback() {
+        if (this._boundHandlers) {
+            this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+                el.removeEventListener(event, boundHandler);
+            });
+            this._boundHandlers = [];
+        }
+        this._eventsBound = false;
     }
 }
 ```
@@ -175,11 +274,11 @@ export default class ComparisonDatepicker extends LightningElement {
 .picker-wrapper {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--sl-spacing-x-small);
 }
 .value {
     font-size: 13px;
-    color: #666;
+    color: var(--sl-color-neutral-600);
     font-family: monospace;
     word-break: break-all;
 }
@@ -194,16 +293,15 @@ export default class ComparisonDatepicker extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-datepicker
+    <sl-datepicker kwc:external class="datepicker-el"
         label="预约时间"
         type="datetime"
         min="2024-01-01"
         max="2024-12-31"
         placeholder="请选择 2024 年内的时间"
         help-text="仅可选择 2024 年内的日期"
-        onsl-change={handleChange}
     ></sl-datepicker>
-    <div class="result" lwc:if={selectedValue}>
+    <div class="result" kwc:if={selectedValue}>
         预约时间: {selectedValue}
     </div>
 </template>
@@ -211,14 +309,48 @@ export default class ComparisonDatepicker extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 
-export default class DatetimeRangePicker extends LightningElement {
+export default class DatetimeRangePicker extends KingdeeElement {
     @track selectedValue = '';
+
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        this.bindShoelaceEvents();
+    }
+
+    get shoelaceEventBindings() {
+        return [
+            ['.datepicker-el', 'sl-change', this.handleChange]
+        ];
+    }
+
+    bindShoelaceEvents() {
+        this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+            const el = this.template.querySelector(selector);
+            if (el) {
+                const boundHandler = handler.bind(this);
+                el.addEventListener(event, boundHandler);
+                return { el, event, boundHandler };
+            }
+            return null;
+        }).filter(Boolean);
+    }
 
     handleChange(event) {
         this.selectedValue = event.target.value;
+    }
+
+    disconnectedCallback() {
+        if (this._boundHandlers) {
+            this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+                el.removeEventListener(event, boundHandler);
+            });
+            this._boundHandlers = [];
+        }
+        this._eventsBound = false;
     }
 }
 ```
@@ -226,12 +358,12 @@ export default class DatetimeRangePicker extends LightningElement {
 **index.css**
 ```css
 .result {
-    margin-top: 12px;
-    padding: 12px;
-    background: #f6ffed;
-    border: 1px solid #b7eb8f;
-    border-radius: 4px;
-    font-size: 14px;
+    margin-top: var(--sl-spacing-small);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-success-100);
+    border: 1px solid var(--sl-color-success-300);
+    border-radius: var(--sl-border-radius-medium);
+    font-size: var(--sl-font-size-small);
 }
 ```
 
@@ -245,20 +377,19 @@ export default class DatetimeRangePicker extends LightningElement {
 ```html
 <template>
     <div class="toolbar">
-        <sl-button
+        <sl-button kwc:external
             variant={dateVariant}
             onclick={switchToDate}
         >日期模式</sl-button>
-        <sl-button
+        <sl-button kwc:external
             variant={datetimeVariant}
             onclick={switchToDatetime}
         >日期时间模式</sl-button>
     </div>
-    <sl-datepicker
+    <sl-datepicker kwc:external class="datepicker-el"
         label="动态切换"
         type={pickerType}
         placeholder={placeholderText}
-        onsl-change={handleChange}
     ></sl-datepicker>
     <div class="result">
         <div>当前模式: {pickerType}</div>
@@ -269,13 +400,37 @@ export default class DatetimeRangePicker extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class DynamicModeDatepicker extends LightningElement {
+export default class DynamicModeDatepicker extends KingdeeElement {
     @track pickerType = 'date';
     @track currentValue = '';
+
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        this.bindShoelaceEvents();
+    }
+
+    get shoelaceEventBindings() {
+        return [
+            ['.datepicker-el', 'sl-change', this.handleChange]
+        ];
+    }
+
+    bindShoelaceEvents() {
+        this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+            const el = this.template.querySelector(selector);
+            if (el) {
+                const boundHandler = handler.bind(this);
+                el.addEventListener(event, boundHandler);
+                return { el, event, boundHandler };
+            }
+            return null;
+        }).filter(Boolean);
+    }
 
     get dateVariant() {
         return this.pickerType === 'date' ? 'primary' : 'default';
@@ -304,6 +459,16 @@ export default class DynamicModeDatepicker extends LightningElement {
     handleChange(event) {
         this.currentValue = event.target.value;
     }
+
+    disconnectedCallback() {
+        if (this._boundHandlers) {
+            this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+                el.removeEventListener(event, boundHandler);
+            });
+            this._boundHandlers = [];
+        }
+        this._eventsBound = false;
+    }
 }
 ```
 
@@ -311,19 +476,19 @@ export default class DynamicModeDatepicker extends LightningElement {
 ```css
 .toolbar {
     display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
+    gap: var(--sl-spacing-x-small);
+    margin-bottom: var(--sl-spacing-medium);
 }
 .result {
-    margin-top: 12px;
-    padding: 12px;
-    background: #f5f5f5;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #666;
+    margin-top: var(--sl-spacing-small);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-neutral-100);
+    border-radius: var(--sl-border-radius-medium);
+    font-size: var(--sl-font-size-small);
+    color: var(--sl-color-neutral-600);
 }
 .result div {
-    margin-bottom: 4px;
+    margin-bottom: var(--sl-spacing-2x-small);
 }
 ```
 
@@ -337,4 +502,4 @@ export default class DynamicModeDatepicker extends LightningElement {
 4. **切换模式清空值**：从 `date` 切换到 `datetime` 模式（或反之）时，建议清空当前值，因为值格式不兼容
 5. **时间面板**：桌面端日历面板右侧显示时/分/秒三列滚动选择；移动端通过底部滚轮选择
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

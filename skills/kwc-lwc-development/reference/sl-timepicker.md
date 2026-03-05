@@ -114,7 +114,7 @@ export default class TimepickerPlaceholder extends KingdeeElement {}
 .timepicker-group {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--sl-spacing-small);
   width: 230px;
 }
 ```
@@ -184,7 +184,7 @@ export default class TimepickerPill extends KingdeeElement {}
 .timepicker-group {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sl-spacing-medium);
   width: 230px;
 }
 ```
@@ -249,7 +249,7 @@ export default class TimepickerReadonly extends KingdeeElement {}
 .time-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sl-spacing-medium);
   width: 230px;
 }
 ```
@@ -262,17 +262,43 @@ export default class TimepickerRequired extends KingdeeElement {
   renderedCallback() {
     if (this._eventsBound) return;
     this._eventsBound = true;
+    this.bindShoelaceEvents();
+  }
 
-    const form = this.template.querySelector('.time-form');
-    if (form) {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const timepicker = this.template.querySelector('.timepicker-el');
-        if (timepicker && timepicker.reportValidity()) {
-          console.log('提交时间:', timepicker.value);
-        }
-      });
+  get shoelaceEventBindings() {
+    return [
+      ['.time-form', 'submit', this.handleSubmit]
+    ];
+  }
+
+  bindShoelaceEvents() {
+    this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+      const el = this.template.querySelector(selector);
+      if (el) {
+        const boundHandler = handler.bind(this);
+        el.addEventListener(event, boundHandler);
+        return { el, event, boundHandler };
+      }
+      return null;
+    }).filter(Boolean);
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    const timepicker = this.template.querySelector('.timepicker-el');
+    if (timepicker && timepicker.reportValidity()) {
+      console.log('提交时间:', timepicker.value);
     }
+  }
+
+  disconnectedCallback() {
+    if (this._boundHandlers) {
+      this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+        el.removeEventListener(event, boundHandler);
+      });
+      this._boundHandlers = [];
+    }
+    this._eventsBound = false;
   }
 }
 ```
@@ -291,8 +317,8 @@ export default class TimepickerRequired extends KingdeeElement {
 ```css
 .overflow-container {
   overflow: hidden;
-  border: 1px solid #ccc;
-  padding: 16px;
+  border: 1px solid var(--sl-color-neutral-300);
+  padding: var(--sl-spacing-medium);
   height: 80px;
 }
 ```
@@ -325,17 +351,17 @@ export default class TimepickerHoist extends KingdeeElement {}
 .timepicker-demo {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sl-spacing-medium);
   width: 280px;
 }
 .event-info {
-  padding: 12px;
-  background: #f5f7fa;
-  border-radius: 4px;
+  padding: var(--sl-spacing-small);
+  background: var(--sl-color-neutral-100);
+  border-radius: var(--sl-border-radius-medium);
 }
 .event-info p {
-  margin: 4px 0;
-  font-size: 14px;
+  margin: var(--sl-spacing-2x-small) 0;
+  font-size: var(--sl-font-size-small);
 }
 ```
 ```javascript
@@ -388,7 +414,9 @@ export default class TimepickerEvent extends KingdeeElement {
       this._boundHandlers.forEach(({ el, event, boundHandler }) => {
         el.removeEventListener(event, boundHandler);
       });
+      this._boundHandlers = [];
     }
+    this._eventsBound = false;
   }
 }
 ```
@@ -407,12 +435,12 @@ export default class TimepickerEvent extends KingdeeElement {
 .timepicker-demo {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--sl-spacing-small);
   width: 230px;
 }
 .event-log {
-  font-size: 14px;
-  color: #666;
+  font-size: var(--sl-font-size-small);
+  color: var(--sl-color-neutral-600);
 }
 ```
 ```javascript
@@ -423,35 +451,44 @@ export default class TimepickerFocusBlur extends KingdeeElement {
   renderedCallback() {
     if (this._eventsBound) return;
     this._eventsBound = true;
+    this.bindShoelaceEvents();
+  }
 
-    const picker = this.template.querySelector('.timepicker-el');
-    if (!picker) return;
-
-    this._handlers = [
-      ['sl-focus', () => this.showLog('获得焦点 (sl-focus)')],
-      ['sl-blur', () => this.showLog('失去焦点 (sl-blur)')],
-      ['sl-clear', () => this.showLog('已清除 (sl-clear)')]
+  get shoelaceEventBindings() {
+    return [
+      ['.timepicker-el', 'sl-focus', () => this.showLog('获得焦点 (sl-focus)')],
+      ['.timepicker-el', 'sl-blur', () => this.showLog('失去焦点 (sl-blur)')],
+      ['.timepicker-el', 'sl-clear', () => this.showLog('已清除 (sl-clear)')]
     ];
+  }
 
-    this._handlers.forEach(([event, handler]) => {
-      picker.addEventListener(event, handler);
-    });
+  bindShoelaceEvents() {
+    this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+      const el = this.template.querySelector(selector);
+      if (el) {
+        const boundHandler = handler;
+        el.addEventListener(event, boundHandler);
+        return { el, event, boundHandler };
+      }
+      return null;
+    }).filter(Boolean);
   }
 
   showLog(text) {
     const el = this.template.querySelector('.log-text');
-    if (el) {
+    if ( el ) {
       el.textContent = text;
     }
   }
 
   disconnectedCallback() {
-    const picker = this.template.querySelector('.timepicker-el');
-    if (picker && this._handlers) {
-      this._handlers.forEach(([event, handler]) => {
-        picker.removeEventListener(event, handler);
+    if (this._boundHandlers) {
+      this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+        el.removeEventListener(event, boundHandler);
       });
+      this._boundHandlers = [];
     }
+    this._eventsBound = false;
   }
 }
 ```
@@ -476,12 +513,12 @@ export default class TimepickerFocusBlur extends KingdeeElement {
 .timepicker-demo {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--sl-spacing-medium);
   width: 280px;
 }
 .controls {
   display: flex;
-  gap: 8px;
+  gap: var(--sl-spacing-x-small);
 }
 ```
 ```javascript
@@ -493,35 +530,58 @@ export default class TimepickerDynamic extends KingdeeElement {
   renderedCallback() {
     if (this._eventsBound) return;
     this._eventsBound = true;
+    this.bindShoelaceEvents();
+  }
 
+  get shoelaceEventBindings() {
+    return [
+      ['.btn-morning', 'click', this.handleMorningClick],
+      ['.btn-noon', 'click', this.handleNoonClick],
+      ['.btn-clear', 'click', this.handleClearClick]
+    ];
+  }
+
+  bindShoelaceEvents() {
+    this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+      const el = this.template.querySelector(selector);
+      if (el) {
+        const boundHandler = handler.bind(this);
+        el.addEventListener(event, boundHandler);
+        return { el, event, boundHandler };
+      }
+      return null;
+    }).filter(Boolean);
+  }
+
+  handleMorningClick() {
     const picker = this.template.querySelector('.timepicker-el');
-    const btnMorning = this.template.querySelector('.btn-morning');
-    const btnNoon = this.template.querySelector('.btn-noon');
-    const btnClear = this.template.querySelector('.btn-clear');
-
-    if (btnMorning) {
-      btnMorning.addEventListener('click', () => {
-        if (picker) {
-          picker.value = '09:00:00';
-        }
-      });
+    if (picker) {
+      picker.value = '09:00:00';
     }
+  }
 
-    if (btnNoon) {
-      btnNoon.addEventListener('click', () => {
-        if (picker) {
-          picker.value = '12:00:00';
-        }
-      });
+  handleNoonClick() {
+    const picker = this.template.querySelector('.timepicker-el');
+    if (picker) {
+      picker.value = '12:00:00';
     }
+  }
 
-    if (btnClear) {
-      btnClear.addEventListener('click', () => {
-        if (picker) {
-          picker.value = '';
-        }
-      });
+  handleClearClick() {
+    const picker = this.template.querySelector('.timepicker-el');
+    if (picker) {
+      picker.value = '';
     }
+  }
+
+  disconnectedCallback() {
+    if (this._boundHandlers) {
+      this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+        el.removeEventListener(event, boundHandler);
+      });
+      this._boundHandlers = [];
+    }
+    this._eventsBound = false;
   }
 }
 ```
@@ -547,7 +607,7 @@ export default class TimepickerDynamic extends KingdeeElement {
 .timepicker-demo {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--sl-spacing-small);
   width: 280px;
 }
 ```
@@ -560,40 +620,58 @@ export default class TimepickerValidation extends KingdeeElement {
   renderedCallback() {
     if (this._eventsBound) return;
     this._eventsBound = true;
+    this.bindShoelaceEvents();
+  }
 
-    const picker = this.template.querySelector('.timepicker-el');
-    const btn = this.template.querySelector('.btn-validate');
-
-    if (picker) {
-      this._handleChange = () => {
+  get shoelaceEventBindings() {
+    return [
+      ['.timepicker-el', 'sl-change', () => {
         // 值变化时清除之前的自定义校验
-        picker.setCustomValidity('');
-      };
-      picker.addEventListener('sl-change', this._handleChange);
-    }
-
-    if (btn) {
-      btn.addEventListener('click', () => {
-        if (!picker) return;
-        const val = picker.value;
-
-        if (!val) {
-          picker.setCustomValidity('请选择一个时间');
-        } else if (val < '09:00:00' || val > '18:00:00') {
-          picker.setCustomValidity('时间必须在 09:00 到 18:00 之间');
-        } else {
+        const picker = this.template.querySelector('.timepicker-el');
+        if (picker) {
           picker.setCustomValidity('');
         }
-        picker.reportValidity();
-      });
+      }],
+      ['.btn-validate', 'click', this.handleValidateClick]
+    ];
+  }
+
+  bindShoelaceEvents() {
+    this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+      const el = this.template.querySelector(selector);
+      if (el) {
+        const boundHandler = handler;
+        el.addEventListener(event, boundHandler);
+        return { el, event, boundHandler };
+      }
+      return null;
+    }).filter(Boolean);
+  }
+
+  handleValidateClick() {
+    const picker = this.template.querySelector('.timepicker-el');
+    if (!picker) return;
+    
+    const val = picker.value;
+
+    if (!val) {
+      picker.setCustomValidity('请选择一个时间');
+    } else if (val < '09:00:00' || val > '18:00:00') {
+      picker.setCustomValidity('时间必须在 09:00 到 18:00 之间');
+    } else {
+      picker.setCustomValidity('');
     }
+    picker.reportValidity();
   }
 
   disconnectedCallback() {
-    const picker = this.template.querySelector('.timepicker-el');
-    if (picker && this._handleChange) {
-      picker.removeEventListener('sl-change', this._handleChange);
+    if (this._boundHandlers) {
+      this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+        el.removeEventListener(event, boundHandler);
+      });
+      this._boundHandlers = [];
     }
+    this._eventsBound = false;
   }
 }
 ```
@@ -625,11 +703,11 @@ export default class TimepickerValidation extends KingdeeElement {
 .time-range {
   display: flex;
   align-items: flex-end;
-  gap: 8px;
+  gap: var(--sl-spacing-x-small);
 }
 .range-separator {
   line-height: 40px;
-  color: #999;
+  color: var(--sl-color-neutral-500);
 }
 ```
 ```javascript
@@ -640,23 +718,26 @@ export default class TimepickerRange extends KingdeeElement {
   renderedCallback() {
     if (this._eventsBound) return;
     this._eventsBound = true;
+    this.bindShoelaceEvents();
+  }
 
-    const startPicker = this.template.querySelector('.start-time');
-    const endPicker = this.template.querySelector('.end-time');
+  get shoelaceEventBindings() {
+    return [
+      ['.start-time', 'sl-change', this.validateRange],
+      ['.end-time', 'sl-change', this.validateRange]
+    ];
+  }
 
-    if (startPicker) {
-      this._handleStartChange = () => {
-        this.validateRange();
-      };
-      startPicker.addEventListener('sl-change', this._handleStartChange);
-    }
-
-    if (endPicker) {
-      this._handleEndChange = () => {
-        this.validateRange();
-      };
-      endPicker.addEventListener('sl-change', this._handleEndChange);
-    }
+  bindShoelaceEvents() {
+    this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+      const el = this.template.querySelector(selector);
+      if (el) {
+        const boundHandler = handler.bind(this);
+        el.addEventListener(event, boundHandler);
+        return { el, event, boundHandler };
+      }
+      return null;
+    }).filter(Boolean);
   }
 
   validateRange() {
@@ -678,14 +759,13 @@ export default class TimepickerRange extends KingdeeElement {
   }
 
   disconnectedCallback() {
-    const startPicker = this.template.querySelector('.start-time');
-    const endPicker = this.template.querySelector('.end-time');
-    if (startPicker && this._handleStartChange) {
-      startPicker.removeEventListener('sl-change', this._handleStartChange);
+    if (this._boundHandlers) {
+      this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+        el.removeEventListener(event, boundHandler);
+      });
+      this._boundHandlers = [];
     }
-    if (endPicker && this._handleEndChange) {
-      endPicker.removeEventListener('sl-change', this._handleEndChange);
-    }
+    this._eventsBound = false;
   }
 }
 ```
@@ -759,14 +839,26 @@ export default class TimepickerSlot extends KingdeeElement {}
 renderedCallback() {
   if (this._eventsBound) return;
   this._eventsBound = true;
+  this.bindShoelaceEvents();
+}
 
-  const timepicker = this.template.querySelector('.timepicker-el');
-  if (timepicker) {
-    this._handleChange = this.handleChange.bind(this);
-    this._handleInput = this.handleInput.bind(this);
-    timepicker.addEventListener('sl-change', this._handleChange);
-    timepicker.addEventListener('sl-input', this._handleInput);
-  }
+get shoelaceEventBindings() {
+  return [
+    ['.timepicker-el', 'sl-change', this.handleChange],
+    ['.timepicker-el', 'sl-input', this.handleInput]
+  ];
+}
+
+bindShoelaceEvents() {
+  this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+    const el = this.template.querySelector(selector);
+    if (el) {
+      const boundHandler = handler.bind(this);
+      el.addEventListener(event, boundHandler);
+      return { el, event, boundHandler };
+    }
+    return null;
+  }).filter(Boolean);
 }
 
 handleChange(event) {
@@ -775,6 +867,16 @@ handleChange(event) {
 
 handleInput(event) {
   console.log('实时变化的时间:', event.target.value);
+}
+
+disconnectedCallback() {
+  if (this._boundHandlers) {
+    this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+      el.removeEventListener(event, boundHandler);
+    });
+    this._boundHandlers = [];
+  }
+  this._eventsBound = false;
 }
 ```
 
@@ -863,12 +965,25 @@ import '@kdcloudjs/shoelace/dist/components/timepicker/timepicker.js';
 renderedCallback() {
   if (this._eventsBound) return;
   this._eventsBound = true;
+  this.bindShoelaceEvents();
+}
 
-  const timepicker = this.template.querySelector('.timepicker-el');
-  if (timepicker) {
-    this._handleChange = this.handleChange.bind(this);
-    timepicker.addEventListener('sl-change', this._handleChange);
-  }
+get shoelaceEventBindings() {
+  return [
+    ['.timepicker-el', 'sl-change', this.handleChange]
+  ];
+}
+
+bindShoelaceEvents() {
+  this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+    const el = this.template.querySelector(selector);
+    if (el) {
+      const boundHandler = handler.bind(this);
+      el.addEventListener(event, boundHandler);
+      return { el, event, boundHandler };
+    }
+    return null;
+  }).filter(Boolean);
 }
 ```
 
@@ -876,10 +991,13 @@ renderedCallback() {
 
 ```javascript
 disconnectedCallback() {
-  const timepicker = this.template.querySelector('.timepicker-el');
-  if (timepicker && this._handleChange) {
-    timepicker.removeEventListener('sl-change', this._handleChange);
+  if (this._boundHandlers) {
+    this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+      el.removeEventListener(event, boundHandler);
+    });
+    this._boundHandlers = [];
   }
+  this._eventsBound = false;
 }
 ```
 
@@ -933,4 +1051,3 @@ A: 直接访问 `value` 属性即可：
 ```javascript
 const timepicker = this.template.querySelector('.timepicker-el');
 const currentTime = timepicker.value; // 例如 "14:30:00" 或 ""
-```

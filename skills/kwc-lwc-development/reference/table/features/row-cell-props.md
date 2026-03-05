@@ -1,6 +1,6 @@
 # 行/单元格属性定制
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -45,7 +45,7 @@ Table 组件支持通过 `onRow`、`onHeaderRow`、`onCell`、`onHeaderCell` 回
 ```html
 <template>
     <div class="log-panel">点击的行: {clickedRow}</div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -56,10 +56,10 @@ Table 组件支持通过 `onRow`、`onHeaderRow`、`onCell`、`onHeaderCell` 回
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class OnRowTable extends LightningElement {
+export default class OnRowTable extends KingdeeElement {
     @track clickedRow = '无';
 
     columns = [
@@ -79,7 +79,7 @@ export default class OnRowTable extends LightningElement {
         const self = this;
         return {
             className: record.status === 'inactive' ? 'inactive-row' : '',
-            style: index % 2 === 0 ? 'background-color: #fafafa;' : '',
+            style: index % 2 === 0 ? 'background-color: var(--sl-color-neutral-50);' : '',
             onClick: () => {
                 self.clickedRow = `${record.name} (ID: ${record.id})`;
             }
@@ -91,11 +91,11 @@ export default class OnRowTable extends LightningElement {
 **index.css**
 ```css
 .log-panel {
-    margin-bottom: 16px;
-    padding: 12px;
-    background: #e6f7ff;
-    border-radius: 4px;
-    color: #1890ff;
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-primary-100);
+    border-radius: var(--sl-border-radius-medium);
+    color: var(--sl-color-primary-600);
 }
 ```
 
@@ -108,7 +108,7 @@ export default class OnRowTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -119,10 +119,10 @@ export default class OnRowTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class OnHeaderRowTable extends LightningElement {
+export default class OnHeaderRowTable extends KingdeeElement {
     columns = [
         { title: '商品名称', dataIndex: 'product', width: 200 },
         { title: '价格', dataIndex: 'price', width: 100 },
@@ -139,8 +139,8 @@ export default class OnHeaderRowTable extends LightningElement {
         return {
             className: 'custom-header-row',
             style: {
-                'background-color': '#1890ff',
-                'color': '#fff'
+                'background-color': 'var(--sl-color-primary-600)',
+                'color': 'var(--sl-color-neutral-0)'
             }
         };
     }
@@ -156,7 +156,7 @@ export default class OnHeaderRowTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         bordered="true"
         columns={columns}
@@ -167,10 +167,10 @@ export default class OnHeaderRowTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class OnCellTable extends LightningElement {
+export default class OnCellTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { 
@@ -179,11 +179,11 @@ export default class OnCellTable extends LightningElement {
             width: 100,
             onCell: (record) => {
                 // 根据分数设置不同颜色
-                let color = '#52c41a';  // 绿色 - 优秀
+                let color = 'var(--sl-color-success-600)';  // 绿色 - 优秀
                 if (record.score < 60) {
-                    color = '#ff4d4f';  // 红色 - 不及格
+                    color = 'var(--sl-color-danger-600)';  // 红色 - 不及格
                 } else if (record.score < 80) {
-                    color = '#faad14';  // 黄色 - 中等
+                    color = 'var(--sl-color-warning-600)';  // 黄色 - 中等
                 }
                 return {
                     style: {
@@ -221,7 +221,7 @@ export default class OnCellTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         bordered="true"
         columns={columns}
@@ -232,17 +232,17 @@ export default class OnCellTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class OnHeaderCellTable extends LightningElement {
+export default class OnHeaderCellTable extends KingdeeElement {
     columns = [
         { 
             title: '必填项 *', 
             dataIndex: 'name', 
             width: 150,
             onHeaderCell: () => ({
-                style: 'color: #ff4d4f;'
+                style: 'color: var(--sl-color-danger-600);'
             })
         },
         { 
@@ -257,7 +257,7 @@ export default class OnHeaderCellTable extends LightningElement {
             onHeaderCell: () => ({
                 className: 'important-header',
                 style: {
-                    'background-color': '#fffbe6',
+                    'background-color': 'var(--sl-color-warning-50)',
                     'font-weight': 'bold'
                 }
             })
@@ -282,7 +282,7 @@ export default class OnHeaderCellTable extends LightningElement {
 ```html
 <template>
     <div class="info">悬停或点击行查看效果</div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         bordered="true"
         columns={columns}
@@ -295,10 +295,10 @@ export default class OnHeaderCellTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class CombinedPropsTable extends LightningElement {
+export default class CombinedPropsTable extends KingdeeElement {
     @track hoveredRow = null;
 
     columns = [
@@ -307,7 +307,7 @@ export default class CombinedPropsTable extends LightningElement {
             dataIndex: 'name', 
             width: 150,
             onHeaderCell: () => ({
-                style: 'font-weight: bold; color: #1890ff;'
+                style: 'font-weight: bold; color: var(--sl-color-primary-600);'
             })
         },
         { 
@@ -316,9 +316,9 @@ export default class CombinedPropsTable extends LightningElement {
             width: 120,
             onCell: (record) => {
                 const score = record.performance;
-                let bgColor = '#f6ffed';  // 浅绿
-                if (score < 60) bgColor = '#fff2f0';  // 浅红
-                else if (score < 80) bgColor = '#fffbe6';  // 浅黄
+                let bgColor = 'var(--sl-color-success-100)';  // 浅绿
+                if (score < 60) bgColor = 'var(--sl-color-danger-50)';  // 浅红
+                else if (score < 80) bgColor = 'var(--sl-color-warning-50)';  // 浅黄
                 return {
                     style: {
                         'background-color': bgColor,
@@ -361,7 +361,7 @@ export default class CombinedPropsTable extends LightningElement {
     }
 
     handleHeaderRow = () => ({
-        style: 'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff;'
+        style: 'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: var(--sl-color-neutral-0);'
     })
 }
 ```
@@ -369,9 +369,9 @@ export default class CombinedPropsTable extends LightningElement {
 **index.css**
 ```css
 .info {
-    margin-bottom: 12px;
-    color: #666;
-    font-size: 14px;
+    margin-bottom: var(--sl-spacing-small);
+    color: var(--sl-color-neutral-600);
+    font-size: var(--sl-font-size-small);
 }
 ```
 
@@ -385,4 +385,4 @@ export default class CombinedPropsTable extends LightningElement {
 4. **性能影响**：回调函数会在每次渲染时调用，避免在其中执行复杂计算
 5. **CSS 优先级**：通过 `style` 设置的样式优先级较高，可能覆盖 `className` 中的样式
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

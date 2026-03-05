@@ -1,6 +1,6 @@
 # 虚拟滚动
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -32,7 +32,7 @@ Table 组件支持虚拟滚动功能，用于优化大数据量场景下的渲�
 ```html
 <template>
     <p class="info">共 {dataCount} 条数据，仅渲染可视区域内的行</p>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         virtualized="true"
         columns={columns}
@@ -44,10 +44,10 @@ Table 组件支持虚拟滚动功能，用于优化大数据量场景下的渲�
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class VirtualizedTable extends LightningElement {
+export default class VirtualizedTable extends KingdeeElement {
     columns = [
         { title: 'ID', dataIndex: 'id', width: 80 },
         { title: '姓名', dataIndex: 'name', width: 150 },
@@ -72,9 +72,9 @@ export default class VirtualizedTable extends LightningElement {
 **index.css**
 ```css
 .info {
-    margin-bottom: 12px;
-    color: #1890ff;
-    font-size: 14px;
+    margin-bottom: var(--sl-spacing-small);
+    color: var(--sl-color-primary-600);
+    font-size: var(--sl-font-size-small);
 }
 ```
 
@@ -87,7 +87,7 @@ export default class VirtualizedTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         virtualized={virtualizedConfig}
         columns={columns}
@@ -99,10 +99,10 @@ export default class VirtualizedTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class CustomHeightVirtualTable extends LightningElement {
+export default class CustomHeightVirtualTable extends KingdeeElement {
     columns = [
         { title: 'ID', dataIndex: 'id', width: 80 },
         { title: '标题', dataIndex: 'title', width: 200 },
@@ -136,11 +136,12 @@ export default class CustomHeightVirtualTable extends LightningElement {
 <template>
     <div class="toolbar">
         <p>数据量：100,000 条</p>
-        <sl-button size="small" onclick={scrollToTop}>滚动到顶部</sl-button>
-        <sl-button size="small" onclick={scrollToMiddle}>滚动到中间</sl-button>
-        <sl-button size="small" onclick={scrollToBottom}>滚动到底部</sl-button>
+        <sl-button kwc:external size="small" onclick={scrollToTop}>滚动到顶部</sl-button>
+        <sl-button kwc:external size="small" onclick={scrollToMiddle}>滚动到中间</sl-button>
+        <sl-button kwc:external size="small" onclick={scrollToBottom}>滚动到底部</sl-button>
     </div>
-    <sl-table
+    <sl-table kwc:external
+        class="table-el"
         row-key="id"
         virtualized="true"
         columns={columns}
@@ -152,11 +153,11 @@ export default class CustomHeightVirtualTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class LargeDataVirtualTable extends LightningElement {
+export default class LargeDataVirtualTable extends KingdeeElement {
     columns = [
         { title: '序号', dataIndex: 'index', width: 100 },
         { title: 'ID', dataIndex: 'id', width: 120 },
@@ -177,7 +178,7 @@ export default class LargeDataVirtualTable extends LightningElement {
     tableScroll = { y: 500 };
 
     scrollToTop() {
-        const table = this.template.querySelector('sl-table');
+        const table = this.template.querySelector('.table-el');
         const bodyWrapper = table?.shadowRoot?.querySelector('.table-body');
         if (bodyWrapper) {
             bodyWrapper.scrollTop = 0;
@@ -185,7 +186,7 @@ export default class LargeDataVirtualTable extends LightningElement {
     }
 
     scrollToMiddle() {
-        const table = this.template.querySelector('sl-table');
+        const table = this.template.querySelector('.table-el');
         const bodyWrapper = table?.shadowRoot?.querySelector('.table-body');
         if (bodyWrapper) {
             bodyWrapper.scrollTop = bodyWrapper.scrollHeight / 2;
@@ -193,7 +194,7 @@ export default class LargeDataVirtualTable extends LightningElement {
     }
 
     scrollToBottom() {
-        const table = this.template.querySelector('sl-table');
+        const table = this.template.querySelector('.table-el');
         const bodyWrapper = table?.shadowRoot?.querySelector('.table-body');
         if (bodyWrapper) {
             bodyWrapper.scrollTop = bodyWrapper.scrollHeight;
@@ -207,12 +208,12 @@ export default class LargeDataVirtualTable extends LightningElement {
 .toolbar {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 16px;
+    gap: var(--sl-spacing-medium);
+    margin-bottom: var(--sl-spacing-medium);
 }
 .toolbar p {
     margin: 0;
-    color: #666;
+    color: var(--sl-color-neutral-600);
 }
 ```
 
@@ -228,7 +229,7 @@ export default class LargeDataVirtualTable extends LightningElement {
     <div class="info">
         已选择 {selectedCount} 条数据
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         virtualized="true"
         columns={columns}
@@ -241,10 +242,10 @@ export default class LargeDataVirtualTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class VirtualWithSelectionTable extends LightningElement {
+export default class VirtualWithSelectionTable extends KingdeeElement {
     @track selectedCount = 0;
 
     columns = [
@@ -279,11 +280,11 @@ export default class VirtualWithSelectionTable extends LightningElement {
 **index.css**
 ```css
 .info {
-    margin-bottom: 12px;
-    padding: 8px 12px;
-    background: #e6f7ff;
-    border-radius: 4px;
-    color: #1890ff;
+    margin-bottom: var(--sl-spacing-small);
+    padding: var(--sl-spacing-x-small) var(--sl-spacing-small);
+    background: var(--sl-color-primary-100);
+    border-radius: var(--sl-border-radius-medium);
+    color: var(--sl-color-primary-600);
 }
 ```
 
@@ -298,4 +299,4 @@ export default class VirtualWithSelectionTable extends LightningElement {
 5. **滚动性能**：虚拟滚动大幅提升渲染性能，推荐数据量超过 100 条时使用
 6. **overscan 配置**：组件内置 overscan 为 5，即上下各多渲染 5 行作为缓冲
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

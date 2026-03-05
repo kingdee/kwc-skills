@@ -1,6 +1,6 @@
 # 事件监听
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -32,22 +32,21 @@ Table 组件提供统一的 `change` 事件，用于监听排序、筛选、分�
         <h4>事件日志</h4>
         <div class="log-content">{logContent}</div>
     </div>
-    <sl-table
+    <sl-table kwc:external class="table-el"
         row-key="id"
         columns={columns}
         data-source={dataSource}
         pagination={pagination}
-        onchange={handleChange}
     ></sl-table>
 </template>
 ```
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class ChangeEventTable extends LightningElement {
+export default class ChangeEventTable extends KingdeeElement {
     @track logContent = '等待操作...';
 
     columns = [
@@ -82,6 +81,30 @@ export default class ChangeEventTable extends LightningElement {
         pageSize: 10
     };
 
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        this.bindShoelaceEvents();
+    }
+
+    get shoelaceEventBindings() {
+        return [
+            ['.table-el', 'sl-change', this.handleChange]
+        ];
+    }
+
+    bindShoelaceEvents() {
+        this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+            const el = this.template.querySelector(selector);
+            if (el) {
+                const boundHandler = handler.bind(this);
+                el.addEventListener(event, boundHandler);
+                return { el, event, boundHandler };
+            }
+            return null;
+        }).filter(Boolean);
+    }
+
     handleChange(event) {
         const { sorting, columnFilters, changeType, pagination } = event.detail;
         const time = new Date().toLocaleTimeString();
@@ -89,28 +112,38 @@ export default class ChangeEventTable extends LightningElement {
         this.logContent = `[${time}] 变化类型: ${changeType}\n`;
         this.logContent += JSON.stringify(event.detail, null, 2);
     }
+
+    disconnectedCallback() {
+        if (this._boundHandlers) {
+            this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+                el.removeEventListener(event, boundHandler);
+            });
+            this._boundHandlers = [];
+        }
+        this._eventsBound = false;
+    }
 }
 ```
 
 **index.css**
 ```css
 .log-panel {
-    margin-bottom: 16px;
-    padding: 12px;
-    background: #f5f5f5;
-    border-radius: 4px;
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-neutral-100);
+    border-radius: var(--sl-border-radius-medium);
 }
 .log-panel h4 {
-    margin: 0 0 8px;
-    font-size: 14px;
+    margin: 0 0 var(--sl-spacing-x-small);
+    font-size: var(--sl-font-size-small);
 }
 .log-content {
-    padding: 8px;
-    background: #fff;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
+    padding: var(--sl-spacing-x-small);
+    background: var(--sl-color-neutral-0);
+    border: 1px solid var(--sl-color-neutral-300);
+    border-radius: var(--sl-border-radius-medium);
     font-family: monospace;
-    font-size: 12px;
+    font-size: var(--sl-font-size-x-small);
     white-space: pre-wrap;
     max-height: 150px;
     overflow: auto;
@@ -131,22 +164,21 @@ export default class ChangeEventTable extends LightningElement {
         <span class="status-item">筛选: {filterStatus}</span>
         <span class="status-item">分页: {pageStatus}</span>
     </div>
-    <sl-table
+    <sl-table kwc:external class="table-el"
         row-key="id"
         columns={columns}
         data-source={dataSource}
         pagination={pagination}
-        onchange={handleChange}
     ></sl-table>
 </template>
 ```
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class ChangeTypeTable extends LightningElement {
+export default class ChangeTypeTable extends KingdeeElement {
     @track sortStatus = '无';
     @track filterStatus = '无';
     @track pageStatus = '第1页';
@@ -184,6 +216,30 @@ export default class ChangeTypeTable extends LightningElement {
         pageSize: 10
     };
 
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        this.bindShoelaceEvents();
+    }
+
+    get shoelaceEventBindings() {
+        return [
+            ['.table-el', 'sl-change', this.handleChange]
+        ];
+    }
+
+    bindShoelaceEvents() {
+        this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+            const el = this.template.querySelector(selector);
+            if (el) {
+                const boundHandler = handler.bind(this);
+                el.addEventListener(event, boundHandler);
+                return { el, event, boundHandler };
+            }
+            return null;
+        }).filter(Boolean);
+    }
+
     handleChange(event) {
         const { sorting, columnFilters, changeType, pagination } = event.detail;
         
@@ -213,6 +269,16 @@ export default class ChangeTypeTable extends LightningElement {
                 break;
         }
     }
+
+    disconnectedCallback() {
+        if (this._boundHandlers) {
+            this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+                el.removeEventListener(event, boundHandler);
+            });
+            this._boundHandlers = [];
+        }
+        this._eventsBound = false;
+    }
 }
 ```
 
@@ -221,14 +287,14 @@ export default class ChangeTypeTable extends LightningElement {
 .status-bar {
     display: flex;
     gap: 24px;
-    margin-bottom: 16px;
-    padding: 12px;
-    background: #e6f7ff;
-    border-radius: 4px;
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-primary-100);
+    border-radius: var(--sl-border-radius-medium);
 }
 .status-item {
-    font-size: 14px;
-    color: #1890ff;
+    font-size: var(--sl-font-size-small);
+    color: var(--sl-color-primary-600);
 }
 ```
 
@@ -245,23 +311,22 @@ export default class ChangeTypeTable extends LightningElement {
         <p>最近请求参数:</p>
         <pre>{requestParams}</pre>
     </div>
-    <sl-table
+    <sl-table kwc:external class="table-el"
         row-key="id"
         loading={isLoading}
         columns={columns}
         data-source={dataSource}
         pagination={pagination}
-        onchange={handleChange}
     ></sl-table>
 </template>
 ```
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class EventLinkageTable extends LightningElement {
+export default class EventLinkageTable extends KingdeeElement {
     @track isLoading = false;
     @track dataSource = [];
     @track requestParams = '{}';
@@ -303,6 +368,30 @@ export default class EventLinkageTable extends LightningElement {
 
     connectedCallback() {
         this.fetchData();
+    }
+
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        this.bindShoelaceEvents();
+    }
+
+    get shoelaceEventBindings() {
+        return [
+            ['.table-el', 'sl-change', this.handleChange]
+        ];
+    }
+
+    bindShoelaceEvents() {
+        this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+            const el = this.template.querySelector(selector);
+            if (el) {
+                const boundHandler = handler.bind(this);
+                el.addEventListener(event, boundHandler);
+                return { el, event, boundHandler };
+            }
+            return null;
+        }).filter(Boolean);
     }
 
     handleChange(event) {
@@ -362,28 +451,38 @@ export default class EventLinkageTable extends LightningElement {
         
         this.isLoading = false;
     }
+
+    disconnectedCallback() {
+        if (this._boundHandlers) {
+            this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+                el.removeEventListener(event, boundHandler);
+            });
+            this._boundHandlers = [];
+        }
+        this._eventsBound = false;
+    }
 }
 ```
 
 **index.css**
 ```css
 .request-info {
-    margin-bottom: 16px;
-    padding: 12px;
-    background: #f5f5f5;
-    border-radius: 4px;
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-neutral-100);
+    border-radius: var(--sl-border-radius-medium);
 }
 .request-info p {
-    margin: 0 0 8px;
+    margin: 0 0 var(--sl-spacing-x-small);
     font-weight: bold;
 }
 .request-info pre {
     margin: 0;
-    padding: 8px;
-    background: #fff;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
-    font-size: 12px;
+    padding: var(--sl-spacing-x-small);
+    background: var(--sl-color-neutral-0);
+    border: 1px solid var(--sl-color-neutral-300);
+    border-radius: var(--sl-border-radius-medium);
+    font-size: var(--sl-font-size-x-small);
     max-height: 120px;
     overflow: auto;
 }
@@ -399,4 +498,4 @@ export default class EventLinkageTable extends LightningElement {
 4. **重置页码**：排序和筛选变化时，通常需要重置页码到第一页
 5. **防抖处理**：如果事件处理中涉及服务端请求，建议添加防抖避免频繁请求
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

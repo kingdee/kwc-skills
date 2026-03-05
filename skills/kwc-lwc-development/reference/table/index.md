@@ -2,7 +2,7 @@
 
 ## 组件概述
 
-`sl-table` 是一个功能丰富的数据表格组件，用于数据收集展示、分析整理和操作处理。基于 `@tanstack/lit-table` 构建，支持在 LWC (Lightning Web Components) 框架中使用。组件提供排序、筛选、分页、行选择、列固定、行展开、虚拟滚动、列宽调整等完整的表格功能。
+`sl-table` 是一个功能丰富的数据表格组件，用于数据收集展示、分析整理和操作处理。基于 `@tanstack/lit-table` 构建，支持在 KWC LWC 框架中使用。组件提供排序、筛选、分页、行选择、列固定、行展开、虚拟滚动、列宽调整等完整的表格功能。
 
 ## 功能列表
 
@@ -45,10 +45,8 @@
 3. **LWC 框架规范**
    - 模板文件使用 `<template>` 作为根标签
    - 属性绑定使用 `{property}` 语法
-   - 事件绑定使用 `oneventname={handler}` 格式（如 `onchange={handleChange}`）
    - 响应式属性使用 `@track` 装饰器
    - **布尔属性必须显式赋值**：使用 `bordered="true"` 而非仅写 `bordered`（在 LWC 动态绑定中使用 `bordered={isBordered}`）
-   - 对象/数组类型属性（如 `columns`、`data-source`、`row-selection`）必须通过 JS 属性绑定
 
 4. **组件标签名**
    - 标签名为 `sl-table`
@@ -71,7 +69,7 @@ import '@kdcloudjs/shoelace/dist/components/table/table.js';
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -81,10 +79,10 @@ import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class QuickStartTable extends LightningElement {
+export default class QuickStartTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { title: '年龄', dataIndex: 'age', width: 100 },
@@ -255,9 +253,3 @@ export default class QuickStartTable extends LightningElement {
 4. **固定列**：使用 `fixed` 固定列时，需要配合 `table-scroll.x` 设置横向滚动宽度
 5. **自定义单元格**：通过 `slot: true` 配合对应 slot 名称实现自定义渲染
 6. **服务端数据**：通过监听 `change` 事件，结合 `sortOrder`、`filteredValue` 受控属性实现服务端排序/筛选
-
-## 相关资源
-
-- [Table 组件源码](../../../src/components/table/)
-- [Pagination 分页组件源码](../../../src/components/pagination/)
-- [Checkbox 组件源码](../../../src/components/checkbox/)

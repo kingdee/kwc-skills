@@ -4,7 +4,7 @@ import { KingdeeElement, api, track } from '@kdcloudjs/kwc';
 export default class ControlName extends KingdeeElement {
   @api label = '';
   @api variant = 'primary';
-  
+
   // 内部状态
   count = 0; // 基本类型无需 @track
   @track items = []; // LWC 中如果对象/数组需要响应式，必须加 @track
@@ -12,16 +12,6 @@ export default class ControlName extends KingdeeElement {
     pageSize: 10,
     currentPage: 1
   };
-
-  /**
-   * 构造函数 (可选)
-   * 在这里进行不需要 DOM 的初始化工作。
-   * 注意：此时 DOM 尚未创建，无法访问 this.template
-   */
-  constructor() {
-    super(); // 必须第一行调用
-    this.items = [{ name: 'Init Item' }];
-  }
 
   // 生命周期：插入 DOM 时
   connectedCallback() {
@@ -32,7 +22,7 @@ export default class ControlName extends KingdeeElement {
   // 生命周期：渲染后绑定事件
   renderedCallback() {
     // ⚠️ 禁止调用 super.renderedCallback()
-    
+
     // 防止重复绑定
     if (this._eventsBound) return;
     this._eventsBound = true;
@@ -69,21 +59,24 @@ export default class ControlName extends KingdeeElement {
 
   unbindShoelaceEvents() {
     if (this._boundHandlers) {
-      // 优化：Shadow DOM 中的元素会随组件销毁而自动清理事件监听，无需手动 removeEventListener
+      // 正确移除事件监听器，避免内存泄漏
+      this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+        el.removeEventListener(event, boundHandler);
+      });
       this._boundHandlers = [];
     }
   }
-  
+
   // ===== 计算逻辑必须在 JS 中完成，禁止在 HTML 中使用表达式 =====
   get isPrimary() {
     return this.variant === 'primary';
   }
-  
+
   get buttonClass() {
     // 在 HTML 中直接使用 {buttonClass}，禁止 {isPrimary ? 'btn-primary' : 'btn-default'}
     return this.isPrimary ? 'btn-primary' : 'btn-default';
   }
-  
+
   get displayItems() {
     // 若有列表渲染，必须在 JS 中生成 HTML 字符串或处理数据
     return this.items.map(item => ({
@@ -91,17 +84,17 @@ export default class ControlName extends KingdeeElement {
       displayName: item.name.toUpperCase() // 数据处理在这里完成
     }));
   }
-  
+
   // ===== 事件处理 =====
   handleInput(event) {
     // 使用 event.target.value 获取值
     this.value = event.target.value;
   }
-  
+
   handleChange(event) {
     console.log('Changed:', event.target.value);
   }
-  
+
   handleClick(event) {
     this.count++;
     this.dispatchEvent(new CustomEvent('change', {

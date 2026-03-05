@@ -1,6 +1,6 @@
 # 固定表头
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -26,7 +26,7 @@ Table 组件支持固定表头功能，通过设置 `table-scroll.y` 指定表�
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -37,10 +37,10 @@ Table 组件支持固定表头功能，通过设置 `table-scroll.y` 指定表�
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class FixedHeaderTable extends LightningElement {
+export default class FixedHeaderTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { title: '年龄', dataIndex: 'age', width: 100 },
@@ -68,7 +68,7 @@ export default class FixedHeaderTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         bordered="true"
         columns={columns}
@@ -80,10 +80,10 @@ export default class FixedHeaderTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class FixedHeaderColumnTable extends LightningElement {
+export default class FixedHeaderColumnTable extends KingdeeElement {
     columns = [
         { title: 'ID', dataIndex: 'id', width: 80, fixed: 'left' },
         { title: '姓名', dataIndex: 'name', width: 100, fixed: 'left' },
@@ -125,7 +125,7 @@ export default class FixedHeaderColumnTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -137,10 +137,10 @@ export default class FixedHeaderColumnTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class ScrollToTopTable extends LightningElement {
+export default class ScrollToTopTable extends KingdeeElement {
     columns = [
         { title: '序号', dataIndex: 'index', width: 80 },
         { title: '姓名', dataIndex: 'name', width: 150 },
@@ -184,7 +184,7 @@ export default class ScrollToTopTable extends LightningElement {
 ```html
 <template>
     <div class="table-container">
-        <sl-table
+        <sl-table kwc:external
             row-key="id"
             columns={columns}
             data-source={dataSource}
@@ -196,10 +196,10 @@ export default class ScrollToTopTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class DynamicHeightTable extends LightningElement {
+export default class DynamicHeightTable extends KingdeeElement {
     @track tableHeight = 400;
 
     columns = [
@@ -243,7 +243,7 @@ export default class DynamicHeightTable extends LightningElement {
 **index.css**
 ```css
 .table-container {
-    padding: 16px;
+    padding: var(--sl-spacing-medium);
 }
 ```
 
@@ -257,4 +257,4 @@ export default class DynamicHeightTable extends LightningElement {
 4. **结合固定列使用**：同时使用固定表头和固定列时，需要同时设置 `x` 和 `y`
 5. **滚动性能**：大数据量时建议配合虚拟滚动（`virtualized`）使用
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

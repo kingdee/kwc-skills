@@ -1,6 +1,6 @@
 # 动态数据更新
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -16,11 +16,11 @@ Table 组件支持动态更新数据源，包括添加数据、删除数据、�
 ```html
 <template>
     <div class="toolbar">
-        <sl-button variant="primary" onclick={handleAdd}>添加一行</sl-button>
-        <sl-button onclick={handleAddMultiple}>添加多行</sl-button>
+        <sl-button kwc:external variant="primary" onclick={handleAdd}>添加一行</sl-button>
+        <sl-button kwc:external onclick={handleAddMultiple}>添加多行</sl-button>
         <span class="count">共 {dataCount} 条数据</span>
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -30,11 +30,11 @@ Table 组件支持动态更新数据源，包括添加数据、删除数据、�
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class AddDataTable extends LightningElement {
+export default class AddDataTable extends KingdeeElement {
     @track dataSource = [
         { id: '1', name: '张三', age: 28, department: '研发部' },
         { id: '2', name: '李四', age: 32, department: '产品部' }
@@ -83,12 +83,12 @@ export default class AddDataTable extends LightningElement {
 .toolbar {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: var(--sl-spacing-small);
+    margin-bottom: var(--sl-spacing-medium);
 }
 .count {
-    color: #666;
-    font-size: 14px;
+    color: var(--sl-color-neutral-600);
+    font-size: var(--sl-font-size-small);
 }
 ```
 
@@ -101,14 +101,14 @@ export default class AddDataTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
     >
         <template for:each={dataSource} for:item="row">
             <div key={row.id} slot={row.actionSlot} class="action-cell">
-                <sl-button 
+                <sl-button kwc:external 
                     size="small" 
                     variant="danger"
                     onclick={handleDelete}
@@ -124,11 +124,11 @@ export default class AddDataTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class DeleteDataTable extends LightningElement {
+export default class DeleteDataTable extends KingdeeElement {
     @track rawData = [
         { id: '1', name: '张三', email: 'zhangsan@example.com' },
         { id: '2', name: '李四', email: 'lisi@example.com' },
@@ -174,10 +174,10 @@ export default class DeleteDataTable extends LightningElement {
 ```html
 <template>
     <div class="toolbar">
-        <sl-button variant="primary" onclick={handleReload}>重新加载</sl-button>
-        <sl-button variant="default" onclick={handleClear}>清空数据</sl-button>
+        <sl-button kwc:external variant="primary" onclick={handleReload}>重新加载</sl-button>
+        <sl-button kwc:external variant="default" onclick={handleClear}>清空数据</sl-button>
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         loading={isLoading}
         columns={columns}
@@ -188,11 +188,11 @@ export default class DeleteDataTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class ReloadDataTable extends LightningElement {
+export default class ReloadDataTable extends KingdeeElement {
     @track isLoading = false;
     @track dataSource = [];
 
@@ -240,8 +240,8 @@ export default class ReloadDataTable extends LightningElement {
 ```css
 .toolbar {
     display: flex;
-    gap: 12px;
-    margin-bottom: 16px;
+    gap: var(--sl-spacing-small);
+    margin-bottom: var(--sl-spacing-medium);
 }
 ```
 
@@ -254,14 +254,14 @@ export default class ReloadDataTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
     >
         <template for:each={dataSource} for:item="row">
             <div key={row.id} slot={row.actionSlot} class="action-cell">
-                <sl-button 
+                <sl-button kwc:external 
                     size="small" 
                     variant="text"
                     onclick={handleEdit}
@@ -274,30 +274,30 @@ export default class ReloadDataTable extends LightningElement {
     </sl-table>
     
     <!-- 编辑弹窗 -->
-    <sl-dialog label="编辑用户" open={isDialogOpen} onsl-hide={handleDialogClose}>
+    <sl-dialog kwc:external class="edit-dialog" label="编辑用户" open={isDialogOpen}>
         <div class="form-item">
             <label>姓名:</label>
-            <sl-input value={editingName} onsl-input={handleNameChange}></sl-input>
+            <sl-input kwc:external class="name-input" value={editingName}></sl-input>
         </div>
         <div class="form-item">
             <label>年龄:</label>
-            <sl-input type="number" value={editingAge} onsl-input={handleAgeChange}></sl-input>
+            <sl-input kwc:external class="age-input" type="number" value={editingAge}></sl-input>
         </div>
-        <sl-button slot="footer" variant="primary" onclick={handleSave}>保存</sl-button>
-        <sl-button slot="footer" onclick={handleDialogClose}>取消</sl-button>
+        <sl-button kwc:external slot="footer" variant="primary" onclick={handleSave}>保存</sl-button>
+        <sl-button kwc:external slot="footer" onclick={handleDialogClose}>取消</sl-button>
     </sl-dialog>
 </template>
 ```
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 import '@kdcloudjs/shoelace/dist/components/dialog/dialog.js';
 import '@kdcloudjs/shoelace/dist/components/input/input.js';
 
-export default class EditDataTable extends LightningElement {
+export default class EditDataTable extends KingdeeElement {
     @track rawData = [
         { id: '1', name: '张三', age: 28 },
         { id: '2', name: '李四', age: 32 },
@@ -308,6 +308,23 @@ export default class EditDataTable extends LightningElement {
     @track editingId = null;
     @track editingName = '';
     @track editingAge = '';
+
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        const dialog = this.template.querySelector('.edit-dialog');
+        if (dialog) {
+            dialog.addEventListener('sl-hide', this.handleDialogClose.bind(this));
+        }
+        const nameInput = this.template.querySelector('.name-input');
+        if (nameInput) {
+            nameInput.addEventListener('sl-input', this.handleNameChange.bind(this));
+        }
+        const ageInput = this.template.querySelector('.age-input');
+        if (ageInput) {
+            ageInput.addEventListener('sl-input', this.handleAgeChange.bind(this));
+        }
+    }
 
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
@@ -371,13 +388,13 @@ export default class EditDataTable extends LightningElement {
     justify-content: center;
 }
 .form-item {
-    margin-bottom: 16px;
+    margin-bottom: var(--sl-spacing-medium);
 }
 .form-item label {
     display: block;
-    margin-bottom: 4px;
-    font-size: 14px;
-    color: #333;
+    margin-bottom: var(--sl-spacing-2x-small);
+    font-size: var(--sl-font-size-small);
+    color: var(--sl-color-neutral-700);
 }
 ```
 
@@ -391,4 +408,4 @@ export default class EditDataTable extends LightningElement {
 4. **slot 更新**：动态数据场景下，自定义单元格 slot 名称需要在 getter 中动态生成
 5. **性能考虑**：大量数据频繁更新时，建议配合虚拟滚动使用
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

@@ -1,6 +1,6 @@
 # RTL 方向支持
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -23,7 +23,7 @@ Table 组件支持从右到左（RTL）的布局方向，通过设置 `direction
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         direction="rtl"
         bordered="true"
@@ -35,10 +35,10 @@ Table 组件支持从右到左（RTL）的布局方向，通过设置 `direction
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class RtlTable extends LightningElement {
+export default class RtlTable extends KingdeeElement {
     columns = [
         { title: 'الاسم', dataIndex: 'name', width: 150 },  // 姓名
         { title: 'العمر', dataIndex: 'age', width: 100 },   // 年龄
@@ -63,7 +63,7 @@ RTL 模式下使用固定列功能。
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         direction="rtl"
         columns={columns}
@@ -75,10 +75,10 @@ RTL 模式下使用固定列功能。
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class RtlFixedTable extends LightningElement {
+export default class RtlFixedTable extends KingdeeElement {
     columns = [
         { title: 'الاسم', dataIndex: 'name', width: 100, fixed: 'right' },  // RTL 下固定在右侧
         { title: 'العمر', dataIndex: 'age', width: 80 },
@@ -120,22 +120,21 @@ RTL 模式下使用排序和筛选功能。
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external class="table-el"
         row-key="id"
         direction="rtl"
         columns={columns}
         data-source={dataSource}
-        onchange={handleChange}
     ></sl-table>
 </template>
 ```
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class RtlSortFilterTable extends LightningElement {
+export default class RtlSortFilterTable extends KingdeeElement {
     columns = [
         { title: 'الاسم', dataIndex: 'name', width: 150 },
         { 
@@ -164,8 +163,42 @@ export default class RtlSortFilterTable extends LightningElement {
         { id: '4', name: 'علي', age: 25, status: 'active', email: 'ali@example.com' }
     ];
 
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        this.bindShoelaceEvents();
+    }
+
+    get shoelaceEventBindings() {
+        return [
+            ['.table-el', 'sl-change', this.handleChange]
+        ];
+    }
+
+    bindShoelaceEvents() {
+        this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+            const el = this.template.querySelector(selector);
+            if (el) {
+                const boundHandler = handler.bind(this);
+                el.addEventListener(event, boundHandler);
+                return { el, event, boundHandler };
+            }
+            return null;
+        }).filter(Boolean);
+    }
+
     handleChange(event) {
         console.log('Table changed:', event.detail);
+    }
+
+    disconnectedCallback() {
+        if (this._boundHandlers) {
+            this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+                el.removeEventListener(event, boundHandler);
+            });
+            this._boundHandlers = [];
+        }
+        this._eventsBound = false;
     }
 }
 ```
@@ -180,14 +213,14 @@ export default class RtlSortFilterTable extends LightningElement {
 ```html
 <template>
     <div class="toolbar">
-        <sl-button-group>
-            <sl-button 
+        <sl-button-group kwc:external>
+            <sl-button kwc:external 
                 variant={ltrVariant}
                 onclick={setLtr}
             >
                 LTR (English)
             </sl-button>
-            <sl-button 
+            <sl-button kwc:external 
                 variant={rtlVariant}
                 onclick={setRtl}
             >
@@ -195,7 +228,7 @@ export default class RtlSortFilterTable extends LightningElement {
             </sl-button>
         </sl-button-group>
     </div>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         direction={direction}
         bordered="true"
@@ -207,12 +240,12 @@ export default class RtlSortFilterTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 import '@kdcloudjs/shoelace/dist/components/button-group/button-group.js';
 
-export default class DynamicDirectionTable extends LightningElement {
+export default class DynamicDirectionTable extends KingdeeElement {
     @track direction = 'ltr';
 
     get ltrVariant() {
@@ -266,7 +299,7 @@ export default class DynamicDirectionTable extends LightningElement {
 **index.css**
 ```css
 .toolbar {
-    margin-bottom: 16px;
+    margin-bottom: var(--sl-spacing-medium);
 }
 ```
 
@@ -280,4 +313,4 @@ export default class DynamicDirectionTable extends LightningElement {
 4. **CSS 变量**：组件内部使用 `--sl-c-table-direction` CSS 变量控制方向
 5. **字体支持**：确保使用的字体支持 RTL 语言的正确显示
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

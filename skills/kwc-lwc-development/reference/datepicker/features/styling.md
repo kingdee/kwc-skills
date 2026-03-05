@@ -1,6 +1,6 @@
 # 样式定制
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -51,12 +51,12 @@
 ```html
 <template>
     <div class="stack">
-        <sl-datepicker
+        <sl-datepicker kwc:external
             label="默认样式"
             placeholder="默认外观"
         ></sl-datepicker>
 
-        <sl-datepicker
+        <sl-datepicker kwc:external
             label="填充样式"
             filled="true"
             placeholder="filled 外观"
@@ -67,10 +67,10 @@
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 
-export default class FilledDatepicker extends LightningElement {}
+export default class FilledDatepicker extends KingdeeElement {}
 ```
 
 **index.css**
@@ -78,7 +78,7 @@ export default class FilledDatepicker extends LightningElement {}
 .stack {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--sl-spacing-medium);
     max-width: 300px;
 }
 ```
@@ -93,18 +93,18 @@ export default class FilledDatepicker extends LightningElement {}
 ```html
 <template>
     <div class="stack">
-        <sl-datepicker
+        <sl-datepicker kwc:external
             label="默认圆角"
             placeholder="默认样式"
         ></sl-datepicker>
 
-        <sl-datepicker
+        <sl-datepicker kwc:external
             label="药丸圆角"
             pill="true"
             placeholder="pill 样式"
         ></sl-datepicker>
 
-        <sl-datepicker
+        <sl-datepicker kwc:external
             label="填充 + 药丸"
             filled="true"
             pill="true"
@@ -116,10 +116,10 @@ export default class FilledDatepicker extends LightningElement {}
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 
-export default class PillDatepicker extends LightningElement {}
+export default class PillDatepicker extends KingdeeElement {}
 ```
 
 **index.css**
@@ -127,7 +127,7 @@ export default class PillDatepicker extends LightningElement {}
 .stack {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--sl-spacing-medium);
     max-width: 300px;
 }
 ```
@@ -141,22 +141,22 @@ export default class PillDatepicker extends LightningElement {}
 **index.html**
 ```html
 <template>
-    <sl-datepicker
+    <sl-datepicker kwc:external
         label="带前缀的日期选择"
         placeholder="请选择日期"
     >
-        <sl-icon slot="prefix" name="calendar-event"></sl-icon>
+        <sl-icon kwc:external slot="prefix" name="calendar-event"></sl-icon>
     </sl-datepicker>
 </template>
 ```
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 import '@kdcloudjs/shoelace/dist/components/icon/icon.js';
 
-export default class PrefixSlotDatepicker extends LightningElement {}
+export default class PrefixSlotDatepicker extends KingdeeElement {}
 ```
 
 ---
@@ -168,7 +168,7 @@ export default class PrefixSlotDatepicker extends LightningElement {}
 **index.html**
 ```html
 <template>
-    <sl-datepicker placeholder="请选择日期">
+    <sl-datepicker kwc:external placeholder="请选择日期">
         <div slot="label" class="custom-label">
             <span>预约日期</span>
             <span class="required-badge">必填</span>
@@ -179,10 +179,10 @@ export default class PrefixSlotDatepicker extends LightningElement {}
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 
-export default class LabelSlotDatepicker extends LightningElement {}
+export default class LabelSlotDatepicker extends KingdeeElement {}
 ```
 
 **index.css**
@@ -190,16 +190,16 @@ export default class LabelSlotDatepicker extends LightningElement {}
 .custom-label {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--sl-spacing-x-small);
 }
 .required-badge {
     display: inline-block;
     padding: 0 6px;
-    font-size: 12px;
+    font-size: var(--sl-font-size-x-small);
     line-height: 20px;
-    background: #ff4d4f;
+    background: var(--sl-color-danger-600);
     color: white;
-    border-radius: 4px;
+    border-radius: var(--sl-border-radius-medium);
 }
 ```
 
@@ -212,9 +212,9 @@ export default class LabelSlotDatepicker extends LightningElement {}
 **index.html**
 ```html
 <template>
-    <sl-datepicker label="活动日期" placeholder="请选择活动日期">
+    <sl-datepicker kwc:external label="活动日期" placeholder="请选择活动日期">
         <div slot="help-text" class="custom-help">
-            <sl-icon name="info-circle"></sl-icon>
+            <sl-icon kwc:external name="info-circle"></sl-icon>
             <span>格式: yyyy-MM-dd，如 2024-01-15</span>
         </div>
     </sl-datepicker>
@@ -223,11 +223,11 @@ export default class LabelSlotDatepicker extends LightningElement {}
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 import '@kdcloudjs/shoelace/dist/components/icon/icon.js';
 
-export default class HelpTextSlotDatepicker extends LightningElement {}
+export default class HelpTextSlotDatepicker extends KingdeeElement {}
 ```
 
 **index.css**
@@ -235,9 +235,9 @@ export default class HelpTextSlotDatepicker extends LightningElement {}
 .custom-help {
     display: flex;
     align-items: center;
-    gap: 4px;
-    color: #8c8c8c;
-    font-size: 12px;
+    gap: var(--sl-spacing-2x-small);
+    color: var(--sl-color-neutral-500);
+    font-size: var(--sl-font-size-x-small);
 }
 ```
 
@@ -250,7 +250,7 @@ export default class HelpTextSlotDatepicker extends LightningElement {}
 **index.html**
 ```html
 <template>
-    <sl-datepicker
+    <sl-datepicker kwc:external
         class="custom-datepicker"
         label="自定义样式"
         placeholder="深度定制外观"
@@ -261,10 +261,10 @@ export default class HelpTextSlotDatepicker extends LightningElement {}
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 
-export default class CssPartsDatepicker extends LightningElement {}
+export default class CssPartsDatepicker extends KingdeeElement {}
 ```
 
 **index.css**
@@ -303,7 +303,7 @@ export default class CssPartsDatepicker extends LightningElement {}
 <template>
     <div class="scroll-container">
         <div class="content">
-            <sl-datepicker
+            <sl-datepicker kwc:external
                 label="普通定位"
                 placeholder="可能被容器裁切"
             ></sl-datepicker>
@@ -312,7 +312,7 @@ export default class CssPartsDatepicker extends LightningElement {}
 
     <div class="scroll-container">
         <div class="content">
-            <sl-datepicker
+            <sl-datepicker kwc:external
                 label="提升定位（hoist）"
                 hoist="true"
                 placeholder="弹出层不被裁切"
@@ -324,10 +324,10 @@ export default class CssPartsDatepicker extends LightningElement {}
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 
-export default class HoistDatepicker extends LightningElement {}
+export default class HoistDatepicker extends KingdeeElement {}
 ```
 
 **index.css**
@@ -335,10 +335,10 @@ export default class HoistDatepicker extends LightningElement {}
 .scroll-container {
     height: 120px;
     overflow: auto;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
-    margin-bottom: 16px;
-    padding: 16px;
+    border: 1px solid var(--sl-color-neutral-300);
+    border-radius: var(--sl-border-radius-medium);
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-medium);
 }
 .content {
     min-height: 200px;
@@ -355,52 +355,52 @@ export default class HoistDatepicker extends LightningElement {}
 ```html
 <template>
     <div class="grid">
-        <sl-datepicker
+        <sl-datepicker kwc:external
             size="small"
             placeholder="Small"
         ></sl-datepicker>
 
-        <sl-datepicker
+        <sl-datepicker kwc:external
             size="small"
             filled="true"
             placeholder="Small Filled"
         ></sl-datepicker>
 
-        <sl-datepicker
+        <sl-datepicker kwc:external
             size="small"
             pill="true"
             placeholder="Small Pill"
         ></sl-datepicker>
 
-        <sl-datepicker
+        <sl-datepicker kwc:external
             size="medium"
             placeholder="Medium"
         ></sl-datepicker>
 
-        <sl-datepicker
+        <sl-datepicker kwc:external
             size="medium"
             filled="true"
             placeholder="Medium Filled"
         ></sl-datepicker>
 
-        <sl-datepicker
+        <sl-datepicker kwc:external
             size="medium"
             pill="true"
             placeholder="Medium Pill"
         ></sl-datepicker>
 
-        <sl-datepicker
+        <sl-datepicker kwc:external
             size="large"
             placeholder="Large"
         ></sl-datepicker>
 
-        <sl-datepicker
+        <sl-datepicker kwc:external
             size="large"
             filled="true"
             placeholder="Large Filled"
         ></sl-datepicker>
 
-        <sl-datepicker
+        <sl-datepicker kwc:external
             size="large"
             pill="true"
             placeholder="Large Pill"
@@ -411,10 +411,10 @@ export default class HoistDatepicker extends LightningElement {}
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/datepicker/datepicker.js';
 
-export default class AllStylesDatepicker extends LightningElement {}
+export default class AllStylesDatepicker extends KingdeeElement {}
 ```
 
 **index.css**
@@ -422,7 +422,7 @@ export default class AllStylesDatepicker extends LightningElement {}
 .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    gap: var(--sl-spacing-medium);
 }
 ```
 
@@ -436,4 +436,4 @@ export default class AllStylesDatepicker extends LightningElement {}
 4. **hoist 的使用场景**：仅在弹出层被容器 `overflow: hidden/auto/scroll` 裁切时才需要设置 `hoist`
 5. **size 影响整体**：`size` 属性会同时影响输入框高度和字体大小
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)

@@ -1,6 +1,6 @@
 # 列排序
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
 
 ## 功能说明
 
@@ -34,7 +34,7 @@ Table 组件支持列排序功能，通过在列配置中设置 `sorter` 函数�
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -44,10 +44,10 @@ Table 组件支持列排序功能，通过在列配置中设置 `sorter` 函数�
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class SortableTable extends LightningElement {
+export default class SortableTable extends KingdeeElement {
     columns = [
         { title: '姓名', dataIndex: 'name', width: 150 },
         { 
@@ -83,7 +83,7 @@ export default class SortableTable extends LightningElement {
 **index.html**
 ```html
 <template>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -93,10 +93,10 @@ export default class SortableTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class DefaultSortTable extends LightningElement {
+export default class DefaultSortTable extends KingdeeElement {
     columns = [
         { title: '商品名称', dataIndex: 'name', width: 200 },
         { 
@@ -134,7 +134,7 @@ export default class DefaultSortTable extends LightningElement {
 ```html
 <template>
     <p class="tip">点击不同列头切换排序列，同时只有一列生效</p>
-    <sl-table
+    <sl-table kwc:external
         row-key="id"
         columns={columns}
         data-source={dataSource}
@@ -144,10 +144,10 @@ export default class DefaultSortTable extends LightningElement {
 
 **index.js**
 ```js
-import { LightningElement } from 'lwc';
+import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class MultiSorterTable extends LightningElement {
+export default class MultiSorterTable extends KingdeeElement {
     columns = [
         { 
             title: '姓名', 
@@ -187,9 +187,9 @@ export default class MultiSorterTable extends LightningElement {
 **index.css**
 ```css
 .tip {
-    margin-bottom: 12px;
-    color: #666;
-    font-size: 14px;
+    margin-bottom: var(--sl-spacing-small);
+    color: var(--sl-color-neutral-600);
+    font-size: var(--sl-font-size-small);
 }
 ```
 
@@ -206,21 +206,20 @@ export default class MultiSorterTable extends LightningElement {
         <p>当前排序列: {sortColumn}</p>
         <p>排序方向: {sortDirection}</p>
     </div>
-    <sl-table
+    <sl-table kwc:external class="table-el"
         row-key="id"
         columns={columns}
         data-source={dataSource}
-        onchange={handleChange}
     ></sl-table>
 </template>
 ```
 
 **index.js**
 ```js
-import { LightningElement, track } from 'lwc';
+import { KingdeeElement, track } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
-export default class SortChangeTable extends LightningElement {
+export default class SortChangeTable extends KingdeeElement {
     @track sortColumn = '无';
     @track sortDirection = '无';
 
@@ -246,6 +245,30 @@ export default class SortChangeTable extends LightningElement {
         { id: '3', name: '王五', age: 35, salary: 20000 }
     ];
 
+    renderedCallback() {
+        if (this._eventsBound) return;
+        this._eventsBound = true;
+        this.bindShoelaceEvents();
+    }
+
+    get shoelaceEventBindings() {
+        return [
+            ['.table-el', 'sl-change', this.handleChange]
+        ];
+    }
+
+    bindShoelaceEvents() {
+        this._boundHandlers = this.shoelaceEventBindings.map(([selector, event, handler]) => {
+            const el = this.template.querySelector(selector);
+            if (el) {
+                const boundHandler = handler.bind(this);
+                el.addEventListener(event, boundHandler);
+                return { el, event, boundHandler };
+            }
+            return null;
+        }).filter(Boolean);
+    }
+
     handleChange(event) {
         const { sorting, changeType } = event.detail;
         
@@ -260,19 +283,29 @@ export default class SortChangeTable extends LightningElement {
             }
         }
     }
+
+    disconnectedCallback() {
+        if (this._boundHandlers) {
+            this._boundHandlers.forEach(({ el, event, boundHandler }) => {
+                el.removeEventListener(event, boundHandler);
+            });
+            this._boundHandlers = [];
+        }
+        this._eventsBound = false;
+    }
 }
 ```
 
 **index.css**
 ```css
 .sort-info {
-    margin-bottom: 16px;
-    padding: 12px;
-    background: #f5f5f5;
-    border-radius: 4px;
+    margin-bottom: var(--sl-spacing-medium);
+    padding: var(--sl-spacing-small);
+    background: var(--sl-color-neutral-100);
+    border-radius: var(--sl-border-radius-medium);
 }
 .sort-info p {
-    margin: 4px 0;
+    margin: var(--sl-spacing-2x-small) 0;
 }
 ```
 
@@ -286,4 +319,4 @@ export default class SortChangeTable extends LightningElement {
 4. **字符串排序**：对于中文字符串排序，建议使用 `localeCompare` 方法
 5. **日期排序**：日期类型需要转换为 Date 对象或时间戳进行比较
 
-[返回目录](../SKILL.md)
+[返回目录](../index.md)
