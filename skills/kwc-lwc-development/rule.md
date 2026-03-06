@@ -22,7 +22,6 @@
   - **包名**：必须使用 `@kdcloudjs/shoelace`，禁止使用 `@shoelace-style/shoelace`。
   - **属性名**：HTML 属性名使用小写（kebab-case），如 `readonly`、`help-text`。
   - **样式**：默认不手工导入主题 CSS，平台通常已注入。
-  - **布尔属性必须显式赋值**：使用 `bordered="true"` 而非仅写 `bordered`（在 KWC 动态绑定中使用 `bordered={isBordered}`）
 - **kwc:external 使用规则**：
   - ✅ **所有Shoelace 组件**（`sl-*`）：**必须**添加 `kwc:external`。
   - ❌ **KWC 内部组件**（`kwc-*`）：**绝对禁止**添加 `kwc:external`。
@@ -81,10 +80,16 @@
 - **严禁运行 ESLint/Prettier 修复与校验**：**绝对禁止**运行任何形式的 lint fix 命令（无论是手动还是自动，如 `eslint --fix`）。同时，**不需要**关注或修复 ESLint 格式报错。KWC LWC 的特殊语法（如无表达式模板）可能与通用规则冲突，强行修复会导致代码损坏。
 - **严禁修改既有配置**：严禁修改 `.eslintrc`, `.prettierrc` 或 `package.json` 中的构建脚本。
 
-## 9. 强制自检清单
+## 9. CSS 样式规范 — 必须使用 Design Token
+- 编写 CSS 时，颜色、间距、字号、圆角等属性**必须**使用 Shoelace Design Token，**禁止**硬编码 hex 色值或 px 数值。
+- 完整的 Token 速查表（颜色/间距/字号/圆角映射、正反示例、例外情况）请参考：`./reference/css-design-tokens.md`
+- **编写 CSS 代码前必须阅读该文档。**
+
+## 10. 强制自检清单
 - [ ] 继承自 `KingdeeElement` 而非 `LightningElement`
 - [ ] **所有Shoelace 组件**（`sl-*`）有 `kwc:external`，**所有KWC 内部组件**（`kwc-*`）没有 `kwc:external`
 - [ ] HTML 无 JS 表达式，无自闭合标签
 - [ ] Shoelace 事件 (`sl-change`) 在 JS 中绑定
 - [ ] 扩展组件（Table/DatePicker等）已参考本地 reference 文档
+- [ ] CSS 样式使用 Design Token，无硬编码 hex 色值或 px 间距/字号/圆角
 - [ ] **未运行**任何 ESLint/Prettier 修复命令，并**忽略**了所有 ESLint 格式报错
