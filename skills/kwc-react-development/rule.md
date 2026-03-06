@@ -1,0 +1,109 @@
+# KWC React 开发硬性约束 (Hard Rules)
+
+所有 KWC React 开发工作必须严格遵守以下约束。违反这些规则的代码将无法运行或无法通过审查。
+
+## 1. 导入规范 (Imports)
+- **组件源**: 必须从 React 包装器路径导入：`@kdcloudjs/shoelace/dist/react/[component]/index.js`。
+- **类型源**: 元素类型从组件源导入：`@kdcloudjs/shoelace/dist/components/[component]/[component].js`。
+- **命名**: 组件使用 PascalCase (如 `SlButton`, `SlInput`)。
+- **示例**:
+  ```javascript
+  import SlButton from '@kdcloudjs/shoelace/dist/react/button/index.js';
+  import type SlButtonElement from '@kdcloudjs/shoelace/dist/components/button/button.js';
+  ```
+
+## 2. 事件绑定 (Events)
+- **命名约定**: Shoelace 事件在 React 中使用 `onSl` 前缀 + PascalCase。
+    - `sl-change` -> `onSlChange`
+    - `sl-input` -> `onSlInput`
+    - `sl-focus` -> `onSlFocus`
+- **事件类型**: 通常为 `CustomEvent`，需通过 `event.target` 断言类型获取值。
+- **禁止**: 禁止直接使用 `onChange` 或 `onInput` 监听 Shoelace 事件（除非 Wrapper 明确重写）。
+
+## 3. 状态管理 (State Management)
+- 使用标准 React Hooks (`useState`, `useCallback`, `useEffect`, `useRef`)。
+- 使用 `ref` 调用组件方法（如 `focus()`, `show()`）。
+
+## 4. 开发范例 (Strict Template)
+
+请参考以下代码结构进行开发。
+
+```tsx
+import React, { useState, useCallback, useRef } from 'react';
+// 1. 组件导入：必须从 @kdcloudjs/shoelace/dist/react 导入
+import SlButton from '@kdcloudjs/shoelace/dist/react/button/index.js';
+import SlInput from '@kdcloudjs/shoelace/dist/react/input/index.js';
+// 2. 类型导入：用于 Ref 和事件目标断言
+import type SlInputElement from '@kdcloudjs/shoelace/dist/components/input/input.js';
+
+function StrictTemplate() {
+  // 内部状态
+  const [value, setValue] = useState('');
+  // 引用组件实例
+  const inputRef = useRef<SlInputElement>(null);
+
+  // 事件处理：命名规范 handle[Action]
+  const handleInput = useCallback((event: CustomEvent) => {
+    // 类型断言
+    const target = event.target as SlInputElement;
+    setValue(target.value);
+  }, []);
+
+  const handleSubmit = useCallback(() => {
+    console.log('Submitting:', value);
+    inputRef.current?.focus();
+  }, [value]);
+
+  return (
+    <div className="container">
+      {/* 规则：事件映射为 onSl[EventName] */}
+      <SlInput
+        ref={inputRef}
+        label="请输入名称"
+        value={value}
+        onSlInput={handleInput as any}
+        clearable
+      />
+      
+      <SlButton variant="primary" onClick={handleSubmit}>
+        提交
+      </SlButton>
+    </div>
+  );
+}
+
+export default StrictTemplate;
+```
+
+## 5. KWC 扩展组件文档与约束
+- **标准组件**（Button/Input/Dialog/Icon 等）：参考官网 [https://shoelace.style/](https://shoelace.style/)
+- **扩展组件**：以下组件为 KWC 专用扩展组件（不在 Shoelace 官网），当任务涉及这些组件时，**必须立即调用 Read 工具读取并学习**对应的 reference 文档，严禁凭空猜测 API：
+
+- **表格 (Table)**:
+  - 文档：`./reference/table/index.md` (**涉及表格开发时必须读取**)
+  - React 中需特别注意列配置 (`columns`) 和数据源 (`dataSource`) 的传递方式。
+  - 需导入 `@kdcloudjs/shoelace/dist/components/table/utils.js` 中的 `generateCustomSlot` 工具函数用于自定义单元格渲染。
+- **日期选择器 (DatePicker)**:
+  - 文档：`./reference/datepicker/index.md`
+  - 严禁使用 `<SlInput type="date">`，必须使用 `<SlDatepicker>`。
+- **时间选择器 (TimePicker)**:
+  - 文档：`./reference/sl-timepicker.md`
+- **分页器 (Pagination)**:
+  - 文档：`./reference/sl-pagination.md`
+
+## 6. 开发工具与环境约束 (Tools & Environment)
+- **严禁运行 ESLint/Prettier 修复与校验**：**绝对禁止**运行任何形式的 lint fix 命令（无论是手动还是自动，如 `eslint --fix`）。同时，**不需要**关注或修复 ESLint 格式报错。KWC React 的特殊语法可能与通用规则冲突，强行修复会导致代码损坏。
+- **严禁修改既有配置**：严禁修改 `.eslintrc`, `.prettierrc` 或 `package.json` 中的构建脚本。
+
+## 7. CSS 样式规范 — 必须使用 Design Token
+- 编写 CSS 时，颜色、间距、字号、圆角等属性**必须**使用 Shoelace Design Token，**禁止**硬编码 hex 色值或 px 数值。
+- 完整的 Token 速查表（颜色/间距/字号/圆角映射、正反示例、例外情况）请参考：`./reference/css-design-tokens.md`
+- **编写 CSS 代码前必须阅读该文档。**
+
+## 8. 强制自检清单 (Checklist)
+1.  [ ] **导入路径**: 是否使用了 `dist/react/...` 路径？
+2.  [ ] **事件命名**: 是否使用了 `onSl*` 前缀（如 `onSlChange`）
+3.  [ ] **类型断言**: 是否正确处理了 `event.target` 的类型断言？
+4.  [ ] **Ref 使用**: 是否正确使用 `ref` 调用组件方法？
+5.  [ ] **扩展组件**: 是否参考了本地 reference 文档（如 Table, DatePicker）？
+6.  [ ] **工具约束**: 是否**未运行**任何 ESLint/Prettier 修复命令？
