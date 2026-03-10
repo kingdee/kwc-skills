@@ -78,20 +78,6 @@ export default class AddDataTable extends KingdeeElement {
 }
 ```
 
-**index.css**
-```css
-.toolbar {
-    display: flex;
-    align-items: center;
-    gap: var(--sl-spacing-small);
-    margin-bottom: var(--sl-spacing-medium);
-}
-.count {
-    color: var(--sl-color-neutral-600);
-    font-size: var(--sl-font-size-small);
-}
-```
-
 ---
 
 ### 示例2：删除数据
@@ -153,14 +139,6 @@ export default class DeleteDataTable extends KingdeeElement {
         const id = event.target.dataset.id;
         this.rawData = this.rawData.filter(item => item.id !== id);
     }
-}
-```
-
-**index.css**
-```css
-.action-cell {
-    display: flex;
-    justify-content: center;
 }
 ```
 
@@ -236,15 +214,6 @@ export default class ReloadDataTable extends KingdeeElement {
 }
 ```
 
-**index.css**
-```css
-.toolbar {
-    display: flex;
-    gap: var(--sl-spacing-small);
-    margin-bottom: var(--sl-spacing-medium);
-}
-```
-
 ---
 
 ### 示例4：编辑数据
@@ -263,7 +232,7 @@ export default class ReloadDataTable extends KingdeeElement {
             <div key={row.id} slot={row.actionSlot} class="action-cell">
                 <sl-button kwc:external 
                     size="small" 
-                    variant="text"
+                    variant="primary"
                     onclick={handleEdit}
                     data-id={row.id}
                 >
@@ -381,23 +350,6 @@ export default class EditDataTable extends KingdeeElement {
 }
 ```
 
-**index.css**
-```css
-.action-cell {
-    display: flex;
-    justify-content: center;
-}
-.form-item {
-    margin-bottom: var(--sl-spacing-medium);
-}
-.form-item label {
-    display: block;
-    margin-bottom: var(--sl-spacing-2x-small);
-    font-size: var(--sl-font-size-small);
-    color: var(--sl-color-neutral-700);
-}
-```
-
 ---
 
 ## 注意事项
@@ -405,7 +357,3 @@ export default class EditDataTable extends KingdeeElement {
 1. **响应式更新**：在 LWC 中，必须通过 `@track` 装饰器声明数据，且需要重新赋值数组（如 `this.data = [...this.data, newItem]`）才能触发视图更新
 2. **避免直接修改**：不要使用 `push`、`splice` 等方法直接修改数组，需要创建新数组
 3. **rowKey 唯一性**：添加新数据时确保 `rowKey` 字段值唯一
-4. **slot 更新**：动态数据场景下，自定义单元格 slot 名称需要在 getter 中动态生成
-5. **性能考虑**：大量数据频繁更新时，建议配合虚拟滚动使用
-
-[返回目录](../index.md)
