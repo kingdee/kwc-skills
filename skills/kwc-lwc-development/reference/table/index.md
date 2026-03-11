@@ -15,18 +15,19 @@
 | 列筛选 | filters 筛选项、多选/单选筛选、默认筛选值 | [filtering.md](./features/filtering.md) |
 | 受控排序筛选 | 受控排序/筛选、服务端数据联动 | [controlled-sort-filter.md](./features/controlled-sort-filter.md) |
 | 固定列 | 左侧固定、右侧固定、两侧同时固定 | [fixed-column.md](./features/fixed-column.md) |
-| 固定表头 | 纵向滚动、固定表头、滚动到顶部 | [fixed-header.md](./features/fixed-header.md) |
 | 列宽调整 | 拖拽调整列宽、禁止某列调整、调整回调 | [column-resizing.md](./features/column-resizing.md) |
 | 自定义单元格 | slot 自定义渲染、动态 slot 生成 | [custom-cell.md](./features/custom-cell.md) |
+| 可编辑单元格 | 点击单元格进入编辑态，失焦后保存 | [editable-cell.md](./features/editable-cell.md) |
 | 文本省略与对齐 | ellipsis 省略、align 对齐、列样式类名 | [ellipsis-align.md](./features/ellipsis-align.md) |
 | 行展开 | 展开行、点击行展开、指定可展开行、默认展开 | [row-expand.md](./features/row-expand.md) |
+| 嵌套子表格 | 在展开行内渲染子表格 | [nested-table.md](./features/nested-table.md) |
+| 行拖拽 | 拖拽排序并监听 sl-row-reorder | [row-drag.md](./features/row-drag.md) |
 | 虚拟滚动 | 大数据量虚拟滚动、自定义行高 | [virtualized.md](./features/virtualized.md) |
 | 分页 | 分页配置、分页位置、每页条数、分页回调 | [pagination.md](./features/pagination.md) |
-| 事件监听 | change 事件、changeType 区分、事件联动 | [events.md](./features/events.md) |
-| 动态数据 | 添加数据、删除数据、清空重载 | [dynamic-data.md](./features/dynamic-data.md) |
+| 事件监听 | change 事件、changeType 区分、事件联动，包含排序、筛选、分页 | [events.md](./features/events.md) |
+| 动态数据更新 | 添加数据、删除数据、清空重载 | [dynamic-data.md](./features/dynamic-data.md) |
 | RTL 方向 | 从右到左布局、RTL + 固定列 | [rtl.md](./features/rtl.md) |
-| 行/单元格属性 | onRow、onHeaderRow、onCell、onHeaderCell | [row-cell-props.md](./features/row-cell-props.md) |
-| 样式定制 | CSS 变量、CSS Parts、主题定制 | [styling.md](./features/styling.md) |
+| 行/单元格属性 | slRow、slHeaderRow、slCell、slHeaderCell | [row-cell-props.md](./features/row-cell-props.md) |
 
 ## 核心约束
 
@@ -100,48 +101,51 @@ export default class QuickStartTable extends KingdeeElement {
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `row-key` | 唯一标识行数据的字段名 | `string` | `'key'` |
-| `columns` | 表格列配置 | `ColumnProps[]` | `[]` |
+| `row-key` | 必填，行唯一标识字段名（区分大小写） | `string` | - |
+| `columns` | 列配置数组，至少包含 `dataIndex` 与 `title` | `ColumnProps[]` | `[]` |
 | `data-source` | 表格数据源 | `TData[]` | `[]` |
 | `loading` | 是否显示加载状态 | `boolean` | `false` |
-| `bordered` | 是否显示边框 | `boolean` | `false` |
 | `show-header` | 是否显示表头 | `boolean` | `true` |
+| `bordered` | 是否显示边框 | `boolean` | `false` |
 | `direction` | 表格方向 | `'ltr' \| 'rtl'` | `'ltr'` |
-| `row-selection` | 行选择配置 | `TableRowSelection` | - |
-| `table-scroll` | 表格滚动配置 | `{ x?: number \| string; y?: number \| string; scrollToFirstRowOnChange?: boolean }` | `{}` |
-| `pagination` | 分页配置 | `PaginationProps` | - |
+| `row-selection` | 行选择配置 | `RowSelection` | - |
+| `table-scroll` | 滚动配置 | `TableScroll` | - |
 | `expand-props` | 展开行配置 | `ExpandProps` | - |
-| `enable-column-resizing` | 是否启用列宽调整 | `boolean` | `false` |
-| `virtualized` | 虚拟滚动配置 | `boolean \| { itemHeight?: number }` | `false` |
-| `on-header-row` | 设置头部行属性 | `(columns, index) => object` | - |
-| `on-row` | 设置行属性 | `(record, index) => object` | - |
-| `on-column-resize` | 列宽调整回调 | `(sizes) => void` | - |
+| `pagination` | 分页配置 | `Pagination` | - |
+| `onchange` | 分页/排序/筛选变更回调 | `(e: CustomEvent) => void` | - |
+| `sl-row` | 设置行属性（注入到 `tr`） | `(record: TData, index: number) => object` | - |
+| `sl-header-row` | 设置表头行属性（注入到 `tr`） | `(columns: ColumnProps[], index: number) => object` | - |
+| `virtualized` | 虚拟滚动配置 | `boolean \| Virtualized` | `false` |
+| `enable-column-resizing` | 是否开启列宽拖拽 | `boolean` | `false` |
+| `sl-column-resize` | 列宽调整回调 | `(size: Record<string, number>) => void` | - |
+| `row-drag` | 是否开启行拖拽 | `boolean` | `false` |
+| `sl-row-reorder` | 行拖拽排序回调 | `(e: CustomEvent) => void` | - |
 
 ### Column 列配置
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `title` | 列头显示文字 | `string` | - |
-| `dataIndex` | 列数据字段名（唯一标识） | `string` | - |
-| `width` | 列宽度 | `number` | - |
-| `align` | 列对齐方式 | `'left' \| 'center' \| 'right'` | `'left'` |
+| `title` | 列标题（必填） | `string` | - |
+| `dataIndex` | 列字段名（必填且唯一） | `string` | - |
+| `align` | 对齐方式 | `'left' \| 'right' \| 'center'` | `'left'` |
 | `className` | 列样式类名 | `string` | - |
-| `fixed` | 列固定位置 | `false \| 'left' \| 'right'` | `false` |
-| `ellipsis` | 内容超出是否省略 | `boolean` | `false` |
-| `slot` | 是否启用自定义渲染 | `boolean` | `false` |
-| `enableResizing` | 是否允许拖拽调整该列宽度 | `boolean` | - |
-| `sorter` | 排序函数 | `(a, b) => number` | - |
-| `defaultSortOrder` | 默认排序方向 | `'asc' \| 'desc'` | - |
-| `sortOrder` | 受控的排序方向 | `'asc' \| 'desc'` | - |
-| `filters` | 筛选项配置 | `{ text: string; value: any }[]` | - |
-| `onFilter` | 筛选函数 | `(value, record) => boolean` | - |
-| `filterMultiple` | 是否支持多选筛选 | `boolean` | `true` |
-| `defaultFilters` | 默认筛选值 | `string[]` | - |
-| `filteredValue` | 受控的筛选值 | `string[]` | - |
-| `filterDropdownProps` | 传递给筛选下拉框的属性 | `object` | - |
-| `onFilterDropdownVisibleChange` | 筛选下拉框显隐变化回调 | `(visible) => void` | - |
-| `onHeaderCell` | 设置表头单元格属性 | `(record, rowIndex) => object` | - |
-| `onCell` | 设置单元格属性 | `(record, rowIndex) => object` | - |
+| `width` | 列宽 | `number` | - |
+| `fixed` | 固定列位置 | `false \| 'left' \| 'right'` | `false` |
+| `ellipsis` | 是否省略超长文本 | `boolean` | `false` |
+| `slot` | 是否启用 slot 自定义渲染 | `boolean` | `false` |
+| `defaultSortOrder` | 默认排序状态 | `'asc' \| 'desc'` | - |
+| `sorter` | 排序函数（服务端可设为 `() => null`） | `(a, b) => number` | - |
+| `sortOrder` | 受控排序状态 | `'asc' \| 'desc'` | - |
+| `onFilter` | 本地筛选函数 | `(value, row) => boolean` | - |
+| `filters` | 筛选项 | `{ text: string; value: any }[]` | - |
+| `defaultFilters` | 默认筛选值 | `any[]` | - |
+| `filteredValue` | 受控筛选值 | `any[]` | - |
+| `filterMultiple` | 是否多选筛选 | `boolean` | `true` |
+| `filterDropdownProps` | 筛选下拉配置 | `object` | - |
+| `onFilterDropdownVisibleChange` | 筛选下拉显隐回调 | `(visible: boolean) => void` | - |
+| `enableResizing` | 是否允许调整该列宽度 | `boolean` | 继承全局 |
+| `slCell` | 设置单元格属性（注入到 `td`） | `(record: TData, rowIndex: number) => object` | - |
+| `slHeaderCell` | 设置表头单元格属性（注入到 `th`） | `(columns: ColumnProps[], columnIndex: number) => object` | - |
 
 ### RowSelection 行选择配置
 
@@ -149,20 +153,20 @@ export default class QuickStartTable extends KingdeeElement {
 |------|------|------|--------|
 | `type` | 选择类型 | `'checkbox' \| 'radio'` | `'checkbox'` |
 | `hidden` | 是否隐藏选择列 | `boolean` | `false` |
-| `width` | 选择列宽度 | `number` | `50` |
+| `width` | 选择列宽度 | `number` | - |
 | `className` | 选择列样式类名 | `string` | - |
-| `disabled` | 是否禁用表头全选 | `boolean` | `false` |
-| `defaultSelectedRowKeys` | 默认选中的行 key 数组 | `string[]` | - |
+| `disabled` | 是否禁用表头选择框 | `boolean` | `false` |
+| `defaultSelectedRowKeys` | 默认选中的行 key 数组 | `any[]` | - |
 | `onChange` | 选择变化回调 | `(selectedRowKeys, selectedRows) => void` | - |
 | `onSelect` | 点击行选择框回调 | `(record, selected, selectedRows, event) => void` | - |
 | `onSelectAll` | 点击全选框回调 | `(selected, selectedRows) => void` | - |
-| `getCheckboxProps` | 自定义选择框属性 | `(record) => { disabled?, className?, style? }` | - |
+| `getCheckboxProps` | 自定义选择框属性 | `(record) => Record<string, unknown>` | - |
 
 ### Pagination 分页配置
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `position` | 分页位置 | `'topStart' \| 'topCenter' \| 'topEnd' \| 'bottomStart' \| 'bottomCenter' \| 'bottomEnd'` | `'bottomEnd'` |
+| `position` | 分页位置 | `'topStart' \| 'topCenter' \| 'topEnd' \| 'bottomStart' \| 'bottomCenter' \| 'bottomEnd'` | `'bottomStart'` |
 | `total` | 数据总条数 | `number` | - |
 | `pageSize` | 每页条数 | `number` | `20` |
 | `currentPage` | 当前页码（受控） | `number` | - |
@@ -171,31 +175,39 @@ export default class QuickStartTable extends KingdeeElement {
 | `simpleMode` | 是否简洁模式 | `boolean` | `false` |
 | `disabled` | 是否禁用 | `boolean` | `false` |
 | `className` | 分页样式类名 | `string` | - |
-| `sl-page-change` | 分页变化回调 | `(event: CustomEvent) => void` | - |
+| `sl-page-change` | 分页变化回调（事件） | `(event: CustomEvent) => void` | - |
 
 ### ExpandProps 展开行配置
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `rowExpandable` | 是否开启行展开 | `boolean` | `false` |
-| `expendableRowKeys` | 可展开的行 key 数组（不传则所有行可展开） | `any[]` | - |
-| `expandRowByClick` | 是否可通过点击行展开 | `boolean` | `false` |
-| `defaultExpandedRowKeys` | 默认展开的行 key 数组 | `any[]` | - |
-| `defaultExpandAllRows` | 是否默认展开所有可展开行 | `boolean` | `false` |
+| `rowExpandable` | 是否开启行展开（优先级高于 `expendableRowKeys`） | `boolean` | `false` |
+| `expendableRowKeys` | 指定可展开的行 key | `any[]` | - |
+| `expandRowByClick` | 是否支持点击行展开 | `boolean` | `false` |
+| `defaultExpandedRowKeys` | 默认展开行 key 数组 | `any[]` | - |
 
 ### TableScroll 滚动配置
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `x` | 横向滚动区域宽度 | `number \| string` | - |
-| `y` | 纵向滚动区域高度 | `number \| string` | - |
+| `x` | 横向滚动宽度（像素值或百分比） | `number \| string` | - |
+| `y` | 纵向滚动高度（像素值） | `number \| string` | - |
 | `scrollToFirstRowOnChange` | 分页/排序/筛选变化后是否滚动到顶部 | `boolean` | `false` |
+
+### Virtualized 虚拟滚动配置
+
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| `itemHeight` | 行高 | `number` | `32` |
+| `onScroll` | 滚动回调 | `(e: CustomEvent) => void` | - |
 
 ### 主要事件
 
 | 事件名 | 说明 | 回调参数 |
 |--------|------|----------|
 | `change` | 分页、排序、筛选变化时触发 | `{ sorting, columnFilters, changeType, pagination? }` |
+| `row-reorder` | 行拖拽排序后触发 | `{ fromIndex, toIndex, newRows, rows }` |
+| `column-resize` | 列宽变化后触发 | `Record<string, number>` |
 
 ### Slots（插槽）
 
@@ -212,12 +224,11 @@ export default class QuickStartTable extends KingdeeElement {
 | `table-wrapper` | 表格外层容器 |
 | `table-container` | 表格内层容器 |
 | `table-head` | 表头区域 |
+| `table-head-row` | 表头行容器 |
+| `table-head-cell` | 表头单元格容器 |
 | `table-body` | 表体区域 |
-| `table-row` | 表格行 |
-| `table-row-cell` | 表格单元格 |
-| `row-all-select` | 全选 Checkbox |
-| `row-check-select` | 行选择 Checkbox |
-| `row-radio-select` | 行选择 Radio |
+| `table-body-row` | 表体行容器 |
+| `table-body-cell` | 表体单元格容器 |
 
 ### CSS 设计变量
 
@@ -241,6 +252,9 @@ export default class QuickStartTable extends KingdeeElement {
 | `--sl-table-default-text-margin-vertical` | 空数据区域内边距 |
 | `--sl-table-mask` | 加载遮罩背景色 |
 | `--sl-c-table-direction` | 表格方向（ltr/rtl） |
+| `--sl-table-expand-row-background` | 展开行背景色 |
+| `--sl-table-cell-border-focus` | 单元格聚焦边框色 |
+| `--sl-table-drag-handle-width` | 列宽拖拽热区宽度 |
 
 ## 使用建议
 
