@@ -4,81 +4,36 @@
 
 ## 功能说明
 
-Table 组件的基础用法包括：定义列配置（columns）、传入数据源（dataSource）、指定行唯一标识（rowKey）、显示边框等基础功能。
+用于演示 `SlTable` 的最小可用配置：`rowKey`、`columns`、`dataSource`。
 
-## API 属性
-
-| 属性 | 说明 | 类型 | 默认值 |
-|------|------|------|--------|
-| `rowKey` | 唯一标识行数据的字段名 | `string` | `'key'` |
-| `columns` | 表格列配置 | `ColumnProps[]` | `[]` |
-| `dataSource` | 表格数据源 | `TData[]` | `[]` |
-| `bordered` | 是否显示边框 | `boolean` | `false` |
-| `showHeader` | 是否显示表头 | `boolean` | `true` |
-
----
-
-## 代码示例
-
-### 示例1：最简表格
-
-指定表格的数据源 `dataSource` 和列的定义 `columns`，以及 `rowKey` 用于表格行 key 的取值字段。
+## 示例代码（React）
 
 ```jsx
 import React from "react";
 import SlTable from '@kdcloudjs/shoelace/dist/react/table/index.js';
-import { dataSource, columns } from "./data";
 
-export default () => {
-  const style = {
-    width: "70%",
-    margin: "0 auto",
-    padding: "20px",
-  };
-  return (
-    <div style={style}>
-      <SlTable rowKey="id" columns={columns} dataSource={dataSource} />
-    </div>
-  );
-};
-```
+const columns = [
+  { dataIndex: 'id', title: '#', width: 48, align: 'center' },
+  { dataIndex: 'name', title: '姓名', width: 160 },
+  { dataIndex: 'dept', title: '部门', width: 140 },
+  { dataIndex: 'email', title: '邮箱' }
+];
 
----
+const dataSource = [
+  { id: '1', name: 'Alice Smith', dept: '研发', email: 'alice@example.com' },
+  { id: '2', name: 'Bob Johnson', dept: '产品', email: 'bob@example.com' }
+];
 
-### 示例2：带边框表格
-
-添加 `bordered` 属性显示表格边框线。
-
-```jsx
-import React from "react";
-import SlTable from '@kdcloudjs/shoelace/dist/react/table/index.js';
-import { dataSource, columns } from "./data";
-
-export default () => {
-  const style = {
-    width: "70%",
-    margin: "0 auto",
-    padding: "20px",
-  };
-  return (
-    <div style={style}>
-      <SlTable
-        rowKey="id"
-        bordered
-        columns={columns}
-        dataSource={dataSource}
-      />
-    </div>
-  );
-};
+export default () => (
+  <SlTable rowKey="id" columns={columns} dataSource={dataSource} />
+);
 ```
 
 ---
 
 ## 注意事项
 
-1. **rowKey 必须唯一**：`rowKey` 指定的字段在数据中必须唯一，否则会导致行选择、展开等功能异常
+1. **rowKey 必须唯一**：`rowKey` 指定的字段在数据中必须唯一，否则会导致行选择、行展开等功能异常
 2. **columns 必须包含 dataIndex**：每列配置必须指定 `dataIndex`，且需与数据源中的字段名对应
 3. **建议设置列宽**：为每列设置 `width` 可避免列宽分配不合理的问题，未设置宽度的列会自动分配剩余空间
 
-[返回目录](../index.md)

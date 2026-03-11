@@ -2,32 +2,32 @@
 
 ## 组件概述
 
-`SlTable` 是一个功能丰富的数据表格组件，用于数据收集展示、分析整理和操作处理。基于 `@tanstack/lit-table` 构建，提供排序、筛选、分页、行选择、列固定、行展开、虚拟滚动、列宽调整等完整的表格功能。
+`SlTable` 是一个功能丰富的数据表格组件，用于数据收集展示、分析整理和操作处理。基于 `@tanstack/lit-table` 构建，支持在 KWC React 框架中使用。组件提供排序、筛选、分页、行选择、列固定、行展开、虚拟滚动、列宽调整等完整的表格功能。
 
 ## 功能列表
 
 | 功能 | 说明 | 详细文档 |
 |------|------|----------|
-| 基础用法 | columns、dataSource、rowKey、边框 | [basic-usage.md](./features/basic-usage.md) |
+| 基础用法 | columns、dataSource、rowKey、边框、隐藏表头 | [basic-usage.md](./features/basic-usage.md) |
+| 加载状态与空数据 | loading 加载中、空数据展示、自定义空状态 | [loading-empty.md](./features/loading-empty.md) |
 | 行选择 | checkbox 多选、radio 单选、默认选中、禁用、回调等 | [row-selection.md](./features/row-selection.md) |
-| 排序 | 非受控/受控排序、字符串排序 | [sorting.md](./features/sorting.md) |
-| 筛选 | 非受控/受控筛选、单选/多选筛选 | [filtering.md](./features/filtering.md) |
-| 过滤排序（综合） | 非受控和受控模式的排序与筛选综合用法 | [filter-sort.md](./features/filter-sort.md) |
+| 列排序 | sorter 排序函数、默认排序方向、排序状态监听 | [sorting.md](./features/sorting.md) |
+| 列筛选 | filters 筛选项、多选/单选筛选、默认筛选值 | [filtering.md](./features/filtering.md) |
+| 受控排序筛选 | 受控排序/筛选、服务端数据联动 | [controlled-sort-filter.md](./features/controlled-sort-filter.md) |
+| 固定列 | 左侧固定、右侧固定、两侧同时固定 | [fixed-column.md](./features/fixed-column.md) |
+| 列宽调整 | 拖拽调整列宽、禁止某列调整、调整回调 | [column-resizing.md](./features/column-resizing.md) |
 | 自定义单元格 | slot 自定义渲染、generateCustomSlot | [custom-cell.md](./features/custom-cell.md) |
-| 可编辑单元格 | 点击编辑、输入/选择/多行文本 | [editable.md](./features/editable.md) |
-| 行展开 | 展开行、嵌套子表格、点击行展开 | [row-expand.md](./features/row-expand.md) |
-| 列宽调整 | 拖拽调整列宽 | [column-resizing.md](./features/column-resizing.md) |
-| 固定列 | 左侧/右侧固定列、左右同时固定 | [fixed-column.md](./features/fixed-column.md) |
-| 固定表头 | tableScroll.y 固定表头、动态高度 | [fixed-header.md](./features/fixed-header.md) |
-| 分页 | 受控和非受控分页 | [pagination.md](./features/pagination.md) |
-| 加载状态与空数据 | loading、空数据展示、自定义空状态 | [loading-empty.md](./features/loading-empty.md) |
-| 事件与行属性 | onChange、onRow、onHeaderRow | [events.md](./features/events.md) |
-| 行/单元格属性定制 | onRow、onHeaderRow、onCell、onHeaderCell 深度定制 | [row-cell-props.md](./features/row-cell-props.md) |
-| 动态数据更新 | 添加/删除/清空/编辑数据 | [dynamic-data.md](./features/dynamic-data.md) |
-| 文本省略与列对齐 | ellipsis、align、className | [ellipsis-align.md](./features/ellipsis-align.md) |
-| RTL 方向支持 | direction="rtl"、动态切换方向 | [rtl.md](./features/rtl.md) |
-| 样式定制 | CSS 变量、CSS Parts、主题/暗黑模式 | [styling.md](./features/styling.md) |
-| 虚拟滚动 | 大数据量虚拟渲染、自定义行高 | [virtualized.md](./features/virtualized.md) |
+| 可编辑单元格 | 点击单元格进入编辑态，失焦后保存 | [editable-cell.md](./features/editable-cell.md) |
+| 文本省略与对齐 | ellipsis 省略、align 对齐、列样式类名 | [ellipsis-align.md](./features/ellipsis-align.md) |
+| 行展开 | 展开行、点击行展开、指定可展开行、默认展开 | [row-expand.md](./features/row-expand.md) |
+| 嵌套子表格 | 在展开行内渲染子表格 | [nested-table.md](./features/nested-table.md) |
+| 行拖拽 | 拖拽排序并监听 onSlRowReorder | [row-drag.md](./features/row-drag.md) |
+| 虚拟滚动 | 大数据量虚拟滚动、自定义行高 | [virtualized.md](./features/virtualized.md) |
+| 分页 | 分页配置、分页位置、每页条数、分页回调 | [pagination.md](./features/pagination.md) |
+| 事件监听 | change 事件、changeType 区分、事件联动，包含排序、筛选、分页 | [events.md](./features/events.md) |
+| 动态数据更新 | 添加数据、删除数据、清空重载 | [dynamic-data.md](./features/dynamic-data.md) |
+| RTL 方向 | 从右到左布局、RTL + 固定列 | [rtl.md](./features/rtl.md) |
+| 行/单元格属性 | onRow、onHeaderRow、onCell、onHeaderCell | [row-cell-props.md](./features/row-cell-props.md) |
 
 ## 核心约束
 
@@ -46,7 +46,10 @@
    - 导入必须从 `@kdcloudjs/shoelace/dist/react/table/index.js` 默认导入
    - 自定义单元格渲染使用 `generateCustomSlot` 工具函数，从 `@kdcloudjs/shoelace/dist/components/table/utils.js` 导入
 
-4. **自定义 Slot 命名规范**
+4. **组件标签名**
+   - 标签名为 `SlTable`（React 包装组件）
+
+5. **自定义 Slot 命名规范**
    - 自定义单元格 slot 名称格式：`custom-cell-{dataIndex}-{rowKeyValue}`
    - 展开行 slot 名称格式：`custom-row-{rowKeyValue}`
 
@@ -91,46 +94,51 @@ export default () => (
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `rowKey` | 唯一标识行数据的字段名 | `string` | `'key'` |
-| `columns` | 表格列配置 | `ColumnProps[]` | `[]` |
+| `rowKey` | 必填，行唯一标识字段名（区分大小写） | `string` | `'key'` |
+| `columns` | 列配置数组，至少包含 `dataIndex` 与 `title` | `ColumnProps[]` | `[]` |
 | `dataSource` | 表格数据源 | `TData[]` | `[]` |
 | `loading` | 是否显示加载状态 | `boolean` | `false` |
-| `bordered` | 是否显示边框 | `boolean` | `false` |
 | `showHeader` | 是否显示表头 | `boolean` | `true` |
+| `bordered` | 是否显示边框 | `boolean` | `false` |
 | `direction` | 表格方向 | `'ltr' \| 'rtl'` | `'ltr'` |
-| `rowSelection` | 行选择配置 | `TableRowSelection` | - |
-| `tableScroll` | 表格滚动配置 | `{ x?: number \| string; y?: number \| string; scrollToFirstRowOnChange?: boolean }` | `{}` |
-| `pagination` | 分页配置 | `PaginationProps` | - |
+| `rowSelection` | 行选择配置 | `RowSelection` | - |
+| `tableScroll` | 滚动配置 | `TableScroll` | - |
 | `expandProps` | 展开行配置 | `ExpandProps` | - |
-| `enableColumnResizing` | 是否启用列宽调整 | `boolean` | `false` |
-| `virtualized` | 虚拟滚动配置 | `boolean \| { itemHeight?: number }` | `false` |
-| `onRow` | 设置行属性 | `(record, index) => object` | - |
-| `onHeaderRow` | 设置头部行属性 | `(columns, index) => object` | - |
-| `onChange` | 分页、排序、筛选时的回调 | `(e: CustomEvent) => void` | - |
+| `pagination` | 分页配置 | `Pagination` | - |
+| `onChange` | 分页/排序/筛选变更回调 | `(e: CustomEvent) => void` | - |
+| `onRow` | 设置行属性（注入到 `tr`） | `(record: TData, index: number) => object` | - |
+| `onHeaderRow` | 设置表头行属性（注入到 `tr`） | `(columns: ColumnProps[], index: number) => object` | - |
+| `virtualized` | 虚拟滚动配置 | `boolean \| Virtualized` | `false` |
+| `enableColumnResizing` | 是否开启列宽拖拽 | `boolean` | `false` |
+| `onSlColumnResize` | 列宽调整回调 | `(size: Record<string, number>) => void` | - |
+| `rowDrag` | 是否开启行拖拽 | `boolean` | `false` |
+| `onSlRowReorder` | 行拖拽排序回调 | `(e: CustomEvent) => void` | - |
 
 ### Column 列配置
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `title` | 列头显示文字 | `string` | - |
-| `dataIndex` | 列数据字段名（唯一标识） | `string` | - |
-| `width` | 列宽度 | `number` | - |
-| `align` | 列对齐方式 | `'left' \| 'center' \| 'right'` | `'left'` |
+| `title` | 列标题（必填） | `string` | - |
+| `dataIndex` | 列字段名（必填且唯一） | `string` | - |
+| `align` | 对齐方式 | `'left' \| 'right' \| 'center'` | `'left'` |
 | `className` | 列样式类名 | `string` | - |
-| `fixed` | 列固定位置 | `false \| 'left' \| 'right'` | `false` |
-| `ellipsis` | 内容超出是否省略 | `boolean` | `false` |
-| `slot` | 是否启用自定义渲染 | `boolean` | `false` |
-| `enableResizing` | 是否允许拖拽调整该列宽度 | `boolean` | - |
-| `sorter` | 排序函数 | `(a, b) => number` | - |
-| `defaultSortOrder` | 默认排序方向 | `'asc' \| 'desc'` | - |
-| `sortOrder` | 受控的排序方向 | `'asc' \| 'desc'` | - |
-| `filters` | 筛选项配置 | `{ text: string; value: any }[]` | - |
-| `onFilter` | 筛选函数 | `(value, record) => boolean` | - |
-| `filterMultiple` | 是否支持多选筛选 | `boolean` | `true` |
-| `defaultFilters` | 默认筛选值 | `string[]` | - |
-| `filteredValue` | 受控的筛选值 | `string[]` | - |
-| `onCell` | 设置单元格属性 | `(colKey, record, rowIndex) => object` | - |
-| `onHeaderCell` | 设置头部单元格属性 | `(colKey, columns, columnIndex) => object` | - |
+| `width` | 列宽 | `number` | - |
+| `fixed` | 固定列位置 | `false \| 'left' \| 'right'` | `false` |
+| `ellipsis` | 是否省略超长文本 | `boolean` | `false` |
+| `slot` | 是否启用 slot 自定义渲染 | `boolean` | `false` |
+| `defaultSortOrder` | 默认排序状态 | `'asc' \| 'desc'` | - |
+| `sorter` | 排序函数（服务端可设为 `() => null`） | `(a, b) => number` | - |
+| `sortOrder` | 受控排序状态 | `'asc' \| 'desc'` | - |
+| `onFilter` | 本地筛选函数 | `(value, row) => boolean` | - |
+| `filters` | 筛选项 | `{ text: string; value: any }[]` | - |
+| `defaultFilters` | 默认筛选值 | `any[]` | - |
+| `filteredValue` | 受控筛选值 | `any[]` | - |
+| `filterMultiple` | 是否多选筛选 | `boolean` | `true` |
+| `filterDropdownProps` | 筛选下拉配置 | `object` | - |
+| `onFilterDropdownVisibleChange` | 筛选下拉显隐回调 | `(visible: boolean) => void` | - |
+| `enableResizing` | 是否允许调整该列宽度 | `boolean` | 继承全局 |
+| `onCell` | 设置单元格属性（注入到 `td`） | `(record: TData, rowIndex: number) => object` | - |
+| `onHeaderCell` | 设置表头单元格属性（注入到 `th`） | `(columns: ColumnProps[], columnIndex: number) => object` | - |
 
 ### RowSelection 行选择配置
 
@@ -138,42 +146,61 @@ export default () => (
 |------|------|------|--------|
 | `type` | 选择类型 | `'checkbox' \| 'radio'` | `'checkbox'` |
 | `hidden` | 是否隐藏选择列 | `boolean` | `false` |
-| `width` | 选择列宽度 | `number` | `50` |
-| `disabled` | 是否禁用表头全选 | `boolean` | `false` |
-| `defaultSelectedRowKeys` | 默认选中的行 key 数组 | `string[]` | - |
+| `width` | 选择列宽度 | `number` | - |
+| `className` | 选择列样式类名 | `string` | - |
+| `disabled` | 是否禁用表头选择框 | `boolean` | `false` |
+| `defaultSelectedRowKeys` | 默认选中的行 key 数组 | `any[]` | - |
 | `onChange` | 选择变化回调 | `(selectedRowKeys, selectedRows) => void` | - |
 | `onSelect` | 点击行选择框回调 | `(record, selected, selectedRows, event) => void` | - |
 | `onSelectAll` | 点击全选框回调 | `(selected, selectedRows) => void` | - |
-| `getCheckboxProps` | 自定义选择框属性 | `(record) => { disabled?, className?, style? }` | - |
+| `getCheckboxProps` | 自定义选择框属性 | `(record) => Record<string, unknown>` | - |
 
 ### ExpandProps 展开行配置
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `rowExpandable` | 是否开启行展开 | `boolean` | `false` |
-| `expendableRowKeys` | 可展开的行 key 数组 | `any[]` | - |
-| `expandRowByClick` | 是否通过点击行展开 | `boolean` | `false` |
-| `defaultExpandedRowKeys` | 默认展开的行 key 数组 | `any[]` | - |
-| `defaultExpandAllRows` | 是否默认展开所有可展开行 | `boolean` | `false` |
+| `rowExpandable` | 是否开启行展开（优先级高于 `expendableRowKeys`） | `boolean` | `false` |
+| `expendableRowKeys` | 指定可展开的行 key | `any[]` | - |
+| `expandRowByClick` | 是否支持点击行展开 | `boolean` | `false` |
+| `defaultExpandedRowKeys` | 默认展开行 key 数组 | `any[]` | - |
 
 ### TableScroll 滚动配置
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `x` | 横向滚动区域宽度 | `number \| string` | - |
-| `y` | 纵向滚动区域高度 | `number \| string` | - |
+| `x` | 横向滚动宽度（像素值或百分比） | `number \| string` | - |
+| `y` | 纵向滚动高度（像素值） | `number \| string` | - |
 | `scrollToFirstRowOnChange` | 分页/排序/筛选变化后是否滚动到顶部 | `boolean` | `false` |
+
+### Virtualized 虚拟滚动配置
+
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| `itemHeight` | 行高 | `number` | `32` |
+| `onScroll` | 滚动回调 | `(e: CustomEvent) => void` | - |
+
+### 主要事件
+
+| 事件名 | 说明 | 回调参数 |
+|--------|------|----------|
+| `change` | 分页、排序、筛选变化时触发 | `{ sorting, columnFilters, changeType, pagination? }` |
+| `row-reorder` | 行拖拽排序后触发 | `{ fromIndex, toIndex, newRows, rows }` |
+| `column-resize` | 列宽变化后触发 | `Record<string, number>` |
 
 ### Pagination 分页配置
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `placement` | 分页位置 | `'topStart' \| 'topCenter' \| 'topEnd' \| 'bottomStart' \| 'bottomCenter' \| 'bottomEnd'` | `'bottomStart'` |
-| `currentPage` | 当前页码（受控） | `number` | - |
+| `position` | 分页位置 | `'topStart' \| 'topCenter' \| 'topEnd' \| 'bottomStart' \| 'bottomCenter' \| 'bottomEnd'` | `'bottomStart'` |
+| `total` | 数据总条数 | `number` | - |
 | `pageSize` | 每页条数 | `number` | `20` |
+| `currentPage` | 当前页码（受控） | `number` | - |
+| `defaultCurrentPage` | 默认当前页码 | `number` | `1` |
 | `pageSizeOpts` | 每页条数选项 | `number[]` | `[10, 20, 50, 100]` |
 | `simpleMode` | 是否简洁模式 | `boolean` | `false` |
 | `disabled` | 是否禁用 | `boolean` | `false` |
+| `className` | 分页样式类名 | `string` | - |
+| `sl-page-change` | 分页变化回调（事件） | `(event: CustomEvent) => void` | - |
 
 ### Slots（插槽）
 
@@ -190,12 +217,11 @@ export default () => (
 | `table-wrapper` | 表格外层容器 |
 | `table-container` | 表格内层容器 |
 | `table-head` | 表头区域 |
+| `table-head-row` | 表头行容器 |
+| `table-head-cell` | 表头单元格容器 |
 | `table-body` | 表体区域 |
-| `table-row` | 表格行 |
-| `table-row-cell` | 表格单元格 |
-| `row-all-select` | 全选 Checkbox |
-| `row-check-select` | 行选择 Checkbox |
-| `row-radio-select` | 行选择 Radio |
+| `table-body-row` | 表体行容器 |
+| `table-body-cell` | 表体单元格容器 |
 
 ### CSS 设计变量
 
@@ -208,12 +234,20 @@ export default () => (
 | `--sl-table-cell-line-height` | 单元格行高 |
 | `--sl-table-cell-padding` | 单元格内边距 |
 | `--sl-table-header-background` | 表头背景色 |
+| `--sl-table-header-line-height` | 表头行高 |
+| `--sl-table-column-header-padding` | 表头单元格内边距 |
 | `--sl-table-font-size` | 表格字体大小 |
 | `--sl-table-row-background-hover` | 行悬停背景色 |
 | `--sl-table-row-background-active` | 选中行背景色 |
 | `--sl-table-icon-color-default` | 排序图标默认颜色 |
 | `--sl-table-icon-color-active` | 排序图标激活颜色 |
+| `--sl-table-default-text-color` | 空数据文字颜色 |
+| `--sl-table-default-text-margin-vertical` | 空数据区域内边距 |
 | `--sl-table-mask` | 加载遮罩背景色 |
+| `--sl-c-table-direction` | 表格方向（ltr/rtl） |
+| `--sl-table-expand-row-background` | 展开行背景色 |
+| `--sl-table-cell-border-focus` | 单元格聚焦边框色 |
+| `--sl-table-drag-handle-width` | 列宽拖拽热区宽度 |
 
 ## 使用建议
 
