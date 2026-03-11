@@ -4,7 +4,7 @@
 
 ## 功能说明
 
-Table 组件支持动态更新数据源，包括添加数据、删除数据、清空并重新加载等操作。在 Vue 中，使用 `ref` 或 `reactive` 声明响应式数据，修改后视图会自动更新。推荐使用不可变更新方式（如展开运算符）创建新数组。
+Table 组件支持动态更新数据源，包括添加数据、删除数据、清空并重新加载等操作。在 Vue 中，使用 `ref` 声明响应式数据，修改后视图会自动更新。必须使用不可变更新方式（展开运算符）创建新数组。
 
 ## 代码示例
 
@@ -67,26 +67,13 @@ function handleAddMultiple() {
   counter += 5;
 }
 </script>
-
-<style scoped>
-.toolbar {
-  display: flex;
-  align-items: center;
-  gap: var(--sl-spacing-small);
-  margin-bottom: var(--sl-spacing-medium);
-}
-.count {
-  color: var(--sl-color-neutral-600);
-  font-size: var(--sl-font-size-small);
-}
-</style>
 ```
 
 ---
 
 ### 示例2：删除数据
 
-从表格中删除指定数据行。在 `v-for` 循环元素上绑定 `:slot` 属性渲染操作列，可直接访问当前行数据，无需通过 id 查找。
+从表格中删除指定数据行。
 
 ```vue
 <template>
@@ -128,13 +115,6 @@ function handleDelete(id) {
   dataSource.value = dataSource.value.filter(item => item.id !== id);
 }
 </script>
-
-<style scoped>
-.action-cell {
-  display: flex;
-  justify-content: center;
-}
-</style>
 ```
 
 ---
@@ -186,12 +166,8 @@ function handleReload() {
 
 async function loadData() {
   isLoading.value = true;
-  dataSource.value = [];  // 先清空
-  
-  // 模拟异步请求
+  dataSource.value = [];
   await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  // 生成新数据
   const now = new Date();
   dataSource.value = Array.from({ length: 10 }, (_, index) => ({
     id: String(index + 1),
@@ -199,25 +175,16 @@ async function loadData() {
     status: ['待处理', '进行中', '已完成'][index % 3],
     createdAt: new Date(now - index * 86400000).toLocaleDateString()
   }));
-  
   isLoading.value = false;
 }
 </script>
-
-<style scoped>
-.toolbar {
-  display: flex;
-  gap: var(--sl-spacing-small);
-  margin-bottom: var(--sl-spacing-medium);
-}
-</style>
 ```
 
 ---
 
 ### 示例4：编辑数据
 
-实现行数据的编辑功能，使用 sl-dialog 弹窗进行数据编辑。在 `v-for` 循环元素上绑定 `:slot` 属性渲染操作列，直接将行数据对象传入编辑函数。
+实现行数据的编辑功能。
 
 ```vue
 <template>
@@ -236,7 +203,6 @@ async function loadData() {
     </div>
   </sl-table>
   
-  <!-- 编辑弹窗 -->
   <sl-dialog label="编辑用户" :open="isDialogOpen" @sl-hide="handleDialogClose">
     <div class="form-item">
       <label>姓名:</label>
@@ -291,11 +257,7 @@ function handleAgeInput(event) {
 function handleSave() {
   dataSource.value = dataSource.value.map(item => {
     if (item.id === editingItem.id) {
-      return {
-        ...item,
-        name: editingItem.name,
-        age: parseInt(editingItem.age, 10)
-      };
+      return { ...item, name: editingItem.name, age: parseInt(editingItem.age, 10) };
     }
     return item;
   });
@@ -309,32 +271,15 @@ function handleDialogClose() {
   editingItem.age = '';
 }
 </script>
-
-<style scoped>
-.action-cell {
-  display: flex;
-  justify-content: center;
-}
-.form-item {
-  margin-bottom: var(--sl-spacing-medium);
-}
-.form-item label {
-  display: block;
-  margin-bottom: var(--sl-spacing-2x-small);
-  font-size: var(--sl-font-size-small);
-  color: var(--sl-color-neutral-700);
-}
-</style>
 ```
 
 ---
 
 ## 注意事项
 
-1. **Vue 响应式与 Web Components 更新**：向 `<sl-table>` 等 Web Component 传递数组或对象数据时，由于底层（Lit）采用 `===` 严格浅比对检测属性变更，**绝对禁止**原地修改响应式数据（如调用 `push`、`splice` 等方法）。即便是使用 Vue 的 `reactive` 包装的数组，直接修改也**不会**触发组件重新渲染。
-2. **必须产生全新引用**：强制使用不可变数据模式，每次更新数据源都必须将包含新数据的全新数组赋值给状态（例如：`dataSource.value = [...dataSource.value, newItem]` 或 `dataSource.value = dataSource.value.filter(...)`），只有引用的改变才能正确触发视图重新渲染。
+1. **响应式更新**：在 Vue 中，使用 `ref` 声明响应式数据，必须使用不可变更新方式（展开运算符）创建新数组才能触发视图更新
+2. **避免直接修改**：不要使用 `push`、`splice` 等方法直接修改数组，需要创建新数组
 3. **rowKey 唯一性**：添加新数据时确保 `rowKey` 字段值唯一
-4. **Vue 中的弹窗事件**：sl-dialog 的 `@sl-hide` 事件在模板中直接绑定，无需手动 `addEventListener`
-5. **正确的 slot 写法**：在 `v-for` 循环的元素上直接绑定 `:slot="\`custom-cell-{dataIndex}-${row.id}\`"`，**禁止**在 `<template>` 上使用 `v-for` + `#[动态表达式]` 动态插槽语法（会导致 Vite 编译错误）
+4. **正确的 slot 写法**：在 `v-for` 循环的元素上直接绑定 `:slot="\`custom-cell-{dataIndex}-${row.id}\`"`，禁止在 `<template>` 上使用 `v-for` + `#[动态表达式]` 动态插槽语法
 
 [返回目录](../index.md)
