@@ -35,7 +35,7 @@ const dataSource = [
 
 const expandProps = {
   rowExpandable: true,
-  expendableRowKeys: ['1', '2'],
+  expandableRowKeys: ['1', '2'],
   defaultExpandedRowKeys: ['1']
 };
 

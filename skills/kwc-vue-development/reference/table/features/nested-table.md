@@ -59,7 +59,7 @@ const dataSource = ref([
 
 const expandProps = {
   rowExpandable: true,
-  expendableRowKeys: ['1'],
+  expandableRowKeys: ['1'],
   defaultExpandedRowKeys: ['1']
 };
 

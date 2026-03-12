@@ -56,7 +56,7 @@ export default class TableNested extends KingdeeElement {
   ];
   expandProps = {
     rowExpandable: true,
-    expendableRowKeys: ['1'],
+    expandableRowKeys: ['1'],
     defaultExpandedRowKeys: ['1']
   };
   get expandRows() {

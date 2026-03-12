@@ -159,8 +159,8 @@ export default () => (
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `rowExpandable` | 是否开启行展开（优先级高于 `expendableRowKeys`） | `boolean` | `false` |
-| `expendableRowKeys` | 指定可展开的行 key | `any[]` | - |
+| `rowExpandable` | 是否开启行展开（优先级高于 `expandableRowKeys`） | `boolean` | `false` |
+| `expandableRowKeys` | 指定可展开的行 key | `any[]` | - |
 | `expandRowByClick` | 是否支持点击行展开 | `boolean` | `false` |
 | `defaultExpandedRowKeys` | 默认展开行 key 数组 | `any[]` | - |
 

@@ -23,6 +23,7 @@
         data-row-index={cell.rowIndex}
         data-col-key={cell.colKey}
         onclick={handleCellClick}
+        style="width: 100%"
       >
       <template kwc:if={cell.editing}>
         <sl-input
