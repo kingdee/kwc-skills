@@ -16,8 +16,8 @@
     columns={columns}
     data-source={dataSource}
   >
-    <template for:each="{customSlots}" for:item="item">
-      <div key={item.slotName} slot={item.slotName} class="op-cell">
+    <template for:each={customSlots} for:item="item">
+      <div key={item.slotName} slot={item.slotName} class="op-cell" style="width: 100%">
         <sl-button
           kwc:external
           size="small"
