@@ -16,6 +16,7 @@
     :dataSource.prop="dataSource"
   >
     <div
+      style="width: 100%"
       v-for="cell in cellSlots"
       :key="cell.slotName"
       :slot="cell.slotName"

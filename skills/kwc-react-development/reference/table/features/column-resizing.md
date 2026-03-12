@@ -4,7 +4,7 @@
 
 ## 功能说明
 
-通过 `enableColumnResizing` 开启拖拽调整列宽，使用 `onSlColumnResize` 获取调整结果。
+通过 `enableColumnResizing` 开启拖拽调整列宽，使用 `slColumnResize` 获取调整结果。
 
 ## 示例代码（React）
 
@@ -29,7 +29,7 @@ export default () => (
     columns={columns}
     dataSource={dataSource}
     enableColumnResizing={true}
-    onSlColumnResize={handleColumnResize}
+    slColumnResize={handleColumnResize}
   />
 );
 ```

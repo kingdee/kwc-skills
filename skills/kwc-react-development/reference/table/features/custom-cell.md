@@ -44,7 +44,7 @@ export default () => {
         type: 'customCell',
         columnId: 'action',
         callback: (props) => (
-          <div key={props.slotName} slot={props.slotName} className="op-cell">
+          <div style={{ width: '100%' }} key={props.slotName} slot={props.slotName} className="op-cell">
             <SlButton
               size="small"
               variant="text"

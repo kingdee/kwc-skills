@@ -20,6 +20,7 @@
       :key="row.id"
       :slot="`custom-cell-action-${row.id}`"
       class="op-cell"
+      style="width: 100%"
     >
       <sl-button
         size="small"

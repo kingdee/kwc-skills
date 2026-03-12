@@ -21,13 +21,13 @@
 | 文本省略与对齐 | ellipsis 省略、align 对齐、列样式类名 | [ellipsis-align.md](./features/ellipsis-align.md) |
 | 行展开 | 展开行、点击行展开、指定可展开行、默认展开 | [row-expand.md](./features/row-expand.md) |
 | 嵌套子表格 | 在展开行内渲染子表格 | [nested-table.md](./features/nested-table.md) |
-| 行拖拽 | 拖拽排序并监听 onSlRowReorder | [row-drag.md](./features/row-drag.md) |
+| 行拖拽 | 拖拽排序并监听 slRowReorder | [row-drag.md](./features/row-drag.md) |
 | 虚拟滚动 | 大数据量虚拟滚动、自定义行高 | [virtualized.md](./features/virtualized.md) |
 | 分页 | 分页配置、分页位置、每页条数、分页回调 | [pagination.md](./features/pagination.md) |
 | 事件监听 | change 事件、changeType 区分、事件联动，包含排序、筛选、分页 | [events.md](./features/events.md) |
 | 动态数据更新 | 添加数据、删除数据、清空重载 | [dynamic-data.md](./features/dynamic-data.md) |
 | RTL 方向 | 从右到左布局、RTL + 固定列 | [rtl.md](./features/rtl.md) |
-| 行/单元格属性 | onRow、onHeaderRow、onCell、onHeaderCell | [row-cell-props.md](./features/row-cell-props.md) |
+| 行/单元格属性 | slRow、slHeaderRow、slCell、slHeaderCell | [row-cell-props.md](./features/row-cell-props.md) |
 
 ## 核心约束
 
@@ -106,13 +106,13 @@ export default () => (
 | `expandProps` | 展开行配置 | `ExpandProps` | - |
 | `pagination` | 分页配置 | `Pagination` | - |
 | `onChange` | 分页/排序/筛选变更回调 | `(e: CustomEvent) => void` | - |
-| `onRow` | 设置行属性（注入到 `tr`） | `(record: TData, index: number) => object` | - |
-| `onHeaderRow` | 设置表头行属性（注入到 `tr`） | `(columns: ColumnProps[], index: number) => object` | - |
+| `slRow` | 设置行属性（注入到 `tr`） | `(record: TData, index: number) => object` | - |
+| `slHeaderRow` | 设置表头行属性（注入到 `tr`） | `(columns: ColumnProps[], index: number) => object` | - |
 | `virtualized` | 虚拟滚动配置 | `boolean \| Virtualized` | `false` |
 | `enableColumnResizing` | 是否开启列宽拖拽 | `boolean` | `false` |
-| `onSlColumnResize` | 列宽调整回调 | `(size: Record<string, number>) => void` | - |
+| `slColumnResize` | 列宽调整回调 | `(size: Record<string, number>) => void` | - |
 | `rowDrag` | 是否开启行拖拽 | `boolean` | `false` |
-| `onSlRowReorder` | 行拖拽排序回调 | `(e: CustomEvent) => void` | - |
+| `slRowReorder` | 行拖拽排序回调 | `(e: CustomEvent) => void` | - |
 
 ### Column 列配置
 
@@ -137,8 +137,8 @@ export default () => (
 | `filterDropdownProps` | 筛选下拉配置 | `object` | - |
 | `onFilterDropdownVisibleChange` | 筛选下拉显隐回调 | `(visible: boolean) => void` | - |
 | `enableResizing` | 是否允许调整该列宽度 | `boolean` | 继承全局 |
-| `onCell` | 设置单元格属性（注入到 `td`） | `(record: TData, rowIndex: number) => object` | - |
-| `onHeaderCell` | 设置表头单元格属性（注入到 `th`） | `(columns: ColumnProps[], columnIndex: number) => object` | - |
+| `slCell` | 设置单元格属性（注入到 `td`） | `(record: TData, rowIndex: number) => object` | - |
+| `slHeaderCell` | 设置表头单元格属性（注入到 `th`） | `(columns: ColumnProps[], columnIndex: number) => object` | - |
 
 ### RowSelection 行选择配置
 

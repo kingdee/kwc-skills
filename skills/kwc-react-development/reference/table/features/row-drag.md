@@ -4,7 +4,7 @@
 
 ## 功能说明
 
-通过 `rowDrag` 开启拖拽排序，监听 `onSlRowReorder` 更新数据顺序。
+通过 `rowDrag` 开启拖拽排序，监听 `slRowReorder` 更新数据顺序。
 
 ## 示例代码（React）
 
@@ -39,7 +39,7 @@ export default () => {
       rowDrag={true}
       columns={columns}
       dataSource={dataSource}
-      onSlRowReorder={handleRowReorder}
+      slRowReorder={handleRowReorder}
     />
   );
 };
@@ -50,5 +50,5 @@ export default () => {
 ## 注意事项
 
 1. **rowDrag 属性**：必须设置为 `true` 才能开启行拖拽功能
-2. **onSlRowReorder 回调**：拖拽完成后触发，参数包含 fromIndex、toIndex、newRows、rows
+2. **slRowReorder 回调**：拖拽完成后触发，参数包含 fromIndex、toIndex、newRows、rows
 3. **数据更新**：需要在回调中手动更新 dataSource 以反映新的顺序

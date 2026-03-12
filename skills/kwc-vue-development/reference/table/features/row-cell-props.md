@@ -4,7 +4,7 @@
 
 ## 功能说明
 
-通过 `:onRow`、`:onHeaderRow`、`onCell`、`onHeaderCell` 注入 class、style 和事件。
+通过 `:slRow`、`:slHeaderRow`、`slCell`、`slHeaderCell` 注入 class、style 和事件。
 
 ## 示例代码（Vue）
 
@@ -14,8 +14,8 @@
     rowKey="id" 
     :columns.prop="columns"
     :dataSource.prop="dataSource"
-    :onRow.prop="onRow"
-    :onHeaderRow.prop="onHeaderRow">
+    :slRow.prop="slRow"
+    :slHeaderRow.prop="slHeaderRow">
   </sl-table>
 </template>
 
@@ -30,21 +30,21 @@ const columns = [
   {
     dataIndex: 'name',
     title: '姓名',
-    onCell: (record) => ({
+    slCell: (record) => ({
       onmouseenter: () => console.log('onmouseenter cell', record.id)
     }),
-    onHeaderCell: () => ({ className: 'name-header' })
+    slHeaderCell: () => ({ className: 'name-header' })
   }
 ];
 
-const onRow = (record, rowIndex) => {
+const slRow = (record, rowIndex) => {
   return {
     onclick: () => console.log('click row', record.id),
     className: rowIndex % 2 === 0 ? 'even-row' : 'odd-row'
   };
 };
 
-const onHeaderRow = () => ({ className: 'table-head-row' });
+const slHeaderRow = () => ({ className: 'table-head-row' });
 </script>
 ```
 

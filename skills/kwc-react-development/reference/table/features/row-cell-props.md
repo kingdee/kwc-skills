@@ -4,7 +4,7 @@
 
 ## 功能说明
 
-通过 `onRow`、`onHeaderRow` 以及 `onCell`、`onHeaderCell` 注入 class、style 和事件。
+通过 `slRow`、`slHeaderRow` 以及 `slCell`、`slHeaderCell` 注入 class、style 和事件。
 
 ## 示例代码（React）
 
@@ -21,10 +21,10 @@ const columns = [
   {
     dataIndex: 'name',
     title: '姓名',
-    onCell: (record) => ({
+    slCell: (record) => ({
       onmouseenter: () => console.log('onmouseenter cell', record.id)
     }),
-    onHeaderCell: () => ({ className: 'name-header' })
+    slHeaderCell: () => ({ className: 'name-header' })
   }
 ];
 
@@ -41,8 +41,8 @@ export default () => {
       rowKey="id"
       columns={columns}
       dataSource={dataSource}
-      onRow={handleRow}
-      onHeaderRow={handleHeaderRow}
+      slRow={handleRow}
+      slHeaderRow={handleHeaderRow}
     />
   );
 };

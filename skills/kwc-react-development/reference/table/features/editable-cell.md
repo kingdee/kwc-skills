@@ -60,6 +60,7 @@ export default () => {
                 key={props.slotName}
                 slot={props.slotName}
                 onClick={() => handleCellClick(props.rowIndex, col.dataIndex)}
+                style={{ width: '100%' }}
               >
                 {editing ? (
                   <SlInput
