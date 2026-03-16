@@ -94,3 +94,4 @@ export default () => {
 1. **Slot 名称格式**：必须严格遵循 `custom-cell-{dataIndex}-{rowKeyValue}` 格式
 2. **rowKey 值**：slot 名称中的 rowKeyValue 是数据中 rowKey 字段的实际值
 3. **性能考虑**：大量自定义单元格会增加 DOM 复杂度，大数据量时建议配合虚拟滚动
+4. **组件使用**：当需要渲染通用组件如（`input、select、datepicker`）时，优先使用`@kdcloudjs/shoelace`提供的组件
