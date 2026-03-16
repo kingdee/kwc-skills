@@ -2,23 +2,26 @@
 
 ## 组件概述
 
-`SlNav` 是一套用于构建应用导航的组件族，适合顶部导航、侧边导航和分组菜单。核心组件包括：
+`SlNav` 现在以 **Ant Design Menu API 兼容** 为核心，保留 Shoelace 的视觉呈现。核心组件包括：
 
-- `SlNav`：导航容器，管理选中值和展示模式
-- `SlNavItem`：导航项，支持选中态和链接模式
-- `SlNavGroup`：导航分组
-- `SlNavSubmenu`：子菜单，支持展开和弹出
+- `SlNav`
+- `SlNavItem`
+- `SlNavGroup`
+- `SlNavSubmenu`
+
+相比旧版，核心状态已经从 `value` 切换为 `key / selectedKeys / openKeys`。
 
 ## 功能列表
 
 | 功能 | 说明 |
 |------|------|
-| 基础选中 | 使用 `value` 管理当前激活项 |
-| 三种模式 | `horizontal`、`vertical`、`vertical-popup` |
-| 分组展示 | `SlNavGroup` 组织同类菜单 |
-| 子菜单 | `SlNavSubmenu` 支持层级结构 |
-| 链接跳转 | `SlNavItem` 可通过 `href` 直接跳转 |
-| 事件处理 | `onSlChange`、`onSlNavSelect` |
+| Antd 兼容 API | 支持 `items`、`selectedKeys`、`defaultSelectedKeys`、`openKeys`、`defaultOpenKeys` |
+| 三种模式 | `inline`、`vertical`、`horizontal` |
+| 折叠菜单 | `inlineCollapsed` |
+| 多选与禁选 | `multiple`、`selectable` |
+| 子菜单交互 | `triggerSubMenuAction`、`subMenuOpenDelay`、`subMenuCloseDelay` |
+| 回调属性 | `onClick`、`onSelect`、`onDeselect`、`onOpenChange` |
+| 事件监听 | `onSlChange`、`onSlNavOpenChange`、`onSlNavSelect` |
 
 ## 核心约束
 
@@ -32,27 +35,25 @@
    import SlNavSubmenu from '@kdcloudjs/shoelace/dist/react/nav-submenu/index.js';
    ```
 
-2. **选中态统一由 `SlNav.value` 驱动**
-   - `SlNavItem.value` 必须唯一
-   - 推荐使用受控状态维护 `value`
-   - 不要在多个 `SlNavItem` 上手工散落维护 `active`
+2. **状态体系已经改为 `key`**
+   - `SlNavItem` / `SlNavSubmenu` 使用 `key`
+   - 选中状态使用 `selectedKeys`
+   - 展开状态使用 `openKeys`
+   - 不要继续按旧版 `value` 写逻辑
 
-3. **事件必须使用 `onSl*`**
-   - `onSlChange`：获取当前导航值，使用 `event.target.value`
-   - `onSlNavSelect`：获取选中项对象，使用 `event.detail.item`
+3. **React 中有两类入口都可用**
+   - Web Component 事件：`onSlChange`、`onSlNavOpenChange`、`onSlNavSelect`
+   - 兼容回调属性：`onClick`、`onSelect`、`onDeselect`、`onOpenChange`
 
-4. **模式差异必须明确**
-   - `horizontal`：子菜单以弹层展示
-   - `vertical`：子菜单内联展开
-   - `vertical-popup`：垂直布局但子菜单走弹层，适合紧凑侧栏
+4. **模式语义必须按新版本理解**
+   - `inline`：默认侧边栏行为
+   - `vertical`：弹出式垂直菜单
+   - `horizontal`：顶部菜单
+   - `inlineCollapsed` 只配合 `inline`
 
-5. **链接模式要和状态模式区分**
-   - 应用内导航建议使用 `value + onSlChange`
-   - 外部跳转再使用 `href`
-
-6. **`SlNavGroup` 标题只能通过 slot 传入**
-   - 正确写法：`<span slot="title">基础设置</span>`
-   - 不要写成 `<SlNavGroup title="基础设置">`
+5. **`SlNavGroup` 没有 `title` 属性**
+   - JSX 结构写法用 `<span slot="title">基础设置</span>`
+   - `items` API 用 `label`
 
 ## 快速开始
 
@@ -69,25 +70,19 @@ import SlNavSubmenu from '@kdcloudjs/shoelace/dist/react/nav-submenu/index.js';
 ### 最简示例
 
 ```jsx
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import SlIcon from '@kdcloudjs/shoelace/dist/react/icon/index.js';
 import SlNav from '@kdcloudjs/shoelace/dist/react/nav/index.js';
 import SlNavItem from '@kdcloudjs/shoelace/dist/react/nav-item/index.js';
 
 export default function BasicNav() {
-  const [value, setValue] = useState('home');
-
-  const handleChange = useCallback((event) => {
-    setValue(event.target.value);
-  }, []);
-
   return (
-    <SlNav value={value} onSlChange={handleChange}>
-      <SlNavItem value="home">
+    <SlNav defaultSelectedKeys={['home']}>
+      <SlNavItem key="home">
         <SlIcon slot="prefix" name="house" />
         首页
       </SlNavItem>
-      <SlNavItem value="profile">
+      <SlNavItem key="profile">
         <SlIcon slot="prefix" name="person" />
         个人中心
       </SlNavItem>
@@ -96,7 +91,7 @@ export default function BasicNav() {
 }
 ```
 
-### 侧边导航示例
+### 受控侧边导航示例
 
 ```jsx
 import React, { useState, useCallback } from 'react';
@@ -107,32 +102,69 @@ import SlNavGroup from '@kdcloudjs/shoelace/dist/react/nav-group/index.js';
 import SlNavSubmenu from '@kdcloudjs/shoelace/dist/react/nav-submenu/index.js';
 
 export default function SidebarNav() {
-  const [value, setValue] = useState('security');
+  const [selectedKeys, setSelectedKeys] = useState(['security']);
+  const [openKeys, setOpenKeys] = useState(['system']);
 
   const handleChange = useCallback((event) => {
-    setValue(event.target.value);
+    setSelectedKeys([...event.detail.selectedKeys]);
   }, []);
 
-  const handleSelect = useCallback((event) => {
-    console.log('选中项:', event.detail.item.value);
+  const handleOpenChange = useCallback((event) => {
+    setOpenKeys([...event.detail.openKeys]);
   }, []);
 
   return (
     <SlNav
-      value={value}
+      mode="inline"
       style={{ maxWidth: '256px' }}
+      selectedKeys={selectedKeys}
+      openKeys={openKeys}
       onSlChange={handleChange}
-      onSlNavSelect={handleSelect}
+      onSlNavOpenChange={handleOpenChange}
     >
-      <SlNavSubmenu title="系统设置" open>
+      <SlNavSubmenu key="system" title="系统设置">
         <SlIcon slot="prefix" name="gear" />
         <SlNavGroup>
           <span slot="title">基础设置</span>
-          <SlNavItem value="profile">个人资料</SlNavItem>
-          <SlNavItem value="security">安全设置</SlNavItem>
+          <SlNavItem key="profile">个人资料</SlNavItem>
+          <SlNavItem key="security">安全设置</SlNavItem>
         </SlNavGroup>
       </SlNavSubmenu>
     </SlNav>
+  );
+}
+```
+
+### `items` API 示例
+
+```jsx
+import React, { useState } from 'react';
+import SlNav from '@kdcloudjs/shoelace/dist/react/nav/index.js';
+
+export default function DataDrivenNav() {
+  const [selectedKeys, setSelectedKeys] = useState(['logs']);
+  const [openKeys, setOpenKeys] = useState(['system']);
+
+  return (
+    <SlNav
+      mode="inline"
+      style={{ maxWidth: '256px' }}
+      items={[
+        { key: 'dashboard', label: 'Dashboard' },
+        {
+          key: 'system',
+          label: 'System',
+          children: [
+            { key: 'logs', label: 'Logs' },
+            { key: 'alerts', label: 'Alerts', danger: true }
+          ]
+        }
+      ]}
+      selectedKeys={selectedKeys}
+      openKeys={openKeys}
+      onSelect={info => setSelectedKeys([...info.selectedKeys])}
+      onOpenChange={keys => setOpenKeys([...keys])}
+    />
   );
 }
 ```
@@ -143,14 +175,35 @@ export default function SidebarNav() {
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `value` | 当前选中的导航值 | `string` | `''` |
-| `mode` | 导航模式 | `'horizontal' \| 'vertical' \| 'vertical-popup'` | `'vertical'` |
+| `items` | Antd 风格菜单数据 | `SlNavItemType[]` | `[]` |
+| `selectedKeys` | 受控选中项 | `string[]` | `[]` |
+| `defaultSelectedKeys` | 非受控默认选中项 | `string[]` | `[]` |
+| `openKeys` | 受控展开子菜单 | `string[]` | `[]` |
+| `defaultOpenKeys` | 非受控默认展开子菜单 | `string[]` | `[]` |
+| `mode` | 菜单模式 | `'inline' \| 'vertical' \| 'horizontal'` | `'inline'` |
+| `multiple` | 是否允许多选 | `boolean` | `false` |
+| `selectable` | 是否允许选中 | `boolean` | `true` |
+| `inlineCollapsed` | 是否折叠内联菜单 | `boolean` | `false` |
+| `inlineIndent` | inline 模式缩进宽度 | `number` | `16` |
+| `subMenuOpenDelay` | 子菜单展开延迟，单位秒 | `number` | `0` |
+| `subMenuCloseDelay` | 子菜单收起延迟，单位秒 | `number` | `0.1` |
+| `triggerSubMenuAction` | 子菜单触发方式 | `'hover' \| 'click'` | `'hover'` |
+| `theme` | 主题兼容字段 | `'light' \| 'dark'` | `'light'` |
+| `expandIcon` | 自定义展开图标 | `unknown` | - |
+| `forceSubMenuRender` | 是否强制渲染子菜单内容 | `boolean` | `false` |
+| `overflowedIndicator` | 溢出指示器兼容字段 | `unknown` | - |
+| `disabledOverflow` | 是否禁用溢出处理 | `boolean` | `false` |
 
 ### `SlNavItem` 主要属性
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
-| `value` | 导航项值 | `string` | `''` |
+| `key` | 菜单项唯一标识 | `string` | `''` |
+| `label` | `items` API 下的标签内容 | `unknown` | - |
+| `icon` | `items` API 下的图标内容 | `unknown` | - |
+| `extra` | 右侧额外内容 | `unknown` | - |
+| `danger` | 危险态菜单项 | `boolean` | `false` |
+| `title` | 提示文案 | `string` | `''` |
 | `disabled` | 是否禁用 | `boolean` | `false` |
 | `active` | 是否激活 | `boolean` | `false` |
 | `href` | 跳转链接 | `string` | `''` |
@@ -162,46 +215,61 @@ export default function SidebarNav() {
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
+| `label` | `items` API 下的分组标题 | `unknown` | - |
 | `active` | 组内是否存在激活项 | `boolean` | `false` |
 
 ### `SlNavSubmenu` 主要属性
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
+| `key` | 子菜单唯一标识 | `string` | `''` |
 | `open` | 是否展开 | `boolean` | `false` |
-| `title` | 子菜单标题 | `string` | `''` |
+| `nested` | 是否为嵌套子菜单 | `boolean` | `false` |
+| `title` | 标题字符串 | `string` | `''` |
+| `label` | `items` API 下的标题内容 | `unknown` | - |
+| `icon` | `items` API 下的图标内容 | `unknown` | - |
+| `theme` | 子菜单主题 | `'light' \| 'dark'` | `'light'` |
+| `popupClassName` | 弹层类名 | `string` | `''` |
+| `popupOffset` | 弹层偏移 | `[number, number]` | - |
 | `disabled` | 是否禁用 | `boolean` | `false` |
 | `active` | 是否包含激活项 | `boolean` | `false` |
-| `mode` | 当前菜单模式 | `'horizontal' \| 'vertical' \| 'vertical-popup'` | `'vertical'` |
 
 ### 主要事件
 
 | 事件 | React 写法 | 获取方式 |
 |------|------------|----------|
-| `sl-change` | `onSlChange` | `event.target.value` |
-| `sl-nav-select` | `onSlNavSelect` | `event.detail.item` |
-| `sl-show` | `onSlShow` | 监听子菜单展开 |
-| `sl-hide` | `onSlHide` | 监听子菜单收起 |
+| `sl-change` | `onSlChange` | `event.detail.selectedKeys` |
+| `sl-nav-open-change` | `onSlNavOpenChange` | `event.detail.openKeys` |
+| `sl-nav-select` | `onSlNavSelect` | `event.detail.item`、`event.detail.domEvent` |
 
-### 主要方法
+### 回调属性
 
-| 组件 | 方法 | 说明 |
-|------|------|------|
-| `SlNavSubmenu` | `show()` | 展开子菜单 |
-| `SlNavSubmenu` | `hide()` | 收起子菜单 |
+| 属性 | 说明 |
+|------|------|
+| `onClick` | 点击菜单项时触发，返回 `key`、`keyPath`、`item`、`domEvent` |
+| `onSelect` | 选中时触发 |
+| `onDeselect` | 多选取消时触发 |
+| `onOpenChange` | 展开项变化时触发 |
 
 ### 主要 Slots
 
 | 组件 | Slot | 说明 |
 |------|------|------|
 | `SlNavItem` | `prefix` / `suffix` | 导航项前后缀 |
-| `SlNavGroup` | `title` | 分组标题，必须通过 `slot="title"` 传入 |
+| `SlNavGroup` | `title` | 分组标题插槽 |
 | `SlNavSubmenu` | `title` / `prefix` / `suffix` / `expand-icon` / `collapse-icon` | 子菜单标题与图标区域 |
+
+### 主要方法
+
+| 组件 | 方法 | 说明 |
+|------|------|------|
+| `SlNavSubmenu` | `show(source?)` | 展开子菜单 |
+| `SlNavSubmenu` | `hide(source?)` | 收起子菜单 |
 
 ## 使用建议
 
-1. **受控写法优先**：用 React state 驱动 `value`，这样和路由状态更容易保持一致。
-2. **唯一值**：每个 `SlNavItem.value` 都要唯一，否则选中同步会混乱。
-3. **模式选择**：顶部菜单选 `horizontal`，标准侧栏选 `vertical`，折叠栏选 `vertical-popup`。
-4. **结构建议**：复杂侧边导航优先用 `SlNavSubmenu + SlNavGroup + SlNavItem` 组合，不要用大量平铺项。
-5. **外链场景**：带 `href` 的导航项更适合外部页面，不建议和应用内状态切换混用在同一组复杂逻辑里。
+1. **React 中优先用受控写法**，尤其是路由侧栏、权限菜单和 Layout 导航。
+2. **事件和回调不要混着滥用**，普通 React 业务推荐优先 `onSelect` / `onOpenChange`；需要和 DOM 事件统一时再用 `onSl*`。
+3. **动态菜单优先 `items`**，静态小菜单再手写 JSX 结构。
+4. **`inlineCollapsed` 是新版本折叠侧栏的关键入口**，不要再沿用旧版 `vertical-popup` 思路。
+5. **菜单项唯一标识必须稳定**，推荐直接对齐路由 key 或权限编码。
