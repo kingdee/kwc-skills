@@ -55,6 +55,7 @@
 
 5. **状态体系已经改为 `key`**
    - `sl-nav-item` / `sl-nav-submenu` 使用 `key`
+   - `itemKey` 是 React 包装层的兼容别名，LWC 中继续使用 `key`
    - 选中状态走 `selectedKeys`
    - 展开状态走 `openKeys`
 
@@ -181,6 +182,13 @@ export default class SidebarNav extends KingdeeElement {
 ```
 
 ### `items` API 示例
+
+**index.html**
+```html
+<template>
+    <sl-nav kwc:external class="nav-el" mode="inline" style="max-width: 256px;"></sl-nav>
+</template>
+```
 
 **index.js**
 ```js

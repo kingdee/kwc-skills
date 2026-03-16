@@ -36,7 +36,8 @@
    ```
 
 2. **状态体系已经改为 `key`**
-   - `SlNavItem` / `SlNavSubmenu` 使用 `key`
+   - 数据模型仍然以 `key` 为唯一标识
+   - **React 子组件组合写法请优先使用 `itemKey`**，因为 React 自身的 `key` 不会透传给自定义元素
    - 选中状态使用 `selectedKeys`
    - 展开状态使用 `openKeys`
    - 不要继续按旧版 `value` 写逻辑
@@ -78,11 +79,11 @@ import SlNavItem from '@kdcloudjs/shoelace/dist/react/nav-item/index.js';
 export default function BasicNav() {
   return (
     <SlNav defaultSelectedKeys={['home']}>
-      <SlNavItem key="home">
+      <SlNavItem itemKey="home">
         <SlIcon slot="prefix" name="house" />
         首页
       </SlNavItem>
-      <SlNavItem key="profile">
+      <SlNavItem itemKey="profile">
         <SlIcon slot="prefix" name="person" />
         个人中心
       </SlNavItem>
@@ -122,12 +123,12 @@ export default function SidebarNav() {
       onSlChange={handleChange}
       onSlNavOpenChange={handleOpenChange}
     >
-      <SlNavSubmenu key="system" title="系统设置">
+      <SlNavSubmenu itemKey="system" title="系统设置">
         <SlIcon slot="prefix" name="gear" />
         <SlNavGroup>
           <span slot="title">基础设置</span>
-          <SlNavItem key="profile">个人资料</SlNavItem>
-          <SlNavItem key="security">安全设置</SlNavItem>
+          <SlNavItem itemKey="profile">个人资料</SlNavItem>
+          <SlNavItem itemKey="security">安全设置</SlNavItem>
         </SlNavGroup>
       </SlNavSubmenu>
     </SlNav>
@@ -199,6 +200,7 @@ export default function DataDrivenNav() {
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
 | `key` | 菜单项唯一标识 | `string` | `''` |
+| `itemKey` | React 安全别名，推荐在 JSX 组合时使用 | `string` | `''` |
 | `label` | `items` API 下的标签内容 | `unknown` | - |
 | `icon` | `items` API 下的图标内容 | `unknown` | - |
 | `extra` | 右侧额外内容 | `unknown` | - |
@@ -223,6 +225,7 @@ export default function DataDrivenNav() {
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
 | `key` | 子菜单唯一标识 | `string` | `''` |
+| `itemKey` | React 安全别名，推荐在 JSX 组合时使用 | `string` | `''` |
 | `open` | 是否展开 | `boolean` | `false` |
 | `nested` | 是否为嵌套子菜单 | `boolean` | `false` |
 | `title` | 标题字符串 | `string` | `''` |
@@ -273,3 +276,4 @@ export default function DataDrivenNav() {
 3. **动态菜单优先 `items`**，静态小菜单再手写 JSX 结构。
 4. **`inlineCollapsed` 是新版本折叠侧栏的关键入口**，不要再沿用旧版 `vertical-popup` 思路。
 5. **菜单项唯一标识必须稳定**，推荐直接对齐路由 key 或权限编码。
+6. **React 子组件组合时统一用 `itemKey`**，只有 `items` 数据对象里才写 `key`。

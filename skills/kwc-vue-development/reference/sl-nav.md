@@ -27,6 +27,7 @@
 
 1. **选中与展开状态使用 `key` 体系，不再使用旧版 `value`**
    - `sl-nav-item` 和 `sl-nav-submenu` 都以 `key` 作为唯一标识
+   - `itemKey` 是 React 专用别名，Vue 模板里继续使用 `key`
    - 选中状态使用 `selectedKeys`
    - 展开状态使用 `openKeys`
 
