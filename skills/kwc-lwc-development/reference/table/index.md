@@ -28,6 +28,7 @@
 | 动态数据更新 | 添加数据、删除数据、清空重载 | [dynamic-data.md](./features/dynamic-data.md) |
 | RTL 方向 | 从右到左布局、RTL + 固定列 | [rtl.md](./features/rtl.md) |
 | 行/单元格属性 | slRow、slHeaderRow、slCell、slHeaderCell | [row-cell-props.md](./features/row-cell-props.md) |
+| 树形数据展示 | 展示树形数据 childrenRecordName indentSize| [tree-table.md](./features/tree-table.md) |
 
 ## 核心约束
 
@@ -120,6 +121,7 @@ export default class QuickStartTable extends KingdeeElement {
 | `sl-column-resize` | 列宽调整回调 | `(size: Record<string, number>) => void` | - |
 | `row-drag` | 是否开启行拖拽 | `boolean` | `false` |
 | `sl-row-reorder` | 行拖拽排序回调 | `(e: CustomEvent) => void` | - |
+| `tree` | 树形表格配置 | `TreeConfig` | - |
 
 ### Column 列配置
 
@@ -200,6 +202,13 @@ export default class QuickStartTable extends KingdeeElement {
 |------|------|------|--------|
 | `itemHeight` | 行高 | `number` | `32` |
 | `onScroll` | 滚动回调 | `(e: CustomEvent) => void` | - |
+
+### Tree 树形表格配置
+
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| `childrenRecordName` | 树形表格 `dataSource` 中每行元素中表示子级数据的字段 | `string` | `children` |
+| `indentSize` | 	树形结构 `TableCell` 的缩进大小 | `number` | `16` |
 
 ### 主要事件
 

@@ -28,6 +28,7 @@
 | 动态数据更新 | 添加数据、删除数据、清空重载 | [dynamic-data.md](./features/dynamic-data.md) |
 | RTL 方向 | 从右到左布局、RTL + 固定列 | [rtl.md](./features/rtl.md) |
 | 行/单元格属性 | slRow、slHeaderRow、slCell、slHeaderCell | [row-cell-props.md](./features/row-cell-props.md) |
+| 树形数据展示 | 展示树形数据 childrenRecordName indentSize| [tree-table.md](./features/tree-table.md) |
 
 ## 核心约束
 
@@ -105,6 +106,7 @@ export default () => (
 | `tableScroll` | 滚动配置 | `TableScroll` | - |
 | `expandProps` | 展开行配置 | `ExpandProps` | - |
 | `pagination` | 分页配置 | `Pagination` | - |
+| `tree` | 树形表格配置 | `TreeConfig` | - |
 | `onChange` | 分页/排序/筛选变更回调 | `(e: CustomEvent) => void` | - |
 | `slRow` | 设置行属性（注入到 `tr`） | `(record: TData, index: number) => object` | - |
 | `slHeaderRow` | 设置表头行属性（注入到 `tr`） | `(columns: ColumnProps[], index: number) => object` | - |
@@ -201,6 +203,13 @@ export default () => (
 | `disabled` | 是否禁用 | `boolean` | `false` |
 | `className` | 分页样式类名 | `string` | - |
 | `sl-page-change` | 分页变化回调（事件） | `(event: CustomEvent) => void` | - |
+
+### Tree 树形表格配置
+
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| `childrenRecordName` | 树形表格 `dataSource` 中每行元素中表示子级数据的字段 | `string` | `children` |
+| `indentSize` | 	树形结构 `TableCell` 的缩进大小 | `number` | `16` |
 
 ### Slots（插槽）
 
