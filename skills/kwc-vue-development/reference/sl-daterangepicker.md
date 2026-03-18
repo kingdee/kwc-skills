@@ -1,4 +1,4 @@
-# Daterange 日期范围选择器
+# Daterangepicker 日期范围选择器
 
 选择一个日期或日期时间范围的控件，支持双日历面板联动、手动输入、范围校验。
 
@@ -20,11 +20,11 @@
 
 ```html
 <template>
-  <sl-daterange style="width: 400px"></sl-daterange>
+  <sl-daterangepicker style="width: 400px"></sl-daterangepicker>
 </template>
 
 <script setup>
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 </script>
 ```
 
@@ -34,12 +34,12 @@
 
 ```html
 <template>
-  <sl-daterange style="width: 400px" :value.prop="dateValue"></sl-daterange>
+  <sl-daterangepicker style="width: 400px" :value.prop="dateValue"></sl-daterangepicker>
 </template>
 
 <script setup>
   import { ref } from 'vue';
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
   const dateValue = ref([new Date(2025, 0, 1), new Date(2025, 5, 30)]);
 </script>
@@ -51,11 +51,11 @@
 
 ```html
 <template>
-  <sl-daterange style="width: 400px" label="选择日期范围"></sl-daterange>
+  <sl-daterangepicker style="width: 400px" label="选择日期范围"></sl-daterangepicker>
 </template>
 
 <script setup>
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 </script>
 ```
 
@@ -65,11 +65,11 @@
 
 ```html
 <template>
-  <sl-daterange style="width: 400px" label="入住退房" help-text="请选择入住和退房日期"></sl-daterange>
+  <sl-daterangepicker style="width: 400px" label="入住退房" help-text="请选择入住和退房日期"></sl-daterangepicker>
 </template>
 
 <script setup>
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 </script>
 ```
 
@@ -79,11 +79,11 @@
 
 ```html
 <template>
-  <sl-daterange style="width: 400px" :placeholder.prop="['Check-in', 'Check-out']"></sl-daterange>
+  <sl-daterangepicker style="width: 400px" :placeholder.prop="['Check-in', 'Check-out']"></sl-daterangepicker>
 </template>
 
 <script setup>
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 </script>
 ```
 
@@ -94,14 +94,14 @@
 ```html
 <template>
   <div class="daterange-group">
-    <sl-daterange :value.prop="dateValue" label="默认可清除"></sl-daterange>
-    <sl-daterange :value.prop="dateValue" label="不可清除" :clearable="false"></sl-daterange>
+    <sl-daterangepicker :value.prop="dateValue" label="默认可清除"></sl-daterangepicker>
+    <sl-daterangepicker :value.prop="dateValue" label="不可清除" :clearable="false"></sl-daterangepicker>
   </div>
 </template>
 
 <script setup>
   import { ref } from 'vue';
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
   const dateValue = ref([new Date(2025, 0, 1), new Date(2025, 5, 30)]);
 </script>
@@ -122,11 +122,11 @@
 
 ```html
 <template>
-  <sl-daterange style="width: 500px" label="日期时间范围" type="datetime"></sl-daterange>
+  <sl-daterangepicker style="width: 500px" label="日期时间范围" type="datetime"></sl-daterangepicker>
 </template>
 
 <script setup>
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 </script>
 ```
 
@@ -136,11 +136,11 @@
 
 ```html
 <template>
-  <sl-daterange style="width: 400px" label="填充样式" filled></sl-daterange>
+  <sl-daterangepicker style="width: 400px" label="填充样式" filled></sl-daterangepicker>
 </template>
 
 <script setup>
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 </script>
 ```
 
@@ -150,11 +150,11 @@
 
 ```html
 <template>
-  <sl-daterange style="width: 400px" label="胶囊样式" pill></sl-daterange>
+  <sl-daterangepicker style="width: 400px" label="胶囊样式" pill></sl-daterangepicker>
 </template>
 
 <script setup>
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 </script>
 ```
 
@@ -165,14 +165,14 @@
 ```html
 <template>
   <div class="daterange-group">
-    <sl-daterange label="Small" size="small"></sl-daterange>
-    <sl-daterange label="Medium" size="medium"></sl-daterange>
-    <sl-daterange label="Large" size="large"></sl-daterange>
+    <sl-daterangepicker label="Small" size="small"></sl-daterangepicker>
+    <sl-daterangepicker label="Medium" size="medium"></sl-daterangepicker>
+    <sl-daterangepicker label="Large" size="large"></sl-daterangepicker>
   </div>
 </template>
 
 <script setup>
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 </script>
 
 <style scoped>
@@ -191,12 +191,12 @@
 
 ```html
 <template>
-  <sl-daterange style="width: 400px" :value.prop="dateValue" disabled></sl-daterange>
+  <sl-daterangepicker style="width: 400px" :value.prop="dateValue" disabled></sl-daterangepicker>
 </template>
 
 <script setup>
   import { ref } from 'vue';
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
   const dateValue = ref([new Date(2025, 0, 1), new Date(2025, 5, 30)]);
 </script>
@@ -208,12 +208,12 @@
 
 ```html
 <template>
-  <sl-daterange style="width: 400px" :value.prop="dateValue" readonly></sl-daterange>
+  <sl-daterangepicker style="width: 400px" :value.prop="dateValue" readonly></sl-daterangepicker>
 </template>
 
 <script setup>
   import { ref } from 'vue';
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
   const dateValue = ref([new Date(2025, 0, 1), new Date(2025, 5, 30)]);
 </script>
@@ -225,11 +225,11 @@
 
 ```html
 <template>
-  <sl-daterange style="width: 400px" label="限制范围" min="2025-01-01" max="2025-12-31"></sl-daterange>
+  <sl-daterangepicker style="width: 400px" label="限制范围" min="2025-01-01" max="2025-12-31"></sl-daterangepicker>
 </template>
 
 <script setup>
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 </script>
 ```
 
@@ -247,13 +247,13 @@
       <p style="margin: 4px 0">当前值 (sl-change): {{ changeValue }}</p>
       <p style="margin: 4px 0">实时值 (sl-input): {{ inputValue }}</p>
     </div>
-    <sl-daterange label="选择日期范围" @sl-change="handleChange" @sl-input="handleInput"></sl-daterange>
+    <sl-daterangepicker label="选择日期范围" @sl-change="handleChange" @sl-input="handleInput"></sl-daterangepicker>
   </div>
 </template>
 
 <script setup>
   import { ref } from 'vue';
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
   const changeValue = ref('-');
   const inputValue = ref('-');
@@ -283,18 +283,18 @@
 <template>
   <div style="display: flex; flex-direction: column; gap: 8px; width: 400px">
     <p style="font-size: 14px; color: #666">最近事件: {{ logText }}</p>
-    <sl-daterange
+    <sl-daterangepicker
       :value.prop="dateValue"
       @sl-focus="logText = '获得焦点 (sl-focus)'"
       @sl-blur="logText = '失去焦点 (sl-blur)'"
       @sl-clear="logText = '已清除 (sl-clear)'"
-    ></sl-daterange>
+    ></sl-daterangepicker>
   </div>
 </template>
 
 <script setup>
   import { ref } from 'vue';
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
   const logText = ref('无');
   const dateValue = ref([new Date(2025, 0, 1), new Date(2025, 5, 30)]);
@@ -313,13 +313,13 @@
       <sl-button size="small" @click="handleThisQuarter">本季度</sl-button>
       <sl-button size="small" @click="handleClear">清空</sl-button>
     </div>
-    <sl-daterange ref="daterangeRef" label="日期范围"></sl-daterange>
+    <sl-daterangepicker ref="daterangeRef" label="日期范围"></sl-daterangepicker>
   </div>
 </template>
 
 <script setup>
   import { ref } from 'vue';
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
   import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
   const daterangeRef = ref(null);
@@ -352,19 +352,19 @@
 ```html
 <template>
   <div style="display: flex; flex-direction: column; gap: 12px; width: 400px">
-    <sl-daterange
+    <sl-daterangepicker
       ref="daterangeRef"
       label="项目周期"
       help-text="范围不能超过 30 天"
       @sl-change="handleChange"
-    ></sl-daterange>
+    ></sl-daterangepicker>
     <sl-button variant="primary" size="small" @click="handleValidate">校验</sl-button>
   </div>
 </template>
 
 <script setup>
   import { ref } from 'vue';
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
   import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
   const daterangeRef = ref(null);
@@ -399,13 +399,13 @@
 
 ```html
 <template>
-  <sl-daterange style="width: 400px" label="自定义后缀">
+  <sl-daterangepicker style="width: 400px" label="自定义后缀">
     <sl-icon slot="suffix" name="calendar-event"></sl-icon>
-  </sl-daterange>
+  </sl-daterangepicker>
 </template>
 
 <script setup>
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
   import '@kdcloudjs/shoelace/dist/components/icon/icon.js';
 </script>
 ```
@@ -458,11 +458,11 @@
 
 ```html
 <template>
-  <sl-daterange @sl-change="handleChange" @sl-input="handleInput"></sl-daterange>
+  <sl-daterangepicker @sl-change="handleChange" @sl-input="handleInput"></sl-daterangepicker>
 </template>
 
 <script setup>
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
   function handleChange(event) {
     const [start, end] = event.target.value;
@@ -550,15 +550,15 @@ Vue 中绑定复杂类型（数组/对象）必须使用 `.prop` 修饰符，`va
 ```html
 <template>
   <!-- 通过 .prop 修饰符绑定数组值（推荐） -->
-  <sl-daterange :value.prop="dateValue"></sl-daterange>
+  <sl-daterangepicker :value.prop="dateValue"></sl-daterangepicker>
 
   <!-- 清空 -->
-  <sl-daterange :value.prop="[null, null]"></sl-daterange>
+  <sl-daterangepicker :value.prop="[null, null]"></sl-daterangepicker>
 </template>
 
 <script setup>
   import { ref } from 'vue';
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
   const dateValue = ref([new Date(2025, 0, 1), new Date(2025, 5, 30)]);
 
@@ -577,12 +577,12 @@ Vue 中绑定复杂类型（数组/对象）必须使用 `.prop` 修饰符，`va
 
 ```html
 <template>
-  <sl-daterange type="datetime" :value.prop="datetimeValue"></sl-daterange>
+  <sl-daterangepicker type="datetime" :value.prop="datetimeValue"></sl-daterangepicker>
 </template>
 
 <script setup>
   import { ref } from 'vue';
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
   const datetimeValue = ref([new Date(2025, 0, 1, 8, 0, 0), new Date(2025, 5, 30, 18, 0, 0)]);
 </script>
@@ -611,42 +611,42 @@ Vue 默认将绑定值作为 HTML attribute 设置，而 `value`（数组）和 
 
 ```html
 <!-- ✅ 正确：使用 .prop 修饰符 -->
-<sl-daterange :value.prop="dateValue"></sl-daterange>
-<sl-daterange :placeholder.prop="['开始', '结束']"></sl-daterange>
+<sl-daterangepicker :value.prop="dateValue"></sl-daterangepicker>
+<sl-daterangepicker :placeholder.prop="['开始', '结束']"></sl-daterangepicker>
 
 <!-- ❌ 错误：缺少 .prop，会被序列化为字符串 -->
-<sl-daterange :value="dateValue"></sl-daterange>
+<sl-daterangepicker :value="dateValue"></sl-daterangepicker>
 ```
 
 ### 2. 字符串类型属性可以直接绑定
 
 ```html
 <!-- 字符串属性无需 .prop -->
-<sl-daterange label="日期范围" min="2025-01-01" max="2025-12-31"></sl-daterange>
+<sl-daterangepicker label="日期范围" min="2025-01-01" max="2025-12-31"></sl-daterangepicker>
 ```
 
 ### 3. 事件监听使用 `@sl-*` 语法
 
 ```html
-<sl-daterange
+<sl-daterangepicker
   @sl-change="handleChange"
   @sl-input="handleInput"
   @sl-focus="handleFocus"
   @sl-blur="handleBlur"
   @sl-clear="handleClear"
-></sl-daterange>
+></sl-daterangepicker>
 ```
 
 ### 4. 通过模板 ref 调用方法
 
 ```html
 <template>
-  <sl-daterange ref="daterangeRef"></sl-daterange>
+  <sl-daterangepicker ref="daterangeRef"></sl-daterangepicker>
 </template>
 
 <script setup>
   import { ref } from 'vue';
-  import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+  import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
   const daterangeRef = ref(null);
 
@@ -674,7 +674,7 @@ A: `sl-input` 在用户每次点选日期或输入合法日期时即触发（实
 
 ### Q: 如何限制可选日期范围？
 
-A: 使用 `min` 和 `max` 属性：`<sl-daterange min="2025-01-01" max="2025-12-31"></sl-daterange>`。超出范围的日期会被自动禁用。
+A: 使用 `min` 和 `max` 属性：`<sl-daterangepicker min="2025-01-01" max="2025-12-31"></sl-daterangepicker>`。超出范围的日期会被自动禁用。
 
 ### Q: 如何通过 JavaScript 读取当前选中的日期范围？
 

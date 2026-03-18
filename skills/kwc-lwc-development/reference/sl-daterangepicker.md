@@ -1,4 +1,4 @@
-# Daterange 日期范围选择器
+# Daterangepicker 日期范围选择器
 
 选择一个日期或日期时间范围的控件，支持双日历面板联动、手动输入、范围校验。
 
@@ -20,15 +20,15 @@
 
 ```html
 <template>
-  <sl-daterange kwc:external class="daterange-el" label="日期范围" style="width: 400px"></sl-daterange>
+  <sl-daterangepicker kwc:external class="daterange-el" label="日期范围" style="width: 400px"></sl-daterangepicker>
 </template>
 ```
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
-export default class DaterangeBasic extends KingdeeElement {}
+export default class DaterangepickerBasic extends KingdeeElement {}
 ```
 
 ## 设置初始值
@@ -37,21 +37,21 @@ export default class DaterangeBasic extends KingdeeElement {}
 
 ```html
 <template>
-  <sl-daterange
+  <sl-daterangepicker
     kwc:external
     class="daterange-el"
     label="默认值"
     style="width: 400px"
     value="2025-01-01 ~ 2025-06-30"
-  ></sl-daterange>
+  ></sl-daterangepicker>
 </template>
 ```
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
-export default class DaterangeInitialValue extends KingdeeElement {}
+export default class DaterangepickerInitialValue extends KingdeeElement {}
 ```
 
 ## 标签
@@ -60,15 +60,15 @@ export default class DaterangeInitialValue extends KingdeeElement {}
 
 ```html
 <template>
-  <sl-daterange kwc:external class="daterange-el" label="选择日期范围" style="width: 400px"></sl-daterange>
+  <sl-daterangepicker kwc:external class="daterange-el" label="选择日期范围" style="width: 400px"></sl-daterangepicker>
 </template>
 ```
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
-export default class DaterangeLabel extends KingdeeElement {}
+export default class DaterangepickerLabel extends KingdeeElement {}
 ```
 
 ## 帮助文本
@@ -77,21 +77,21 @@ export default class DaterangeLabel extends KingdeeElement {}
 
 ```html
 <template>
-  <sl-daterange
+  <sl-daterangepicker
     kwc:external
     class="daterange-el"
     label="入住退房"
     help-text="请选择入住和退房日期"
     style="width: 400px"
-  ></sl-daterange>
+  ></sl-daterangepicker>
 </template>
 ```
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
-export default class DaterangeHelpText extends KingdeeElement {}
+export default class DaterangepickerHelpText extends KingdeeElement {}
 ```
 
 ## 占位符
@@ -100,21 +100,21 @@ export default class DaterangeHelpText extends KingdeeElement {}
 
 ```html
 <template>
-  <sl-daterange
+  <sl-daterangepicker
     kwc:external
     class="daterange-el"
     label="自定义占位符"
     placeholder="Check-in,Check-out"
     style="width: 400px"
-  ></sl-daterange>
+  ></sl-daterangepicker>
 </template>
 ```
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
-export default class DaterangePlaceholder extends KingdeeElement {}
+export default class DaterangepickerPlaceholder extends KingdeeElement {}
 ```
 
 ## 可清除
@@ -124,20 +124,20 @@ export default class DaterangePlaceholder extends KingdeeElement {}
 ```html
 <template>
   <div class="daterange-group">
-    <sl-daterange
+    <sl-daterangepicker
       kwc:external
       class="daterange-clearable"
       value="2025-01-01 ~ 2025-06-30"
       label="默认可清除"
       style="width: 400px"
-    ></sl-daterange>
-    <sl-daterange
+    ></sl-daterangepicker>
+    <sl-daterangepicker
       kwc:external
       class="daterange-no-clear"
       value="2025-01-01 ~ 2025-06-30"
       label="不可清除"
       style="width: 400px"
-    ></sl-daterange>
+    ></sl-daterangepicker>
   </div>
 </template>
 ```
@@ -152,9 +152,9 @@ export default class DaterangePlaceholder extends KingdeeElement {}
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
-export default class DaterangeClearable extends KingdeeElement {
+export default class DaterangepickerClearable extends KingdeeElement {
   renderedCallback() {
     if (this._rendered) return;
     this._rendered = true;
@@ -173,21 +173,21 @@ export default class DaterangeClearable extends KingdeeElement {
 
 ```html
 <template>
-  <sl-daterange
+  <sl-daterangepicker
     kwc:external
     class="daterange-el"
     label="日期时间范围"
     type="datetime"
     style="width: 500px"
-  ></sl-daterange>
+  ></sl-daterangepicker>
 </template>
 ```
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
-export default class DaterangeDatetime extends KingdeeElement {}
+export default class DaterangepickerDatetime extends KingdeeElement {}
 ```
 
 ## 填充样式
@@ -196,15 +196,15 @@ export default class DaterangeDatetime extends KingdeeElement {}
 
 ```html
 <template>
-  <sl-daterange kwc:external class="daterange-el" label="填充样式" filled style="width: 400px"></sl-daterange>
+  <sl-daterangepicker kwc:external class="daterange-el" label="填充样式" filled style="width: 400px"></sl-daterangepicker>
 </template>
 ```
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
-export default class DaterangeFilled extends KingdeeElement {}
+export default class DaterangepickerFilled extends KingdeeElement {}
 ```
 
 ## 胶囊样式
@@ -213,15 +213,15 @@ export default class DaterangeFilled extends KingdeeElement {}
 
 ```html
 <template>
-  <sl-daterange kwc:external class="daterange-el" label="胶囊样式" pill style="width: 400px"></sl-daterange>
+  <sl-daterangepicker kwc:external class="daterange-el" label="胶囊样式" pill style="width: 400px"></sl-daterangepicker>
 </template>
 ```
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
-export default class DaterangePill extends KingdeeElement {}
+export default class DaterangepickerPill extends KingdeeElement {}
 ```
 
 ## 尺寸
@@ -231,15 +231,15 @@ export default class DaterangePill extends KingdeeElement {}
 ```html
 <template>
   <div class="daterange-group">
-    <sl-daterange kwc:external class="daterange-small" label="Small" size="small" style="width: 400px"></sl-daterange>
-    <sl-daterange
+    <sl-daterangepicker kwc:external class="daterange-small" label="Small" size="small" style="width: 400px"></sl-daterangepicker>
+    <sl-daterangepicker
       kwc:external
       class="daterange-medium"
       label="Medium"
       size="medium"
       style="width: 400px"
-    ></sl-daterange>
-    <sl-daterange kwc:external class="daterange-large" label="Large" size="large" style="width: 400px"></sl-daterange>
+    ></sl-daterangepicker>
+    <sl-daterangepicker kwc:external class="daterange-large" label="Large" size="large" style="width: 400px"></sl-daterangepicker>
   </div>
 </template>
 ```
@@ -254,9 +254,9 @@ export default class DaterangePill extends KingdeeElement {}
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
-export default class DaterangeSize extends KingdeeElement {}
+export default class DaterangepickerSize extends KingdeeElement {}
 ```
 
 ## 禁用
@@ -265,22 +265,22 @@ export default class DaterangeSize extends KingdeeElement {}
 
 ```html
 <template>
-  <sl-daterange
+  <sl-daterangepicker
     kwc:external
     class="daterange-el"
     label="禁用状态"
     value="2025-01-01 ~ 2025-06-30"
     disabled
     style="width: 400px"
-  ></sl-daterange>
+  ></sl-daterangepicker>
 </template>
 ```
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
-export default class DaterangeDisabled extends KingdeeElement {}
+export default class DaterangepickerDisabled extends KingdeeElement {}
 ```
 
 ## 只读
@@ -289,22 +289,22 @@ export default class DaterangeDisabled extends KingdeeElement {}
 
 ```html
 <template>
-  <sl-daterange
+  <sl-daterangepicker
     kwc:external
     class="daterange-el"
     label="只读状态"
     value="2025-01-01 ~ 2025-06-30"
     readonly
     style="width: 400px"
-  ></sl-daterange>
+  ></sl-daterangepicker>
 </template>
 ```
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
-export default class DaterangeReadonly extends KingdeeElement {}
+export default class DaterangepickerReadonly extends KingdeeElement {}
 ```
 
 ## 最值范围
@@ -313,22 +313,22 @@ export default class DaterangeReadonly extends KingdeeElement {}
 
 ```html
 <template>
-  <sl-daterange
+  <sl-daterangepicker
     kwc:external
     class="daterange-el"
     label="限制范围"
     min="2025-01-01"
     max="2025-12-31"
     style="width: 400px"
-  ></sl-daterange>
+  ></sl-daterangepicker>
 </template>
 ```
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
-export default class DaterangeMinMax extends KingdeeElement {}
+export default class DaterangepickerMinMax extends KingdeeElement {}
 ```
 
 ## 必填校验
@@ -338,14 +338,14 @@ export default class DaterangeMinMax extends KingdeeElement {}
 ```html
 <template>
   <form class="daterange-form">
-    <sl-daterange
+    <sl-daterangepicker
       kwc:external
       class="daterange-el"
       label="项目周期"
       required
       help-text="此字段为必填"
       style="width: 400px"
-    ></sl-daterange>
+    ></sl-daterangepicker>
     <sl-button kwc:external class="submit-btn" type="submit" variant="primary">提交</sl-button>
   </form>
 </template>
@@ -362,10 +362,10 @@ export default class DaterangeMinMax extends KingdeeElement {}
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class DaterangeRequired extends KingdeeElement {
+export default class DaterangepickerRequired extends KingdeeElement {
   renderedCallback() {
     if (this._eventsBound) return;
     this._eventsBound = true;
@@ -425,7 +425,7 @@ export default class DaterangeRequired extends KingdeeElement {
       <p>当前值 (sl-change): <span class="change-value">-</span></p>
       <p>实时值 (sl-input): <span class="input-value">-</span></p>
     </div>
-    <sl-daterange kwc:external class="daterange-el" label="选择日期范围" style="width: 400px"></sl-daterange>
+    <sl-daterangepicker kwc:external class="daterange-el" label="选择日期范围" style="width: 400px"></sl-daterangepicker>
   </div>
 </template>
 ```
@@ -450,9 +450,9 @@ export default class DaterangeRequired extends KingdeeElement {
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
-export default class DaterangeEvent extends KingdeeElement {
+export default class DaterangepickerEvent extends KingdeeElement {
   renderedCallback() {
     if (this._eventsBound) return;
     this._eventsBound = true;
@@ -515,7 +515,7 @@ export default class DaterangeEvent extends KingdeeElement {
 <template>
   <div class="daterange-demo">
     <p class="event-log">最近事件: <span class="log-text">无</span></p>
-    <sl-daterange kwc:external class="daterange-el" value="2025-01-01 ~ 2025-06-30" style="width: 400px"></sl-daterange>
+    <sl-daterangepicker kwc:external class="daterange-el" value="2025-01-01 ~ 2025-06-30" style="width: 400px"></sl-daterangepicker>
   </div>
 </template>
 ```
@@ -535,9 +535,9 @@ export default class DaterangeEvent extends KingdeeElement {
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 
-export default class DaterangeFocusBlur extends KingdeeElement {
+export default class DaterangepickerFocusBlur extends KingdeeElement {
   renderedCallback() {
     if (this._eventsBound) return;
     this._eventsBound = true;
@@ -597,7 +597,7 @@ export default class DaterangeFocusBlur extends KingdeeElement {
       <sl-button kwc:external class="btn-this-quarter" size="small">本季度</sl-button>
       <sl-button kwc:external class="btn-clear" size="small">清空</sl-button>
     </div>
-    <sl-daterange kwc:external class="daterange-el" label="日期范围" style="width: 400px"></sl-daterange>
+    <sl-daterangepicker kwc:external class="daterange-el" label="日期范围" style="width: 400px"></sl-daterangepicker>
   </div>
 </template>
 ```
@@ -617,10 +617,10 @@ export default class DaterangeFocusBlur extends KingdeeElement {
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class DaterangeDynamic extends KingdeeElement {
+export default class DaterangepickerDynamic extends KingdeeElement {
   renderedCallback() {
     if (this._eventsBound) return;
     this._eventsBound = true;
@@ -696,13 +696,13 @@ export default class DaterangeDynamic extends KingdeeElement {
 ```html
 <template>
   <div class="daterange-demo">
-    <sl-daterange
+    <sl-daterangepicker
       kwc:external
       class="daterange-el"
       label="项目周期"
       help-text="范围不能超过 30 天"
       style="width: 400px"
-    ></sl-daterange>
+    ></sl-daterangepicker>
     <sl-button kwc:external class="btn-validate" variant="primary" size="small">校验</sl-button>
   </div>
 </template>
@@ -719,10 +719,10 @@ export default class DaterangeDynamic extends KingdeeElement {
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 import '@kdcloudjs/shoelace/dist/components/button/button.js';
 
-export default class DaterangeValidation extends KingdeeElement {
+export default class DaterangepickerValidation extends KingdeeElement {
   renderedCallback() {
     if (this._eventsBound) return;
     this._eventsBound = true;
@@ -796,18 +796,18 @@ export default class DaterangeValidation extends KingdeeElement {
 
 ```html
 <template>
-  <sl-daterange kwc:external class="daterange-el" label="自定义后缀" style="width: 400px">
+  <sl-daterangepicker kwc:external class="daterange-el" label="自定义后缀" style="width: 400px">
     <sl-icon kwc:external slot="suffix" name="calendar-event"></sl-icon>
-  </sl-daterange>
+  </sl-daterangepicker>
 </template>
 ```
 
 ```javascript
 import { KingdeeElement } from '@kdcloudjs/kwc';
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 import '@kdcloudjs/shoelace/dist/components/icon/icon.js';
 
-export default class DaterangeSlot extends KingdeeElement {}
+export default class DaterangepickerSlot extends KingdeeElement {}
 ```
 
 ## Properties
@@ -992,7 +992,7 @@ disconnectedCallback() {
 ### 1. 正确导入组件
 
 ```javascript
-import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 ```
 
 ### 2. 添加 kwc:external 属性
@@ -1001,20 +1001,20 @@ import '@kdcloudjs/shoelace/dist/components/daterange/daterange.js';
 
 ```html
 <!-- 正确 -->
-<sl-daterange kwc:external class="daterange-el"></sl-daterange>
+<sl-daterangepicker kwc:external class="daterange-el"></sl-daterangepicker>
 
 <!-- 错误：缺少 kwc:external -->
-<sl-daterange class="daterange-el"></sl-daterange>
+<sl-daterangepicker class="daterange-el"></sl-daterangepicker>
 ```
 
 ### 3. 使用 class 而非 id 选择器
 
 ```html
 <!-- 正确 -->
-<sl-daterange kwc:external class="daterange-el"></sl-daterange>
+<sl-daterangepicker kwc:external class="daterange-el"></sl-daterangepicker>
 
 <!-- 错误 -->
-<sl-daterange kwc:external id="daterange-el"></sl-daterange>
+<sl-daterangepicker kwc:external id="daterange-el"></sl-daterangepicker>
 ```
 
 ### 4. 在 renderedCallback 中绑定事件
@@ -1063,10 +1063,10 @@ disconnectedCallback() {
 
 ```html
 <!-- 正确 -->
-<sl-daterange kwc:external class="daterange-el"></sl-daterange>
+<sl-daterangepicker kwc:external class="daterange-el"></sl-daterangepicker>
 
 <!-- 错误：自闭合标签 -->
-<sl-daterange kwc:external class="daterange-el" />
+<sl-daterangepicker kwc:external class="daterange-el" />
 ```
 
 ### 7. 值格式说明
@@ -1075,7 +1075,7 @@ HTML attribute 值使用 `~` 分隔的字符串格式，JavaScript 值使用 `[D
 
 ```javascript
 // HTML attribute 设置
-// <sl-daterange value="2025-01-01 ~ 2025-06-30"></sl-daterange>
+// <sl-daterangepicker value="2025-01-01 ~ 2025-06-30"></sl-daterangepicker>
 
 // JavaScript 设置
 const picker = this.template.querySelector('.daterange-el');
@@ -1098,7 +1098,7 @@ const endDate = picker.endDate; // Date | null
 
 ```javascript
 // HTML attribute 设置（datetime 模式）
-// <sl-daterange type="datetime" value="2025-01-01 08:00:00 ~ 2025-06-30 18:00:00"></sl-daterange>
+// <sl-daterangepicker type="datetime" value="2025-01-01 08:00:00 ~ 2025-06-30 18:00:00"></sl-daterangepicker>
 
 // JavaScript 设置
 const picker = this.template.querySelector('.daterange-el');
@@ -1123,7 +1123,7 @@ A: `sl-input` 在用户每次点选日期或输入合法日期时即触发（实
 
 ### Q: 如何限制可选日期范围？
 
-A: 使用 `min` 和 `max` 属性：`<sl-daterange min="2025-01-01" max="2025-12-31"></sl-daterange>`。超出范围的日期会被自动禁用。
+A: 使用 `min` 和 `max` 属性：`<sl-daterangepicker min="2025-01-01" max="2025-12-31"></sl-daterangepicker>`。超出范围的日期会被自动禁用。
 
 ### Q: 如何通过 JavaScript 读取当前选中的日期范围？
 
