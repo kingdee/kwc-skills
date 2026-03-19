@@ -35,13 +35,6 @@ export default class TableControlledSortFilter extends KingdeeElement {
   get columns() {
     return [
       {
-        dataIndex: "no",
-        title: "#",
-        width: 60,
-        sorter: () => null,
-        sortOrder: this.sorting.no || "",
-      },
-      {
         dataIndex: "name",
         title: "姓名",
         sorter: (a, b) => a.name.localeCompare(b.name),
