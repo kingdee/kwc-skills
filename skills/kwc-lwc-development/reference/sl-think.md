@@ -49,7 +49,7 @@ export default class BasicThink extends KingdeeElement {
 **index.html**
 ```html
 <template>
-    <sl-think kwc:external class="loading-think" title="正在思考中..." loading>
+    <sl-think kwc:external class="loading-think" title="正在思考中..." loading="true">
         AI 正在分析您的问题...
     </sl-think>
 </template>
@@ -74,7 +74,7 @@ export default class LoadingThink extends KingdeeElement {
 **index.html**
 ```html
 <template>
-    <sl-think kwc:external class="blink-think" title="思考中" loading blink>
+    <sl-think kwc:external class="blink-think" title="思考中" loading="true" blink="true">
         正在进行深度分析...
     </sl-think>
 </template>
@@ -272,7 +272,7 @@ export default class CustomTitleThink extends KingdeeElement {
 **index.html**
 ```html
 <template>
-    <sl-think kwc:external class="custom-blink-think" title="自定义闪烁颜色" loading blink>
+    <sl-think kwc:external class="custom-blink-think" title="自定义闪烁颜色" loading="true" blink="true">
         使用主题色的闪烁效果。
     </sl-think>
 </template>
@@ -391,7 +391,7 @@ export default class ProgrammaticThink extends KingdeeElement {
         </sl-think>
 
         <!-- 加载中 -->
-        <sl-think kwc:external class="think-loading" title="AI 正在思考..." loading blink>
+        <sl-think kwc:external class="think-loading" title="AI 正在思考..." loading="true" blink="true">
             正在分析您的问题，请稍候...
         </sl-think>
 
