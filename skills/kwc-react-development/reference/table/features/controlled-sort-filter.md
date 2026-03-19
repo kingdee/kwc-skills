@@ -9,68 +9,105 @@
 ## 示例代码（React）
 
 ```jsx
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo } from 'react';
 import SlTable from '@kdcloudjs/shoelace/dist/react/table/index.js';
 
+interface DataRecord {
+    id: string;
+    no: number;
+    name: string;
+    [key: string]: string | number;
+}
+
+type SortOrder = 'asc' | 'desc' | '';
+type SortingState = Record<string, SortOrder>;
+type FiltersState = Record<string, string[]>;
+
 export default () => {
-  const [sorting, setSorting] = useState({});
-  const [filters, setFilters] = useState({ name: [] });
+    const [sorting, setSorting] = useState<SortingState>({});
+    const [filters, setFilters] = useState<FiltersState>({ name: [] });
 
-  const dataSource = [
-    { id: "1", no: 1, name: "Alice" },
-    { id: "2", no: 2, name: "Bob" },
-  ];
-
-  const columns = useMemo(() => {
-    return [
-      {
-        dataIndex: "no",
-        title: "#",
-        width: 60,
-        sorter: () => null,
-        sortOrder: sorting.no || "",
-      },
-      {
-        dataIndex: "name",
-        title: "姓名",
-        sorter: (a, b) => a.name.localeCompare(b.name),
-        sortOrder: sorting.name || "",
-        filters: [
-          { text: "Alice", value: "Alice" },
-          { text: "Bob", value: "Bob" },
-        ],
-        filteredValue: filters.name || [],
-        onFilter: () => true,
-      },
+    const dataSource: DataRecord[] = [
+        { id: '1', no: 1, name: 'Alice' },
+        { id: '2', no: 2, name: 'Bob' }
     ];
-  }, [sorting, filters]);
 
-  const handleChange = (e) => {
-    const { changeType, sorting: newSorting, columnFilters } = e.detail || {};
-    if (changeType === "sorter") {
-      const next = {};
-      (newSorting || []).forEach((s) => {
-        next[s.id] = s.desc ? "desc" : "asc";
-      });
-      setSorting(next);
-    }
-    if (changeType === "filters") {
-      const next = {};
-      (columnFilters || []).forEach((f) => {
-        next[f.id] = f.value;
-      });
-      setFilters(next);
-    }
-  };
+    const columns = useMemo(() => {
+        return [
+            {
+                dataIndex: 'no',
+                title: '#',
+                width: 60,
+                sorter: (a: DataRecord, b: DataRecord) => a.no - b.no,
+                sortOrder: sorting.no || ''
+            },
+            {
+                dataIndex: 'name',
+                title: '姓名',
+                sorter: (a: DataRecord, b: DataRecord) => a.name.localeCompare(b.name),
+                sortOrder: sorting.name || '',
+                filters: [
+                    { text: 'Alice', value: 'Alice' },
+                    { text: 'Bob', value: 'Bob' }
+                ],
+                filteredValue: filters.name || [],
+                onFilter: (value: string, record: DataRecord) => record.name.includes(value)
+            }
+        ];
+    }, [sorting, filters]);
 
-  return (
-    <SlTable
-      rowKey="id"
-      columns={columns}
-      dataSource={dataSource}
-      onChange={handleChange}
-    />
-  );
+    // 根据 sorting 和 filters 状态派生展示数据
+    const displayData = useMemo(() => {
+        let result = [...dataSource];
+
+        // 应用筛选
+        Object.entries(filters).forEach(([key, values]) => {
+            if (values && values.length > 0) {
+                result = result.filter((record) =>
+                    values.some((v: string) => String(record[key]).includes(v))
+                );
+            }
+        });
+
+        // 应用排序
+        const sortKey = Object.keys(sorting).find((k) => sorting[k]);
+        if (sortKey) {
+            const col = columns.find((c) => c.dataIndex === sortKey);
+            if (col?.sorter) {
+                const direction = sorting[sortKey] === 'desc' ? -1 : 1;
+                result.sort((a, b) => col.sorter(a, b) * direction);
+            }
+        }
+
+        return result;
+    }, [dataSource, sorting, filters, columns]);
+
+    const handleChange = (e: CustomEvent) => {
+        const { changeType, sorting: newSorting, columnFilters } = e.detail || {};
+        if (changeType === 'sorter') {
+            const next: SortingState = {};
+            (newSorting || []).forEach((s: { id: string; desc: boolean }) => {
+                next[s.id] = s.desc ? 'desc' : 'asc';
+            });
+            setSorting(next);
+        }
+        if (changeType === 'filters') {
+            const next: FiltersState = {};
+            (columnFilters || []).forEach((f) => {
+                next[f.id] = f.value;
+            });
+            setFilters(next);
+        }
+    };
+
+    return (
+        <SlTable
+            rowKey="id"
+            columns={columns}
+            dataSource={displayData}
+            onChange={handleChange}
+        />
+    );
 };
 ```
 

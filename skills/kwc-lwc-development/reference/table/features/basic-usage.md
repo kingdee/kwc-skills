@@ -22,7 +22,6 @@ import '@kdcloudjs/shoelace/dist/components/table/table.js';
 
 export default class TableBasicUsage extends KingdeeElement {
   columns = [
-    { dataIndex: 'id', title: '#', width: 48, align: 'center' },
     { dataIndex: 'name', title: '姓名', width: 160 },
     { dataIndex: 'dept', title: '部门', width: 140 },
     { dataIndex: 'email', title: '邮箱' }

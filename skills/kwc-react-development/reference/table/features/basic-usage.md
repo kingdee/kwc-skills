@@ -9,23 +9,22 @@
 ## 示例代码（React）
 
 ```jsx
-import React from "react";
+import React from 'react';
 import SlTable from '@kdcloudjs/shoelace/dist/react/table/index.js';
 
 const columns = [
-  { dataIndex: 'id', title: '#', width: 48, align: 'center' },
-  { dataIndex: 'name', title: '姓名', width: 160 },
-  { dataIndex: 'dept', title: '部门', width: 140 },
-  { dataIndex: 'email', title: '邮箱' }
+    { dataIndex: 'name', title: '姓名', width: 160 },
+    { dataIndex: 'dept', title: '部门', width: 140 },
+    { dataIndex: 'email', title: '邮箱' }
 ];
 
 const dataSource = [
-  { id: '1', name: 'Alice Smith', dept: '研发', email: 'alice@example.com' },
-  { id: '2', name: 'Bob Johnson', dept: '产品', email: 'bob@example.com' }
+    { id: '1', name: 'Alice Smith', dept: '研发', email: 'alice@example.com' },
+    { id: '2', name: 'Bob Johnson', dept: '产品', email: 'bob@example.com' }
 ];
 
 export default () => (
-  <SlTable rowKey="id" columns={columns} dataSource={dataSource} />
+    <SlTable rowKey="id" columns={columns} dataSource={dataSource} />
 );
 ```
 

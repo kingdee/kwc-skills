@@ -9,27 +9,27 @@
 ## 示例代码（React）
 
 ```jsx
-import React from "react";
+import React from 'react';
 import SlTable from '@kdcloudjs/shoelace/dist/react/table/index.js';
 
 const columns = [
-  { dataIndex: 'name', title: '姓名', width: 160 },
-  { dataIndex: 'email', title: '邮箱', width: 280 }
+    { dataIndex: 'name', title: '姓名', width: 160 },
+    { dataIndex: 'email', title: '邮箱', width: 280 }
 ];
 
 const dataSource = [{ id: '1', name: 'Alice Smith', email: 'alice@example.com' }];
 
 const handleColumnResize = (e) => {
-  console.log('sizes', e.detail);
+    console.log('sizes', e.detail);
 };
 
 export default () => (
-  <SlTable
-    rowKey="id"
-    columns={columns}
-    dataSource={dataSource}
-    enableColumnResizing={true}
-    slColumnResize={handleColumnResize}
-  />
+    <SlTable
+        rowKey="id"
+        columns={columns}
+        dataSource={dataSource}
+        enableColumnResizing={true}
+        slColumnResize={handleColumnResize}
+    />
 );
 ```

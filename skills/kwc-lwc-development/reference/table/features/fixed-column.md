@@ -27,7 +27,6 @@ import "@kdcloudjs/shoelace/dist/components/table/table.js";
 export default class TableFixedColumn extends KingdeeElement {
   tableScroll = { x: 900 };
   columns = [
-    { dataIndex: "id", title: "#", width: 48, fixed: "left" },
     { dataIndex: "name", title: "姓名", width: 160, fixed: "left" },
     { dataIndex: "gender", title: "性别", width: 140 },
     { dataIndex: "age", title: "年龄", width: 120 },

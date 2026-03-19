@@ -15,7 +15,6 @@ import React, { useState, useCallback } from "react";
 import SlTable from '@kdcloudjs/shoelace/dist/react/table/index.js';
 
 const columns = [
-  { title: 'ID', dataIndex: 'id', width: 80 },
   { title: '姓名', dataIndex: 'name', width: 150 },
   { title: '年龄', dataIndex: 'age', width: 100 },
   { title: '部门', dataIndex: 'department' }
