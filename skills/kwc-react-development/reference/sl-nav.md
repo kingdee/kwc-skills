@@ -51,6 +51,7 @@
    - `vertical`：弹出式垂直菜单
    - `horizontal`：顶部菜单
    - `inlineCollapsed` 只配合 `inline`
+   - 当 `inlineCollapsed` 或 `mode` 切换时，组件会主动清空当前展开的 submenu
 
 5. **`SlNavGroup` 没有 `title` 属性**
    - JSX 结构写法用 `<span slot="title">基础设置</span>`
@@ -170,6 +171,58 @@ export default function DataDrivenNav() {
 }
 ```
 
+### 只展开当前父级菜单示例
+
+```jsx
+import React, { useState, useCallback } from 'react';
+import SlNav from '@kdcloudjs/shoelace/dist/react/nav/index.js';
+import SlNavItem from '@kdcloudjs/shoelace/dist/react/nav-item/index.js';
+import SlNavSubmenu from '@kdcloudjs/shoelace/dist/react/nav-submenu/index.js';
+
+export default function AccordionNav() {
+  const rootSubmenuKeys = ['system', 'workspace'];
+  const [selectedKeys, setSelectedKeys] = useState(['security']);
+  const [openKeys, setOpenKeys] = useState(['system']);
+
+  const handleChange = useCallback((event) => {
+    setSelectedKeys([...event.detail.selectedKeys]);
+  }, []);
+
+  const handleOpenChange = useCallback((event) => {
+    const nextOpenKeys = [...event.detail.openKeys];
+    const latestRootKey = nextOpenKeys.find(key => !openKeys.includes(key));
+
+    if (!latestRootKey) {
+      setOpenKeys(nextOpenKeys);
+      return;
+    }
+
+    setOpenKeys(rootSubmenuKeys.includes(latestRootKey) ? [latestRootKey] : nextOpenKeys);
+  }, [openKeys]);
+
+  return (
+    <SlNav
+      mode="inline"
+      style={{ maxWidth: '256px' }}
+      selectedKeys={selectedKeys}
+      openKeys={openKeys}
+      onSlChange={handleChange}
+      onSlNavOpenChange={handleOpenChange}
+    >
+      <SlNavSubmenu itemKey="system" title="系统设置">
+        <SlNavItem itemKey="profile">个人资料</SlNavItem>
+        <SlNavItem itemKey="security">安全设置</SlNavItem>
+      </SlNavSubmenu>
+
+      <SlNavSubmenu itemKey="workspace" title="工作台">
+        <SlNavItem itemKey="todo">待办任务</SlNavItem>
+        <SlNavItem itemKey="report">报表中心</SlNavItem>
+      </SlNavSubmenu>
+    </SlNav>
+  );
+}
+```
+
 ## API 概览
 
 ### `SlNav` 主要属性
@@ -208,6 +261,7 @@ export default function DataDrivenNav() {
 | `title` | 提示文案 | `string` | `''` |
 | `disabled` | 是否禁用 | `boolean` | `false` |
 | `active` | 是否激活 | `boolean` | `false` |
+| `collapsed` | 是否处于折叠侧栏状态，由父级 nav 同步 | `boolean` | `false` |
 | `href` | 跳转链接 | `string` | `''` |
 | `target` | 链接打开方式 | `'_blank' \| '_parent' \| '_self' \| '_top'` | - |
 | `download` | 下载文件名 | `string` | - |
@@ -236,6 +290,7 @@ export default function DataDrivenNav() {
 | `popupOffset` | 弹层偏移 | `[number, number]` | - |
 | `disabled` | 是否禁用 | `boolean` | `false` |
 | `active` | 是否包含激活项 | `boolean` | `false` |
+| `collapsed` | 是否处于折叠侧栏状态，由父级 nav 同步 | `boolean` | `false` |
 
 ### 主要事件
 
@@ -277,3 +332,5 @@ export default function DataDrivenNav() {
 4. **`inlineCollapsed` 是新版本折叠侧栏的关键入口**，不要再沿用旧版 `vertical-popup` 思路。
 5. **菜单项唯一标识必须稳定**，推荐直接对齐路由 key 或权限编码。
 6. **React 子组件组合时统一用 `itemKey`**，只有 `items` 数据对象里才写 `key`。
+7. **切换 `inlineCollapsed` 或 `mode` 时记得重置外部 `openKeys` 状态**，因为组件内部会同步清空展开项。
+8. **如果要做手风琴侧栏**，在 `onSlNavOpenChange` 中把 `openKeys` 限制为当前一级父菜单即可。

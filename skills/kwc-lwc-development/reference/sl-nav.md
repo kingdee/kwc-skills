@@ -58,6 +58,7 @@
    - `itemKey` 是 React 包装层的兼容别名，LWC 中继续使用 `key`
    - 选中状态走 `selectedKeys`
    - 展开状态走 `openKeys`
+   - `inlineCollapsed` 或 `mode` 切换时，组件会主动清空当前展开的 submenu
 
 6. **`sl-nav-group` 标题不能写成属性**
    - 模板结构用 `<span slot="title">基础设置</span>`
@@ -224,6 +225,76 @@ export default class DataDrivenNav extends KingdeeElement {
 }
 ```
 
+### 只展开当前父级菜单示例
+
+**index.html**
+```html
+<template>
+    <sl-nav kwc:external class="accordion-nav" mode="inline" style="max-width: 256px;">
+        <sl-nav-submenu kwc:external key="system" title="系统设置">
+            <sl-nav-item kwc:external key="profile">个人资料</sl-nav-item>
+            <sl-nav-item kwc:external key="security">安全设置</sl-nav-item>
+        </sl-nav-submenu>
+
+        <sl-nav-submenu kwc:external key="workspace" title="工作台">
+            <sl-nav-item kwc:external key="todo">待办任务</sl-nav-item>
+            <sl-nav-item kwc:external key="report">报表中心</sl-nav-item>
+        </sl-nav-submenu>
+    </sl-nav>
+</template>
+```
+
+**index.js**
+```js
+import { KingdeeElement } from '@kdcloudjs/kwc';
+import '@kdcloudjs/shoelace/dist/components/nav/nav.js';
+import '@kdcloudjs/shoelace/dist/components/nav-item/nav-item.js';
+import '@kdcloudjs/shoelace/dist/components/nav-submenu/nav-submenu.js';
+
+export default class AccordionNav extends KingdeeElement {
+    rootSubmenuKeys = ['system', 'workspace'];
+    selectedKeys = ['security'];
+    openKeys = ['system'];
+
+    renderedCallback() {
+        if (this._initialized) return;
+        this._initialized = true;
+
+        const nav = this.template.querySelector('.accordion-nav');
+        if (!nav) return;
+
+        nav.selectedKeys = [...this.selectedKeys];
+        nav.openKeys = [...this.openKeys];
+        nav.addEventListener('sl-change', this.handleChange.bind(this));
+        nav.addEventListener('sl-nav-open-change', this.handleOpenChange.bind(this));
+    }
+
+    handleChange(event) {
+        this.selectedKeys = [...event.detail.selectedKeys];
+        const nav = this.template.querySelector('.accordion-nav');
+        if (nav) {
+            nav.selectedKeys = [...this.selectedKeys];
+        }
+    }
+
+    handleOpenChange(event) {
+        const nextOpenKeys = [...event.detail.openKeys];
+        const latestRootKey = nextOpenKeys.find(key => !this.openKeys.includes(key));
+
+        this.openKeys = !latestRootKey
+            ? nextOpenKeys
+            : this.rootSubmenuKeys.includes(latestRootKey)
+                ? [latestRootKey]
+                : nextOpenKeys;
+
+        const nav = this.template.querySelector('.accordion-nav');
+        if (nav) {
+            nav.openKeys = [...this.openKeys];
+        }
+    }
+}
+```
+
 ## API 概览
 
 ### `sl-nav` 主要属性
@@ -261,6 +332,7 @@ export default class DataDrivenNav extends KingdeeElement {
 | `title` | 提示文案 | `string` | `''` |
 | `disabled` | 是否禁用 | `boolean` | `false` |
 | `active` | 是否激活 | `boolean` | `false` |
+| `collapsed` | 是否处于折叠侧栏状态，由父级 nav 同步 | `boolean` | `false` |
 | `href` | 跳转链接 | `string` | `''` |
 
 ### `sl-nav-group` 主要属性
@@ -285,6 +357,7 @@ export default class DataDrivenNav extends KingdeeElement {
 | `popupOffset` | 弹层偏移 | `[number, number]` | - |
 | `disabled` | 是否禁用 | `boolean` | `false` |
 | `active` | 是否包含激活项 | `boolean` | `false` |
+| `collapsed` | 是否处于折叠侧栏状态，由父级 nav 同步 | `boolean` | `false` |
 
 ### 主要事件
 
@@ -325,3 +398,5 @@ export default class DataDrivenNav extends KingdeeElement {
 3. **折叠侧栏优先走 `mode="inline" + inlineCollapsed`。**
 4. **需要受控状态时，监听 `sl-change` 与 `sl-nav-open-change` 后回写组件实例。**
 5. **动态菜单和权限菜单优先使用 `items` API，不要在 HTML 模板里硬拼复杂层级。**
+6. **切换 `inlineCollapsed` 或 `mode` 后，要把外部维护的 `openKeys` 一并清空重设。**
+7. **如果要做手风琴侧栏**，在 `sl-nav-open-change` 里把 `openKeys` 限制为当前一级父菜单即可。
