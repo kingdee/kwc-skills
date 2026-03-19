@@ -49,6 +49,7 @@
    - `vertical`：弹出式垂直菜单
    - `horizontal`：顶部菜单
    - `inlineCollapsed` 只对 `inline` 有意义，会把内联侧栏切成弹出式体验
+   - 当 `inlineCollapsed` 或 `mode` 发生切换时，组件会主动清空已展开的 submenu
 
 4. **事件读取方式已变化**
    - `sl-change`：从 `event.detail.selectedKeys` 取值
@@ -197,6 +198,58 @@ function handleOpenChange(nextOpenKeys) {
 </script>
 ```
 
+### 只展开当前父级菜单示例
+
+```vue
+<template>
+  <sl-nav
+    mode="inline"
+    style="max-width: 256px;"
+    :selectedKeys.prop="selectedKeys"
+    :openKeys.prop="openKeys"
+    @sl-change="handleChange"
+    @sl-nav-open-change="handleOpenChange"
+  >
+    <sl-nav-submenu key="system" title="系统设置">
+      <sl-nav-item key="profile">个人资料</sl-nav-item>
+      <sl-nav-item key="security">安全设置</sl-nav-item>
+    </sl-nav-submenu>
+
+    <sl-nav-submenu key="workspace" title="工作台">
+      <sl-nav-item key="todo">待办任务</sl-nav-item>
+      <sl-nav-item key="report">报表中心</sl-nav-item>
+    </sl-nav-submenu>
+  </sl-nav>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+import '@kdcloudjs/shoelace/dist/components/nav/nav.js';
+import '@kdcloudjs/shoelace/dist/components/nav-item/nav-item.js';
+import '@kdcloudjs/shoelace/dist/components/nav-submenu/nav-submenu.js';
+
+const rootSubmenuKeys = ['system', 'workspace'];
+const selectedKeys = ref(['security']);
+const openKeys = ref(['system']);
+
+function handleChange(event) {
+  selectedKeys.value = [...event.detail.selectedKeys];
+}
+
+function handleOpenChange(event) {
+  const nextOpenKeys = [...event.detail.openKeys];
+  const latestRootKey = nextOpenKeys.find(key => !openKeys.value.includes(key));
+
+  if (!latestRootKey) {
+    openKeys.value = nextOpenKeys;
+    return;
+  }
+
+  openKeys.value = rootSubmenuKeys.includes(latestRootKey) ? [latestRootKey] : nextOpenKeys;
+}
+</script>
+```
+
 ## API 概览
 
 ### `sl-nav` 主要属性
@@ -234,6 +287,7 @@ function handleOpenChange(nextOpenKeys) {
 | `title` | 提示文案，折叠时常用 | `string` | `''` |
 | `disabled` | 是否禁用 | `boolean` | `false` |
 | `active` | 是否激活 | `boolean` | `false` |
+| `collapsed` | 是否处于折叠侧栏状态，由父级 nav 同步 | `boolean` | `false` |
 | `href` | 跳转链接 | `string` | `''` |
 | `target` | 链接打开方式 | `'_blank' \| '_parent' \| '_self' \| '_top'` | - |
 | `download` | 下载文件名 | `string` | - |
@@ -261,6 +315,7 @@ function handleOpenChange(nextOpenKeys) {
 | `popupOffset` | 弹层偏移 | `[number, number]` | - |
 | `disabled` | 是否禁用 | `boolean` | `false` |
 | `active` | 是否包含激活项 | `boolean` | `false` |
+| `collapsed` | 是否处于折叠侧栏状态，由父级 nav 同步 | `boolean` | `false` |
 
 ### 主要事件
 
@@ -303,3 +358,5 @@ function handleOpenChange(nextOpenKeys) {
 3. **受控场景优先监听 `sl-change` 和 `sl-nav-open-change`**，用 `event.detail` 回写本地状态。
 4. **Vue 里复杂属性全部走 `.prop`**，否则数组和函数会被字符串化。
 5. **折叠侧栏优先使用 `mode="inline" + inlineCollapsed`**，不要再用旧版 `vertical-popup` 思路。
+6. **切换 `inlineCollapsed` 或 `mode` 时要同步业务状态**，因为组件会清空当前展开的 `openKeys`。
+7. **如果要做手风琴侧栏**，在 `sl-nav-open-change` 里把 `openKeys` 限制为当前一级父菜单即可。

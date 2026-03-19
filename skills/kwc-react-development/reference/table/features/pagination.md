@@ -43,49 +43,57 @@ export default () => (
 ### 受控
 
 ```jsx
-import React, { useState } from "react";
+import React, { useState, useMemo } from 'react';
 import SlTable from '@kdcloudjs/shoelace/dist/react/table/index.js';
 
 const columns = [
-  { dataIndex: 'name', title: '姓名', width: 160 },
-  { dataIndex: 'email', title: '邮箱' }
+    { dataIndex: 'name', title: '姓名', width: 160 },
+    { dataIndex: 'email', title: '邮箱' }
 ];
 
-const dataSource = Array.from({ length: 100 }).map((_, i) => ({
-  id: String(i + 1),
-  name: `User-${i + 1}`,
-  email: `user${i + 1}@example.com`
+const allData = Array.from({ length: 100 }).map((_, i) => ({
+    id: String(i + 1),
+    name: `User-${i + 1}`,
+    email: `user${i + 1}@example.com`
 }));
 
 export default () => {
-  const [tablePagination, setTablePagination] = useState({
-    pageSize: 10,
-    pageSizeOpts: [10, 20, 50, 100],
-    currentPage: 1,
-    total: 100
-  });
+    const [tablePagination, setTablePagination] = useState({
+        pageSize: 10,
+        pageSizeOpts: [10, 20, 50, 100],
+        currentPage: 1,
+        total: allData.length
+    });
 
-  const handleChange = (e) => {
-    const { changeType, pagination } = e.detail;
-    console.log(e);
-    if (changeType === 'pagination') {
-      const { pageNumber } = pagination;
-      setTablePagination({
-        ...tablePagination,
-        currentPage: pageNumber
-      });
-    }
-  };
+    // 根据分页状态切片数据
+    const displayData = useMemo(() => {
+        const { currentPage, pageSize } = tablePagination;
+        const start = (currentPage - 1) * pageSize;
+        return allData.slice(start, start + pageSize);
+    }, [tablePagination]);
 
-  return (
-    <SlTable
-      rowKey="id"
-      columns={columns}
-      dataSource={dataSource}
-      pagination={tablePagination}
-      onChange={handleChange}
-    />
-  );
+    const handleChange = (e: CustomEvent) => {
+        const { changeType, pagination } = e.detail || {};
+        console.log(changeType);
+        if (changeType === 'pagination') {
+            const { pageNumber, pageSize } = pagination;
+            setTablePagination((prev) => ({
+                ...prev,
+                currentPage: pageNumber ?? prev.currentPage,
+                pageSize: pageSize ?? prev.pageSize
+            }));
+        }
+    };
+
+    return (
+        <SlTable
+            rowKey="id"
+            columns={columns}
+            dataSource={displayData}
+            pagination={tablePagination}
+            onChange={handleChange}
+        />
+    );
 };
 ```
 
