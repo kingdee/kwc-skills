@@ -72,6 +72,8 @@
 - **导航 (Nav)**:
   - 文档：`./reference/sl-nav.md`
   - 涉及 `sl-nav`、`sl-nav-item`、`sl-nav-group`、`sl-nav-submenu` 时必须先阅读
+- **思考过程 (Think)**:
+  - 文档：`./reference/sl-think.md`
 
 ## 7. 常见排障
 1. **构建报错 `(!) Unresolved dependencies`**：例如提示 `sl/tabPanel` 无法解析。这是因为 HTML 中 Shoelace 组件缺少 `kwc:external` 属性，导致编译器将其误判为 LWC 组件。
