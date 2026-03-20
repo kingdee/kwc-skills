@@ -9,54 +9,94 @@
 ## 示例代码（React）
 
 ```jsx
-import React from "react";
+import React from 'react';
 import SlTable from '@kdcloudjs/shoelace/dist/react/table/index.js';
-
-const columns = [
-  { dataIndex: 'name', title: '姓名', width: 160 },
-  { dataIndex: 'email', title: '邮箱' }
-];
-
-const subColumns = [
-  { dataIndex: 'task', title: '任务', width: 180 },
-  { dataIndex: 'status', title: '状态' }
-];
-
+import { generateCustomSlot } from '@kdcloudjs/shoelace/dist/components/table/utils';
 const dataSource = [
-  {
-    id: '1',
-    name: 'Alice Smith',
-    email: 'alice@example.com',
-    children: [{ subId: '1-1', task: '需求评审', status: '完成' }]
-  }
+    {
+        id: 1,
+        Name: 'Bob Johnson',
+        Gender: 'Male',
+        Age: 34,
+        Position: 'Product Manager',
+        Email: 'bob.johnson@example.com'
+    },
+    {
+        id: 2,
+        Name: 'Carol White',
+        Gender: 'Female',
+        Age: 31,
+        Position: 'UX Designer',
+        Email: 'carol.white@example.com'
+    },
+    {
+        id: 3,
+        Name: 'David Brown',
+        Gender: 'Male',
+        Age: 26,
+        Position: 'Data Analyst',
+        Email: 'david.brown@example.com'
+    },
+    {
+        id: 4,
+        Name: 'Eva Green',
+        Gender: 'Female',
+        Age: 38,
+        Position: 'Marketing Lead',
+        Email: 'eva.green@example.com'
+    }
+];
+const columns = [
+    { title: 'Name', dataIndex: 'Name', width: 140 },
+    { title: 'Gender', dataIndex: 'Gender', width: 120 },
+    { title: 'Age', dataIndex: 'Age', width: 120 },
+    { title: 'Position', dataIndex: 'Position', width: 180 },
+    { title: 'Email', dataIndex: 'Email', width: 280 }
 ];
 
-const expandProps = {
-  rowExpandable: true,
-  expandableRowKeys: ['1'],
-  defaultExpandedRowKeys: ['1']
+const CustomTable = (props) => {
+    return (
+        <div
+            slot={props.slot}
+            style={{ margin: '8px', border: '1px solid #e5e5e5' }}
+        >
+            <SlTable
+                rowKey="id"
+                columns={columns}
+                dataSource={dataSource}
+                showHeader={false}
+            ></SlTable>
+        </div>
+    );
 };
 
 export default () => {
-  return (
-    <SlTable
-      rowKey="id"
-      columns={columns}
-      dataSource={dataSource}
-      expandProps={expandProps}
-    >
-      {dataSource.map((row) => (
-        <div key={row.id} slot={`custom-row-${row.id}`} className="expand-wrap">
-          <SlTable
-            rowKey="subId"
-            columns={subColumns}
-            dataSource={row.children || []}
-            showHeader={false}
-          />
-        </div>
-      ))}
-    </SlTable>
-  );
+    const [expandProps, setExpandProps] = React.useState({
+        defaultExpandedRowKeys: [1],
+        expendableRowKeys: [1],
+        rowExpandable: true
+    });
+
+    const handleGenrateExpandRowSlot = () =>
+        generateCustomSlot('id', dataSource, [
+            {
+                type: 'customRow',
+                callback: ({ slotName, rowInfo }) => (
+                    <CustomTable key={slotName} slot={slotName} row={rowInfo} />
+                )
+            }
+        ]);
+
+    return (
+        <SlTable
+            rowKey="id"
+            expandProps={expandProps}
+            columns={columns}
+            dataSource={dataSource}
+        >
+            {handleGenrateExpandRowSlot()}
+        </SlTable>
+    );
 };
 ```
 
