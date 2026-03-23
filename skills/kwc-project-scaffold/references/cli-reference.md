@@ -108,7 +108,7 @@ kd project create demoPage --type page
 - `template`：页面模板。
 - `app`：苍穹应用编码。
 - `app` 必须来自用户在 `kd project init` 时手工输入的真实应用编码。
-- `version`：正整数；每次重新上传页面元数据前手动加 `1`。
+- `version`：正整数；仅当该页面元数据文件有变更并准备重新上传时，手动加 `1`。
 - `control.type`：组件类型名。
 - `control.name`：页面内的组件实例名。
 - 实测默认不会自动插入真实 `<control>` 节点，只保留注释模板。
@@ -192,10 +192,16 @@ OpenAPI 认证时通常需要：
 kd project deploy
 ```
 
-部署指定组件到指定环境：
+仅部署指定组件到 `sit` 环境：
 
 ```bash
-kd project deploy -d kwc/MyComponent -e sit
+kd project deploy -d app/kwc/MyComponent -e sit
+```
+
+仅部署指定页面元数据到 `sit` 环境：
+
+```bash
+kd project deploy -d app/pages/MyPage -e sit
 ```
 
 注意：
@@ -203,6 +209,23 @@ kd project deploy -d kwc/MyComponent -e sit
 - 部署时脚手架会自动替换组件及页面元数据中的 `isv`。
 - 若未指定环境，则使用默认环境。
 - 若环境未认证，CLI 会直接阻止部署。
+- 不要把 `deploy` 当成每次改代码后的必跑步骤；先看是否真的改了元数据文件。
+
+版本管理规则：
+
+| 变更类型 | 是否需要递增 `version` | 是否需要 `deploy` | 推荐动作 |
+| --- | --- | --- | --- |
+| 只改组件实现代码，未改任何元数据 | 否 | 否 | `npm run build`，需要联调时再 `kd debug` |
+| 改了组件元数据 `.js-meta.kwc` | 是，递增该组件元数据 `version` | 是 | 部署该组件或整个项目 |
+| 改了页面元数据 `.page-meta.kwp` | 是，递增该页面元数据 `version` | 是 | 部署该页面元数据或整个项目 |
+| 同时改了组件元数据和页面元数据 | 是，分别递增 | 是 | 部署受影响路径或整个项目 |
+| 新建组件元数据或页面元数据 | 初始值设为 `1` | 是 | 首次上传 |
+
+判断提醒：
+
+- 是否需要 `deploy`，先看元数据文件是否变更。
+- 是否需要递增 `version`，也先看对应元数据文件是否变更。
+- 只改组件代码，不要因为“刚改了东西”就盲目 `deploy`。
 
 ## 调试
 
