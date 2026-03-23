@@ -47,7 +47,7 @@ Skill 需要检查并补齐：
 | 字段 | 生成原则 |
 | --- | --- |
 | `version` | 设为自然数，新增组件通常从 `1` 开始；修改后递增 |
-| `name` | 与组件类型标识一致，通常直接使用组件名，如 `DemoComponent1` |
+| `name` | 组件类型标识，通常直接使用组件名，如 `DemoComponent1`；页面元数据中的 `control.type` 必须与它完全一致 |
 | `masterLabel` | 给页面装配者看的中文名称 |
 | `isv` | 开发商标识，开发阶段可留空，deploy 时自动从环境拉取并写入元数据 |
 | `app` | 与用户手工输入并写入 `.kd/config.json` 的目标应用编码一致 |
@@ -57,7 +57,23 @@ Skill 需要检查并补齐：
 注意：
 
 - `app` 不能靠猜
+- 页面元数据中的 `control.type` 必须与这里的 `name` 完全一致，包含大小写也必须一致
 - 如果当前工程的 `.kd/config.json` 里没有可信的 `app`，先回到初始化步骤补齐
+
+例子：
+
+```xml
+<!-- 组件元数据 -->
+<name>OverviewCard</name>
+
+<!-- 页面元数据中的正确写法 -->
+<type>OverviewCard</type>
+
+<!-- 页面元数据中的错误写法 -->
+<type>kwc_OverviewCard</type>
+```
+
+不要把目录名 `kwc`、文件夹层级或你自己的命名偏好拼到 `type` 里；页面元数据只认这里声明的 `name`。
 
 ### 属性区 `targetConfigs`
 

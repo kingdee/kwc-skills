@@ -52,6 +52,33 @@ KWC 的核心交付对象是：
 
 只有把这几项补齐，脚手架命令才有明确目标。
 
+## 框架开发 Skill 协作
+
+将 `kwc-project-scaffold` 视为 KWC 工作流的总入口，但不要让它吞掉框架开发 Skill 的职责。
+
+职责边界如下：
+
+- `kwc-project-scaffold` 负责项目初始化、组件与页面元数据生成、环境配置、部署、调试编排
+- `kwc-react-development` 负责 React KWC 项目的具体组件代码实现、框架规范和本地预览约束
+- `kwc-vue-development` 负责 Vue KWC 项目的具体组件代码实现、框架规范和本地预览约束
+- `kwc-lwc-development` 负责 LWC KWC 项目的具体组件代码实现、框架规范和本地预览约束
+
+协作约定：
+
+- 当任务仍处于需求拆分、脚手架命令、元数据、环境、`deploy`、`debug` 阶段时，继续由本 Skill 主导
+- 当任务进入“具体代码开发、组件修改、页面前端实现”阶段时，建议加载与当前 framework 对应的开发 Skill
+- 不要同时加载三个框架开发 Skill；只根据当前工程的 framework 推荐一个
+- 不要把三个框架 Skill 的具体编码细则复制进本 Skill；本 Skill 只保留选择逻辑和切换时机
+
+推荐规则：
+
+1. 若是新建工程，以 `kd project init` 交互中用户选择的 framework 作为后续推荐 Skill 依据
+2. 若是已有工程，以 `.kd/config.json` 中的 `framework` 作为推荐 Skill 依据
+3. 当 `framework=react` 时，建议转入 `kwc-react-development`
+4. 当 `framework=vue` 时，建议转入 `kwc-vue-development`
+5. 当 `framework=lwc` 时，建议转入 `kwc-lwc-development`
+6. 若还无法判断 framework，先停下来向用户确认，不要直接继续写代码
+
 ## 需要用户提供或确认的输入
 
 这些输入若无法从现有工程或上下文推断，就必须向用户确认：
@@ -148,9 +175,12 @@ KWC 的核心交付对象是：
 1. 先确定页面名称、标题、所属应用、业务单元、版本策略。
 2. 根据需求把页面拆成一个或多个组件实例。
 3. 为每个实例生成 `<control>`。
-4. `control.type` 对应组件元数据里的组件 `name`。
+4. `control.type` 必须与组件元数据里的组件 `name` 完全一致，包含大小写也必须一致。
 5. `control.name` 是页面内唯一实例名，必须符合页面元数据命名规范。
 6. 只有组件元数据中定义过的属性，才能写进 `<propertys>`。
+
+例如，若组件元数据中的 `name` 是 `OverviewCard`，则页面元数据里的 `control.type` 只能写 `OverviewCard`。
+不要因为组件目录在 `app/kwc/` 下，就擅自写成 `kwc_OverviewCard`；这类前缀不是组件类型名的一部分。
 
 页面字段默认策略：
 
@@ -171,7 +201,16 @@ KWC 的核心交付对象是：
 1. 若当前目录下不存在 `.kd`，先视为“尚未初始化 KWC 工程”。
 2. 若用户要新建页面或组件，优先使用 `kd project create`，不要手工拼目录结构。
 3. 若用户要部署或调试，先检查环境是否已经通过 `kd env create` 和 `kd env auth openapi` 完成配置。
-4. 若用户开始编写具体前端实现代码，转入对应框架的开发规范或专用 Skill，不要把本 Skill 当成组件编码规范。
+4. 若用户开始编写具体前端实现代码，先判断当前工程 framework，再建议转入对应框架的专用 Skill，不要把本 Skill 当成组件编码规范。
+
+判断顺序：
+
+- 新建工程：以 `kd project init` 中用户选择的 framework 作为推荐依据
+- 已有工程：以 `.kd/config.json.framework` 作为推荐依据
+- `react` -> 建议加载 `kwc-react-development`
+- `vue` -> 建议加载 `kwc-vue-development`
+- `lwc` -> 建议加载 `kwc-lwc-development`
+- 若 framework 未知，先停下来确认，不要默认猜测
 
 ## 执行前置检查
 
@@ -232,7 +271,7 @@ KWC 的核心交付对象是：
 
 不要忽略以下约束：
 
-- `type` 是组件类型名，必须与实际组件对应。
+- `type` 是组件类型名，必须与组件元数据中的组件 `name` 完全一致，不能只做到语义对应或名称相近。
 - `name` 是组件实例名，需要在页面内唯一。
 - `app` 必须与当前苍穹应用编码一致。
 - `isv` 开发阶段可留空，deploy 时会自动从环境拉取并写入，不需要手工维护。
@@ -247,14 +286,15 @@ KWC 的核心交付对象是：
 
 1. 若无工程，执行 `kd project init`
 2. 对每个“会出现在页面里的组件”执行 `kd project create <ComponentName> --type kwc`
-3. 实现组件代码
-4. 先确认当前工程 `.kd/config.json` 里的 `app` 是用户手工输入的真实值，再补全这些组件的 `.js-meta.kwc`
-5. 执行 `kd project create <page-name> --type page`
-6. 补全页面 `app/pages/<page-name>.page-meta.kwp`
-7. 确认或创建目标环境
-8. 完成认证
-9. 执行 `kd project deploy`
-10. 需要联调时执行 `kd debug`
+3. 确认当前工程 framework；若后续进入代码实现，建议切换到对应框架开发 Skill
+4. 实现组件代码
+5. 先确认当前工程 `.kd/config.json` 里的 `app` 是用户手工输入的真实值，再补全这些组件的 `.js-meta.kwc`
+6. 执行 `kd project create <page-name> --type page`
+7. 补全页面 `app/pages/<page-name>.page-meta.kwp`
+8. 确认或创建目标环境
+9. 完成认证
+10. 执行 `kd project deploy`
+11. 需要联调时执行 `kd debug`
 
 如果是修改已有页面：
 
