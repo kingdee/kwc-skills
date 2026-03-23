@@ -1,0 +1,232 @@
+# KWC CLI Reference
+
+按需读取本文件，用于补充命令语法、OpenAPI 参数和页面元数据示例。
+
+## 核心概念
+
+- `Project`：本地项目目录，保存源代码、配置文件和元数据。
+- `Env`：远端苍穹环境，一个本地项目可以连接多个环境。
+
+## 安装 CLI
+
+外网环境：
+
+```bash
+npm i -g @kdcloudjs/cli
+kd -v
+```
+
+研发内网环境：
+
+```bash
+npm config set registry http://172.17.52.48:8081/repository/npm-group
+npm i -g @kdcloudjs/cli
+kd -v
+```
+
+## 初始化项目
+
+```bash
+kd project init my-demo-project
+kd project init my-demo-project -s inner
+```
+
+交互过程中通常需要：
+
+- 选择框架，如 React、Vue、LWC
+- 选择语言，如 TypeScript、JavaScript
+- 输入应用标识 `app`
+
+其中 `app` 必须由用户手工提供，不要使用示例值、历史值或猜测值替代。
+
+初始化后执行：
+
+```bash
+cd my-demo-project
+npm install
+npm run dev
+```
+
+## 创建组件
+
+```bash
+kd project create DemoComponent1 --type kwc
+kd project create DemoComponent2 --type kwc
+```
+
+建议：
+
+- 使用 `PascalCase` 作为组件名。
+- 先让 CLI 生成组件工程，再补充具体实现代码。
+- 实测不会自动修改 `app/kwc/main.tsx`。
+- 生成后应继续检查并完善 `.js-meta.kwc`，不要把脚手架模板直接当成最终元数据。
+
+## 创建页面
+
+```bash
+kd project create demoPage --type page
+```
+
+页面元数据常见示例：
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Page>
+    <name>demoPage</name>
+    <masterLabel>demoPage</masterLabel>
+    <template>oneregion</template>
+    <isv>kdtest</isv>
+    <app>your_app_code</app>
+    <version>1</version>
+    <regions>
+        <region>
+            <name>region1</name>
+            <controls>
+                <control>
+                    <type>DemoComponent1</type>
+                    <name>instance1</name>
+                </control>
+                <control>
+                    <type>DemoComponent1</type>
+                    <name>instance2</name>
+                </control>
+                <control>
+                    <type>DemoComponent2</type>
+                    <name>instance3</name>
+                </control>
+            </controls>
+        </region>
+    </regions>
+</Page>
+```
+
+字段提醒：
+
+- `name`：页面标识。
+- `masterLabel`：页面展示名。
+- `template`：页面模板。
+- `app`：苍穹应用编码。
+- `app` 必须来自用户在 `kd project init` 时手工输入的真实应用编码。
+- `version`：正整数；每次重新上传页面元数据前手动加 `1`。
+- `control.type`：组件类型名。
+- `control.name`：页面内的组件实例名。
+- 实测默认不会自动插入真实 `<control>` 节点，只保留注释模板。
+- 页面中配置的属性名，应与组件元数据里定义的 `<property name="...">` 对应。
+
+强约束：
+
+- 不要把文档中的示例 `app` 当默认值
+- 新建工程时若还没有用户提供的 `app`，不要继续生成正式页面元数据
+
+## 环境管理
+
+创建环境：
+
+```bash
+kd env create dev --url https://feature.kingdee.com:1026/feature_dev/
+```
+
+OpenAPI 认证：
+
+```bash
+kd env auth openapi
+```
+
+常用环境命令：
+
+```bash
+kd env set target-env dev
+kd env list
+kd env info
+kd env delete dev
+```
+
+OpenAPI 认证时通常需要：
+
+- 数据中心
+- Client ID
+- Client Secret
+- Username
+
+注意：这里的“数据中心”应由脚手架在认证过程中读取列表后供用户选择，不应和其他凭据一样让用户手动输入。
+
+如果环境不存在，先向用户收集以下字段，再继续：
+
+- env name
+- env url
+- Client ID
+- Client Secret
+- Username
+
+推荐直接让用户按这个模板回填：
+
+```text
+请补充以下环境信息：
+1. env name:
+2. env url:
+3. client id:
+4. client secret:
+5. username:
+
+说明：data center 不需要先手填，后续由脚手架读取候选项供选择。
+```
+
+相关 OpenAPI 应用需具备这些接口授权：
+
+1. `updateKwc`
+2. `kwcisv`
+3. `updatePageMeta`
+
+补充提醒：
+
+- 环境配置写入 `~/.kd`。
+- 在受限环境中执行 `kd env create` 后，务必再跑 `kd env list` 检查是否真正保存成功。
+- 删除环境后要重新确认默认环境是否被 CLI 自动切换。
+
+## 部署
+
+部署整个项目：
+
+```bash
+kd project deploy
+```
+
+部署指定组件到指定环境：
+
+```bash
+kd project deploy -d kwc/MyComponent -e sit
+```
+
+注意：
+
+- 部署时脚手架会自动替换组件及页面元数据中的 `isv`。
+- 若未指定环境，则使用默认环境。
+- 若环境未认证，CLI 会直接阻止部署。
+
+## 调试
+
+```bash
+kd debug
+kd debug -e sit
+kd debug -f demoForm
+```
+
+调试前确认：
+
+- 已部署过组件或页面元数据
+- 当前默认环境正确
+- `.kd/config.json` 中 `app` 编码与目标应用一致
+- 若 `.kd/config.json` 缺少 `isv/app`，静态路由不会挂载
+- `localhost:3333` 未被占用
+
+调试补充：
+
+- 在 `kd 0.0.9` 的本地验证里，`kd debug -e <env> -f <formId>` 存在返回 `Environment "undefined" has no URL configured` 的情况。
+- 更稳妥的方式是先 `kd env set target-env <env>`，再运行 `kd debug -f <formId>`。
+
+按需深入读取：
+
+- `component-metadata.md`
+- `env-setup.md`
+- `page-metadata.md`
