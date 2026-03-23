@@ -235,6 +235,29 @@ kd debug -e sit
 kd debug -f demoForm
 ```
 
+`kd debug -f` 规则：
+
+- `-f` 后面优先传页面元数据顶层 `<name>` 的完整值
+- 不要传 `masterLabel`
+- 不要自己缩写页面名
+- 若实际页面名带前缀或业务标识，调试时也应保留完整全称
+
+示例：
+
+```xml
+<name>kdtest_card_demo</name>
+```
+
+```bash
+# 正确
+kd debug -f kdtest_card_demo
+
+# 错误
+kd debug -f card_demo
+kd debug -f demo
+kd debug -f CardDemo
+```
+
 调试前确认：
 
 - 已部署过组件或页面元数据

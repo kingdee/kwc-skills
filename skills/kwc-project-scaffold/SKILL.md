@@ -378,6 +378,33 @@ KWC 的核心交付对象是：
 4. `kd debug`：进入调试
 5. 若需要指定环境或表单，使用 `kd debug -e <env-name>` 或 `kd debug -f <formid>`
 
+`kd debug -f` 的使用规则：
+
+- `formid` 优先直接使用页面元数据顶层 `<name>` 的完整值
+- 不要传 `masterLabel`
+- 不要把完整页面名截短成你觉得“更好记”的别名
+- 不要擅自改大小写、去掉前缀，或只传后半段
+
+例如，若页面元数据中写的是：
+
+```xml
+<name>kdtest_card_demo</name>
+```
+
+则应执行：
+
+```bash
+kd debug -f kdtest_card_demo
+```
+
+不要写成：
+
+```bash
+kd debug -f card_demo
+kd debug -f demo
+kd debug -f CardDemo
+```
+
 版本管理规则：
 
 - 只改组件实现代码，如 `.tsx`、`.vue`、`.js`、`.html`、`.scss`，且没有改任何元数据文件：不需要 `deploy`，也不要递增 `version`
