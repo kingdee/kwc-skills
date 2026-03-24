@@ -98,6 +98,10 @@ export default StrictTemplate;
   - 涉及 `SlXMarkdown` 时必须先阅读
 - **思考过程 (Think)**:
   - 文档：`./reference/sl-think.md`
+- **消息发送 (Sender)**:
+  - 文档：`./reference/sender/index.md` (**涉及 Sender 开发时必须读取**)
+  - 包含 `SlSender`（主体）、`SlSenderHeader`（可折叠头部）、`SlSenderSwitch`（功能开关）三个子组件
+  - 支持结构化插槽填充（`slotConfig`）、技能标签（`skill`）、语音输入（`allowSpeech`）等高级功能
 
 ## 6. 开发工具与环境约束 (Tools & Environment)
 - **严禁运行 ESLint/Prettier 修复与校验**：**绝对禁止**运行任何形式的 lint fix 命令（无论是手动还是自动，如 `eslint --fix`）。同时，**不需要**关注或修复 ESLint 格式报错。KWC React 的特殊语法可能与通用规则冲突，强行修复会导致代码损坏。

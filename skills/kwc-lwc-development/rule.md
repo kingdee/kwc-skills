@@ -77,6 +77,10 @@
   - 涉及 `sl-x-markdown` 时必须先阅读
 - **思考过程 (Think)**:
   - 文档：`./reference/sl-think.md`
+- **消息发送 (Sender)**:
+  - 文档：`./reference/sender/index.md` (**涉及 Sender 开发时必须读取**)
+  - 包含 `sl-sender`（主体）、`sl-sender-header`（可折叠头部）、`sl-sender-switch`（功能开关）三个子组件
+  - 需导入对应的 `.js` 定义文件，标签必须加 `kwc:external`
 
 ## 7. 常见排障
 1. **构建报错 `(!) Unresolved dependencies`**：例如提示 `sl/tabPanel` 无法解析。这是因为 HTML 中 Shoelace 组件缺少 `kwc:external` 属性，导致编译器将其误判为 LWC 组件。
