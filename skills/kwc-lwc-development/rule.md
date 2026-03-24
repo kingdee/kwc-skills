@@ -72,6 +72,9 @@
 - **导航 (Nav)**:
   - 文档：`./reference/sl-nav.md`
   - 涉及 `sl-nav`、`sl-nav-item`、`sl-nav-group`、`sl-nav-submenu` 时必须先阅读
+- **Markdown 渲染器 (XMarkdown)**:
+  - 文档：`./reference/sl-xmarkdown.md`
+  - 涉及 `sl-x-markdown` 时必须先阅读
 - **思考过程 (Think)**:
   - 文档：`./reference/sl-think.md`
 
