@@ -122,6 +122,7 @@ export default () => (
 |------|------|------|--------|
 | `title` | 列标题（必填） | `string` | - |
 | `dataIndex` | 列字段名（必填且唯一） | `string` | - |
+| `children` | 表头合并时用于子列的设置 | `Column[]` | - |
 | `align` | 对齐方式 | `'left' \| 'right' \| 'center'` | `'left'` |
 | `className` | 列样式类名 | `string` | - |
 | `width` | 列宽 | `number` | - |
