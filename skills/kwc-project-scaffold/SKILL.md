@@ -59,9 +59,9 @@ KWC 的核心交付对象是：
 职责边界如下：
 
 - `kwc-project-scaffold` 负责项目初始化、组件与页面元数据生成、环境配置、部署、调试编排
-- `kwc-react-development` 负责 React KWC 项目的具体组件代码实现、框架规范和本地预览约束
-- `kwc-vue-development` 负责 Vue KWC 项目的具体组件代码实现、框架规范和本地预览约束
-- `kwc-lwc-development` 负责 LWC KWC 项目的具体组件代码实现、框架规范和本地预览约束
+- `kwc-react-development` 负责 React KWC 项目的具体组件代码实现
+- `kwc-vue-development` 负责 Vue KWC 项目的具体组件代码实现
+- `kwc-lwc-development` 负责 LWC KWC 项目的具体组件代码实现
 
 协作约定：
 
@@ -88,8 +88,7 @@ KWC 的核心交付对象是：
 - 苍穹应用编码 `app`
 - 目标环境别名和 URL
 - 认证方式，以及 OpenAPI 所需的真实参数
-- 页面标识，例如 page name、formId、业务页面用途
-- 页面标题、是否需要 `bizUnit`、是否需要扩展和权限控制
+- 页面标识，例如 page name，以及业务页面用途
 - 哪些组件需要暴露给页面使用，哪些只是内部逻辑组件
 - 哪些参数需要做成可配置属性
 - 若用户已有环境，是否允许直接部署到该环境
@@ -105,8 +104,6 @@ KWC 的核心交付对象是：
 - 新建工程时，`kd project init` 的交互步骤里必须手动填写 `app`
 - 如果用户没有给 `app`，就不要继续初始化、生成正式元数据或部署
 - 不要把示例中的 `app` 值当默认值
-- 不要复用上一次任务里的 `app`
-- 不要因为当前环境里存在某个应用就自动代入
 
 ## 由 Skill 自动决策或生成的内容
 
@@ -120,6 +117,7 @@ KWC 的核心交付对象是：
 - 为页面生成 `page-meta.kwp` 并填充 `<controls>`
 - 为页面中的每个组件实例生成唯一 `name`
 - 判断当前该执行 `init`、`create`、`deploy` 还是 `debug`
+- 调试时结合当前任务、页面元数据和最近改动，自行判断优先预览哪个页面
 - 仅当对应元数据文件变更并需要重新上传时，递增该元数据的 `version`
 - 在环境操作后复核 `kd env list` 和 `kd env info`
 
@@ -185,8 +183,7 @@ KWC 的核心交付对象是：
 页面字段默认策略：
 
 - `template` 默认使用 `oneregion`
-- `bizUnit`、`enableExtend`、`enablePermissionControl` 仅在需求明确时填写
-- `isv`、`app` 以页面主信息为主，控制级别只有在需要覆盖时才填写
+- `isv`、`app` 以页面主信息为主
 
 `app` 的填写规则见"需要用户提供或确认的输入"一节。若发现页面元数据 `app` 与 `.kd/config.json` 不一致，优先停下来核对，不要直接 deploy。
 
@@ -203,25 +200,13 @@ KWC 的核心交付对象是：
 3. 若用户要部署或调试，先检查环境是否已经通过 `kd env create` 和 `kd env auth openapi` 完成配置。
 4. 若用户开始编写具体前端实现代码，先判断当前工程 framework，再建议转入对应框架的专用 Skill，不要把本 Skill 当成组件编码规范。
 
-判断顺序：
-
-- 新建工程：以 `kd project init` 中用户选择的 framework 作为推荐依据
-- 已有工程：以 `.kd/config.json.framework` 作为推荐依据
-- `react` -> 建议加载 `kwc-react-development`
-- `vue` -> 建议加载 `kwc-vue-development`
-- `lwc` -> 建议加载 `kwc-lwc-development`
-- 若 framework 未知，先停下来确认，不要默认猜测
-
 ## 执行前置检查
-
-本 Skill 基于 `kd 0.0.9` 验证，若 CLI 版本有较大变更，部分 workaround 可能不再适用。
 
 先确认以下前提：
 
 - 将 `Project` 理解为本地工程目录。
 - 将 `Env` 理解为远端苍穹环境。
 - 提醒用户本地需具备 `node`、`npm`、`git`。
-- 若命令需要联网安装 CLI 或依赖，再根据环境决定是否需要设置内网镜像。
 
 ## 初始化工程
 
@@ -238,7 +223,7 @@ KWC 的核心交付对象是：
 
 如果用户没有提供 `app`，遵循"需要用户提供或确认的输入"中的 `app` 规则，先停在初始化前让用户补齐。
 
-补充：`kd project init` 依赖 `git clone` 下载模板，若失败优先检查 `git`、网络连通性和执行环境是否允许联网。更多实测细节见 `references/validation-notes.md`。
+补充：`kd project init` 依赖 `git clone` 下载模板，若失败优先检查 `git`。更多实测细节见 `references/validation-notes.md`。
 
 ## 创建组件
 
@@ -375,35 +360,16 @@ KWC 的核心交付对象是：
 1. `kd project deploy`：部署整个项目到默认环境
 2. `kd project deploy -d app/kwc/MyComponent -e sit`：仅部署指定组件到 `sit`
 3. `kd project deploy -d app/pages/MyPage -e sit`：仅部署指定页面元数据到 `sit`
-4. `kd debug`：进入调试
-5. 若需要指定环境或表单，使用 `kd debug -e <env-name>` 或 `kd debug -f <formid>`
+4. `kd debug`：进入调试，并由脚手架自动打开浏览器
 
-`kd debug -f` 的使用规则：
+调试默认约定：
 
-- `formid` 优先直接使用页面元数据顶层 `<name>` 的完整值
-- 不要传 `masterLabel`
-- 不要把完整页面名截短成你觉得“更好记”的别名
-- 不要擅自改大小写、去掉前缀，或只传后半段
-
-例如，若页面元数据中写的是：
-
-```xml
-<name>kdtest_card_demo</name>
-```
-
-则应执行：
-
-```bash
-kd debug -f kdtest_card_demo
-```
-
-不要写成：
-
-```bash
-kd debug -f card_demo
-kd debug -f demo
-kd debug -f CardDemo
-```
+- 统一直接运行 `kd debug`
+- 若目标环境不是当前默认环境，先执行 `kd env set target-env <env-name>`，再运行 `kd debug`
+- 不要在输出命令时默认拼带页面参数的 `kd debug` 命令，也不要手工拼调试 URL
+- 调试时由 AI 自行结合当前任务、最近修改文件和 `app/pages/*.page-meta.kwp` 判断要优先预览哪个页面
+- 只有在多个页面都同样可能且误判风险明显时，才向用户确认
+- 浏览器会自动打开；进入浏览器后继续定位并验证目标页面，而不是把“让用户提供页面参数”当成默认前置条件
 
 版本管理规则：
 
@@ -421,7 +387,7 @@ kd debug -f CardDemo
 
 遇到跨应用调试时，优先检查 `.kd/config.json` 里的 `app` 编码是否需要手工切换。
 
-补充：环境未认证时 `kd project deploy` 会直接阻止部署；`kd debug -e <env> -f <formid>` 在部分版本中可能异常，更稳妥的路径是先 `kd env set target-env <env>` 再执行 `kd debug -f <formid>`。更多实测细节见 `references/validation-notes.md`。
+补充：环境未认证时 `kd project deploy` 会直接阻止部署；调试前若需要切换环境，先 `kd env set target-env <env>`，再直接执行 `kd debug`。更多实测细节见 `references/validation-notes.md`。
 
 ## 端到端执行原则
 

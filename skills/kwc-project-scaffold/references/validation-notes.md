@@ -21,7 +21,7 @@
 7. `npm run build`
 8. `npm run dev`
 9. `kd env create/list/set/info/delete`
-10. `kd debug -f demoPage`，在设置默认环境后可启动本地调试链路
+10. `kd debug`，在设置默认环境后可启动本地调试链路，并自动打开浏览器
 
 ## 关键观察
 
@@ -54,19 +54,20 @@
 
 ### 调试
 
-- 在受限沙箱里，`kd debug -e skillcheck -f demoPage` 可能因为 `tsx` IPC pipe 权限失败。
-- 在放开权限后，`kd debug -e skillcheck -f demoPage` 曾返回 `Environment "undefined" has no URL configured`。
+- 在受限沙箱里，`kd debug` 可能因为 `tsx` IPC pipe 权限失败。
+- 在放开权限后，显式使用带 `-e/-f` 参数的 `kd debug` 曾返回 `Environment "undefined" has no URL configured`。
 - 更稳定的路径是：
 
 ```bash
 kd env set target-env skillcheck
-kd debug -f demoPage
+kd debug
 ```
 
 - 调试成功启动后，日志出现：
   - `KD Dev Server Started`
   - `Listening on http://localhost:3333`
-  - `Opening: <env-url>?formId=demoPage&kdkwc_cdn=http://localhost:3333`
+  - `Opening: <env-url>...`
+- `Opening:` 之后脚手架会自动打开浏览器；当前 Skill 默认由 AI 在浏览器里继续定位和验证目标页面，不再要求用户手工提供页面参数
 - 若 `.kd/config.json` 缺少 `isv/app`，会提示：
   - `kdConfig missing isv/app, static route not mounted`
 - 若 `3333` 端口已占用，会提示端口冲突。

@@ -1,71 +1,72 @@
 # KWC Skills
 
-**KWC Skills** 仓库用于统一管理和沉淀与 Kingdee Web Components (KWC) 和 LWC (Lightning Web Components) 相关的 AI 智能体专属技能 (AI Agent Skills)。
+**KWC Skills** 仓库用于统一管理和沉淀与 Kingdee Web Components (KWC) 相关的 AI 智能体技能。
 
-通过在 AI IDE 或智能开发助手中加载本仓库的 Skills，可以赋予 AI 处理 KWC 专属业务逻辑、熟悉特定组件 API 并强制遵循开发规范的能力，从而大幅提升代码生成的质量与合规性。
+这些 Skill 分成两类：
+- **KWC 工程型 Skill**：面向 KWC React、Vue、LWC 工程，以及从 0 到 1 的脚手架、元数据、部署和调试流程
+- **组件型 Skill**：面向不依赖 KWC 工程结构、只需要在 React/Vue 项目中使用 `@kdcloudjs/shoelace` 与 KWC 扩展组件的场景
 
-## 📦 当前包含的 Skills
+## 当前包含的 Skills
 
-### 1. [KWC LWC 开发专家](./skills/kwc-lwc-development) (`kwc-lwc-development`)
-这是 KWC LWC 项目开发的核心辅助指令集。
-- **核心定位**：项目开发入口与总指挥，提供组件创建、代码修改与技术咨询。
-- **开发约束**：内置针对 KWC 架构的硬性代码约束，包括：
-  - 必须继承 `@kdcloudjs/kwc` 提供的 `KingdeeElement`。
-  - 模板中严格禁止 JS 表达式、禁止自闭合标签、禁止使用 ID 选择器。
-  - 强制遵循事件绑定规范（纯 HTML 原生事件，在 JS `renderedCallback` 中处理 Shoelace 组件的自定义事件）。
-  - `@kdcloudjs/shoelace` (`sl-*`) 组件必须包含 `kwc:external` 等特性。
-- **参考文档**：内置了核心组件（如 DatePicker、TimePicker、Pagination、Table 等）的详细开发指引及示例。
+### 1. `kwc-project-scaffold`
 
-### 2. [KWC React 开发专家](./skills/kwc-react-development) (`kwc-react-development`)
-这是 KWC React 项目开发的核心辅助指令集。
-- **核心定位**：项目开发入口与总指挥，提供组件创建、代码修改与技术咨询。
-- **开发约束**：内置针对 KWC React 架构的硬性代码约束，包括：
-  - 必须使用 `@kdcloudjs/kwc-react` 提供的组件和 Hooks。
-  - Shoelace 组件事件绑定必须使用 JSX 属性方式（如 `onSlChange`、`onSlInput`），禁止使用 `ref` + `addEventListener`。
-  - 组件属性必须使用驼峰命名（如 `panelEndDate`、`panelStartDate`）。
-  - 严格遵循 React 组件生命周期和状态管理最佳实践。
-- **参考文档**：内置了核心组件（如 DatePicker、TimePicker、Pagination、Table 等）的详细开发指引及示例。
+KWC 项目的总入口 Skill，负责需求拆分、`kd project init/create`、组件元数据 `.js-meta.kwc`、页面元数据 `.page-meta.kwp`、环境配置、`deploy`、`debug` 等全流程能力。推荐所有 KWC 工程场景优先安装。
 
-### 3. [KWC Vue 开发专家](./skills/kwc-vue-development) (`kwc-vue-development`)
-这是 KWC Vue 项目开发的核心辅助指令集。
-- **核心定位**：项目开发入口与总指挥，提供组件创建、代码修改与技术咨询。
-- **开发约束**：内置针对 KWC Vue 架构的硬性代码约束，包括：
-  - 必须使用 `@kdcloudjs/kwc-vue` 提供的组件和 Composables。
-  - Shoelace 组件事件绑定必须使用 Vue 的 `v-on` 或 `@` 语法（如 `@sl-change`、`@sl-input`）。
-  - 组件属性必须使用驼峰命名（如 `panelEndDate`、`panelStartDate`）。
-  - 严格遵循 Vue 3 Composition API 和响应式系统最佳实践。
-- **参考文档**：内置了核心组件（如 DatePicker、TimePicker、Pagination、Table 等）的详细开发指引及示例。
+### 2. `kwc-react-development`
 
-## 🚀 如何使用
+面向 **KWC React 工程** 的开发 Skill。适合已经处在 KWC React 项目中的组件开发、页面构建和规范约束场景。
 
-1. **配置并加载 Skill**：在兼容的 AI 开发平台（如本地 Agent 环境、光年 IDE 等）中，导入或加载本仓库下的具体 Skill 文件夹（例如 `skills/kwc-lwc-development`）。
-2. **自动上下文识别**：Skill 内置了智能识别机制。当检测到当前项目环境符合 KWC 特征（如包含 `.kd` 文件夹或 `kwc.config.json`，且标识为 `lwc` 框架）时，AI 将自动激活这套专属的开发规范。
-3. **获取解答与代码**：一旦加载并生效，您可以自然语言提问或指派编码任务，AI 将严格遵守 `SKILL.md` 与 `rule.md` 中的规范为您生成高度符合要求的零修改或少修改代码。
+### 3. `kwc-vue-development`
 
-## 📂 仓库结构
+面向 **KWC Vue 工程** 的开发 Skill。适合已经处在 KWC Vue 项目中的组件开发、页面构建和规范约束场景。
+
+### 4. `kwc-lwc-development`
+
+面向 **KWC LWC 工程** 的开发 Skill。适合 KWC/LWC 模式下的组件开发、模板约束和事件处理场景。
+
+### 5. `kwc-shoelace-react`
+
+面向 **通用 React 项目** 的组件 Skill。适用于不使用 KWC 工程结构、只需要在现有 React 工程中正确接入 `@kdcloudjs/shoelace` 与 KWC 扩展组件的场景。
+
+### 6. `kwc-shoelace-vue`
+
+面向 **通用 Vue 3 项目** 的组件 Skill。适用于不使用 KWC 工程结构、只需要在现有 Vue 工程中正确接入 `@kdcloudjs/shoelace` 与 KWC 扩展组件的场景。
+
+## 推荐组合
+
+- **KWC React 项目**：`kwc-project-scaffold` + `kwc-react-development`
+- **KWC Vue 项目**：`kwc-project-scaffold` + `kwc-vue-development`
+- **KWC LWC 项目**：`kwc-project-scaffold` + `kwc-lwc-development`
+- **通用 React 组件项目**：`kwc-shoelace-react`
+- **通用 Vue 组件项目**：`kwc-shoelace-vue`
+
+## 如何使用
+
+1. 在准备开始开发的工作目录中运行：
+
+   ```bash
+   npx skills add kingdee/kwc-skills
+   ```
+
+2. 按照当前项目场景选择需要的 Skill 组合。
+3. 让 AI 在对应 Skill 约束下完成项目初始化、组件开发或组件接入。
+
+## 仓库结构
 
 ```text
 kwc-skills/
-├── README.md                   # 仓库入口说明（本文档）
-└── skills/                     # 不同场景维度的 AI Skills 集合
-    ├── kwc-lwc-development/    # KWC LWC 前端开发专家 Skill
-    │   ├── SKILL.md            # 技能核心描述、入口与工作流定义
-    │   ├── rule.md             # 强制开发规范与约束
-    │   ├── assets/             # 优质示例代码
-    │   └── reference/          # 专属扩展组件文档 (DatePicker, Table 等)
-    ├── kwc-react-development/  # KWC React 前端开发专家 Skill
-    │   ├── SKILL.md            # 技能核心描述、入口与工作流定义
-    │   ├── rule.md             # 强制开发规范与约束
-    │   └── reference/          # 专属扩展组件文档 (DatePicker, Table 等)
-    └── kwc-vue-development/    # KWC Vue 前端开发专家 Skill
-        ├── SKILL.md            # 技能核心描述、入口与工作流定义
-        ├── rule.md             # 强制开发规范与约束
-        └── reference/          # 专属扩展组件文档 (DatePicker, Table 等)
+├── README.md
+└── skills/
+    ├── kwc-lwc-development/
+    ├── kwc-project-scaffold/
+    ├── kwc-shoelace-react/
+    ├── kwc-react-development/
+    ├── kwc-shoelace-vue/
+    └── kwc-vue-development/
 ```
 
-## 🤝 参与贡献
+## 贡献方向
 
-如果您在使用过程中总结了新的踩坑经验、或者有了更优的代码模式，欢迎为本仓库贡献力量：
-1. **完善文档与参考**：在特定 Skill 的 `reference/` 或 `assets/` 目录下提交更多的 API 用法和最佳实践代码。
-2. **补充校验规则**：将常犯的错误或新的框架限制补充至对应 Skill 的 `rule.md` 或 `SKILL.md` 检查清单中，以提升 AI 准确率。
-3. **新增 Skill**：如果出现了有别于当前 LWC 业务模块的新型架构或大模块，可以在 `skills/` 下新建独立的 Skill。
+- 补充扩展组件文档和高质量示例
+- 更新 `rule.md` 中的强约束和常见踩坑
+- 新增适用于不同工程形态的 Skill

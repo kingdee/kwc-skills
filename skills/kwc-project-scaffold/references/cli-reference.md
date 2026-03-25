@@ -230,46 +230,30 @@ kd project deploy -d app/pages/MyPage -e sit
 ## 调试
 
 ```bash
+kd env set target-env sit
 kd debug
-kd debug -e sit
-kd debug -f demoForm
 ```
 
-`kd debug -f` 规则：
+调试默认约定：
 
-- `-f` 后面优先传页面元数据顶层 `<name>` 的完整值
-- 不要传 `masterLabel`
-- 不要自己缩写页面名
-- 若实际页面名带前缀或业务标识，调试时也应保留完整全称
-
-示例：
-
-```xml
-<name>kdtest_card_demo</name>
-```
-
-```bash
-# 正确
-kd debug -f kdtest_card_demo
-
-# 错误
-kd debug -f card_demo
-kd debug -f demo
-kd debug -f CardDemo
-```
+- 默认先确保 `target-env` 正确，再直接运行 `kd debug`
+- 不要默认输出带页面参数的 `kd debug` 命令，也不要要求用户先提供页面参数
+- AI 应结合当前任务、最近修改页面和 `app/pages/*.page-meta.kwp` 自行判断预览目标
+- `kd debug` 会自动打开浏览器，后续在浏览器里继续定位并验证目标页面
 
 调试前确认：
 
 - 已部署过组件或页面元数据
-- 当前默认环境正确
+- 当前默认环境正确，或已通过 `kd env set target-env <env>` 切换
 - `.kd/config.json` 中 `app` 编码与目标应用一致
 - 若 `.kd/config.json` 缺少 `isv/app`，静态路由不会挂载
 - `localhost:3333` 未被占用
 
 调试补充：
 
-- 在 `kd 0.0.9` 的本地验证里，`kd debug -e <env> -f <formId>` 存在返回 `Environment "undefined" has no URL configured` 的情况。
-- 更稳妥的方式是先 `kd env set target-env <env>`，再运行 `kd debug -f <formId>`。
+- 在 `kd 0.0.9` 的本地验证里，显式使用 `-e/-f` 参数的 `kd debug` 曾出现环境解析异常。
+- 当前更稳妥的方式是先 `kd env set target-env <env>`，再直接运行 `kd debug`。
+- 调试启动后脚手架会自动打开浏览器，因此当前 Skill 不再把“指定页面参数”和“约束页面名称写法”作为默认操作。
 
 按需深入读取：
 
