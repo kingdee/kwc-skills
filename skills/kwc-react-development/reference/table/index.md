@@ -29,6 +29,7 @@
 | RTL 方向 | 从右到左布局、RTL + 固定列 | [rtl.md](./features/rtl.md) |
 | 行/单元格属性 | slRow、slHeaderRow、slCell、slHeaderCell | [row-cell-props.md](./features/row-cell-props.md) |
 | 树形数据展示 | 展示树形数据 childrenRecordName indentSize| [tree-table.md](./features/tree-table.md) |
+| 表头分组 | columns children 多级表头、嵌套分组 | [header-group.md](./features/header-group.md) |
 
 ## 核心约束
 
