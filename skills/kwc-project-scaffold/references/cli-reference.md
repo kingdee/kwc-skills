@@ -9,35 +9,28 @@
 
 ## 安装 CLI
 
-外网环境：
-
 ```bash
 npm i -g @kdcloudjs/cli
 kd -v
 ```
 
-研发内网环境：
+更新脚手架到最新版本：
 
 ```bash
-npm config set registry http://172.17.52.48:8081/repository/npm-group
-npm i -g @kdcloudjs/cli
-kd -v
+kd update
 ```
 
 ## 初始化项目
 
 ```bash
 kd project init my-demo-project
-kd project init my-demo-project -s inner
 ```
 
 交互过程中通常需要：
 
 - 选择框架，如 React、Vue、LWC
 - 选择语言，如 TypeScript、JavaScript
-- 输入应用标识 `app`
-
-其中 `app` 必须由用户手工提供，不要使用示例值、历史值或猜测值替代。
+- 输入应用标识 `app`（必须由用户明确提供，详见 SKILL.md「需要用户提供或确认的输入」一节）
 
 初始化后执行：
 
@@ -58,13 +51,12 @@ kd project create DemoComponent2 --type kwc
 
 - 使用 `PascalCase` 作为组件名。
 - 先让 CLI 生成组件工程，再补充具体实现代码。
-- 实测不会自动修改 `app/kwc/main.tsx`。
 - 生成后应继续检查并完善 `.js-meta.kwc`，不要把脚手架模板直接当成最终元数据。
 
 ## 创建页面
 
 ```bash
-kd project create demoPage --type page
+kd project create demo_page --type page
 ```
 
 页面元数据常见示例：
@@ -73,10 +65,10 @@ kd project create demoPage --type page
 <?xml version="1.0" encoding="UTF-8"?>
 
 <Page>
-    <name>demoPage</name>
-    <masterLabel>demoPage</masterLabel>
+    <name>demo_page</name>
+    <masterLabel>demo_page</masterLabel>
     <template>oneregion</template>
-    <isv>kdtest</isv>
+    <isv></isv>  <!-- deploy 时由脚手架自动从环境拉取 -->
     <app>your_app_code</app>
     <version>1</version>
     <regions>
@@ -106,18 +98,12 @@ kd project create demoPage --type page
 - `name`：页面标识。
 - `masterLabel`：页面展示名。
 - `template`：页面模板。
-- `app`：苍穹应用编码。
-- `app` 必须来自用户在 `kd project init` 时手工输入的真实应用编码。
+- `app`：苍穹应用编码（必须由用户明确提供，详见 SKILL.md）。
 - `version`：正整数；仅当该页面元数据文件有变更并准备重新上传时，手动加 `1`。
 - `control.type`：组件类型名。
 - `control.name`：页面内的组件实例名。
 - 实测默认不会自动插入真实 `<control>` 节点，只保留注释模板。
 - 页面中配置的属性名，应与组件元数据里定义的 `<property name="...">` 对应。
-
-强约束：
-
-- 不要把文档中的示例 `app` 当默认值
-- 新建工程时若还没有用户提供的 `app`，不要继续生成正式页面元数据
 
 ## 环境管理
 
@@ -201,7 +187,7 @@ kd project deploy -d app/kwc/MyComponent -e sit
 仅部署指定页面元数据到 `sit` 环境：
 
 ```bash
-kd project deploy -d app/pages/MyPage -e sit
+kd project deploy -d app/pages/my_page -e sit
 ```
 
 注意：

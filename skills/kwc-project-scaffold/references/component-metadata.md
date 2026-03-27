@@ -50,15 +50,13 @@ Skill 需要检查并补齐：
 | `name` | 组件类型标识，通常直接使用组件名，如 `DemoComponent1`；页面元数据中的 `control.type` 必须与它完全一致 |
 | `masterLabel` | 给页面装配者看的中文名称 |
 | `isv` | 开发商标识，开发阶段可留空，deploy 时自动从环境拉取并写入元数据 |
-| `app` | 与用户手工输入并写入 `.kd/config.json` 的目标应用编码一致 |
+| `app` | 所属应用编码（必须由用户明确提供，详见 SKILL.md「需要用户提供或确认的输入」一节） |
 | `framework` | 当前工程框架，如 `react` |
 | `targets` | KWC 页面当前默认填 `KWCFormModel` |
 
 注意：
 
-- `app` 不能靠猜
 - 页面元数据中的 `control.type` 必须与这里的 `name` 完全一致，包含大小写也必须一致
-- 如果当前工程的 `.kd/config.json` 里没有可信的 `app`，先回到初始化步骤补齐
 
 例子：
 
@@ -151,5 +149,4 @@ Skill 需要检查并补齐：
 - `version` 留空
 - 只改了组件实现代码，却误以为组件元数据 `version` 也要递增
 - `masterLabel` 仍是脚手架默认英文名，没有改成可读名称
-- `app` 与目标环境不一致（`isv` 由 deploy 自动写入，一般无需关注）
-- 把示例或历史项目里的 `app` 直接抄进当前组件元数据
+- `isv` 由 deploy 自动写入，一般无需关注

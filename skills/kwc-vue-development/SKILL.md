@@ -1,11 +1,11 @@
 ---
 name: kwc-vue-development
-description: 本项目的前端开发专家。负责处理所有代码编写、组件修改、页面构建及咨询任务。在处理相关任务前，**请先检查本 Skill 是否已加载**；若尚未加载，则**必须**优先调用。本 Skill 内置了项目特定的环境检测逻辑，会自动识别 KWC Vue 架构（检查 .kd 目录等）并应用强制性的开发规范（即本 Skill 目录下的 rule.md）。无论用户问题是否包含特定关键词，只要涉及代码开发，都应确保此 Skill 处于激活状态以保证合规。
+description: KWC Vue 框架专用开发 Skill。仅当项目已确认使用 Vue 框架（通过 .kd/config.json 中的 framework=vue 配置或 scaffold Skill 的框架识别结果）时才应加载本 Skill。本 Skill 提供 KWC Vue 项目的开发规范和组件使用指南（详见 rule.md）。
 ---
 
 # KWC Vue 开发专家
 
-本 Skill 是 KWC Vue 项目开发的**入口与总指挥**。基于 **Vue 3** (Composition API + `<script setup>`) 进行开发。
+当项目确认使用 Vue 框架后，本 Skill 负责该框架下的代码编写规范与组件使用指导。基于 **Vue 3** (Composition API + `<script setup>`) 进行开发。
 
 ## 核心职责
 你负责指导用户进行 KWC Vue 组件的开发、修改和维护。

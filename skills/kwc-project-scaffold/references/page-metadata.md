@@ -23,17 +23,11 @@
 | `masterLabel` | 页面标题，给业务用户看的名称 |
 | `template` | 目前默认 `oneregion` |
 | `isv` | 开发商标识，开发阶段可留空，deploy 时自动从环境拉取并写入 |
-| `app` | 用户手工输入并写入 `.kd/config.json` 的目标业务应用编码 |
+| `app` | 所属应用编码（必须由用户明确提供，详见 SKILL.md「需要用户提供或确认的输入」一节） |
 | `bizUnit` | 仅在用户明确要求放到某业务单元时填写 |
 | `version` | 新页面从 `1` 起；仅当该 `.page-meta.kwp` 文件内容变更并准备重新上传时递增 |
 | `enableExtend` | 仅在需求明确允许扩展时填写 |
 | `enablePermissionControl` | 仅在需求明确要求权限控制时填写 |
-
-关于 `app`：
-
-- 不要写死
-- 不要使用文档示例值
-- 生成页面元数据前先核对 `.kd/config.json` 中的 `app`
 
 推荐页面命名：
 
@@ -143,10 +137,6 @@
 4. 每个 `control.type` 都能在组件元数据中找到完全一致的 `name`
 5. 每个 `property` 名都在组件元数据中定义过
 6. 若是修改已有页面元数据，`version` 已递增
-
-额外检查：
-
-7. 页面元数据 `app` 与 `.kd/config.json` 中的 `app` 完全一致
 
 ## 常见失误
 

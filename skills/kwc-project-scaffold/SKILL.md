@@ -56,28 +56,33 @@ KWC 的核心交付对象是：
 
 将 `kwc-project-scaffold` 视为 KWC 工作流的总入口，但不要让它吞掉框架开发 Skill 的职责。
 
-职责边界如下：
+### 协作边界表
 
-- `kwc-project-scaffold` 负责项目初始化、组件与页面元数据生成、环境配置、部署、调试编排
-- `kwc-react-development` 负责 React KWC 项目的具体组件代码实现
-- `kwc-vue-development` 负责 Vue KWC 项目的具体组件代码实现
-- `kwc-lwc-development` 负责 LWC KWC 项目的具体组件代码实现
+| 任务阶段 | 负责 Skill | 产出物 |
+|----------|------------|--------|
+| 工程初始化 | scaffold | .kd/config.json |
+| 创建组件目录 | scaffold | app/kwc/Component/ |
+| 编写组件代码 | react/vue/lwc-development | *.tsx / *.vue / *.js |
+| 补全组件元数据 | scaffold | *.js-meta.kwc |
+| 创建页面元数据 | scaffold | *.page-meta.kwp |
+| 环境配置与部署 | scaffold | 环境渲染结果 |
 
-协作约定：
+### 切换时机
 
 - 当任务仍处于需求拆分、脚手架命令、元数据、环境、`deploy`、`debug` 阶段时，继续由本 Skill 主导
-- 当任务进入“具体代码开发、组件修改、页面前端实现”阶段时，建议加载与当前 framework 对应的开发 Skill
-- 不要同时加载三个框架开发 Skill；只根据当前工程的 framework 推荐一个
-- 不要把三个框架 Skill 的具体编码细则复制进本 Skill；本 Skill 只保留选择逻辑和切换时机
+- 当 `kd project create` 完成后需写代码 → 切到框架 Skill
+- 当代码写完需补元数据或部署 → 回到 scaffold
 
-推荐规则：
+### 推荐规则
 
 1. 若是新建工程，以 `kd project init` 交互中用户选择的 framework 作为后续推荐 Skill 依据
 2. 若是已有工程，以 `.kd/config.json` 中的 `framework` 作为推荐 Skill 依据
 3. 当 `framework=react` 时，建议转入 `kwc-react-development`
 4. 当 `framework=vue` 时，建议转入 `kwc-vue-development`
 5. 当 `framework=lwc` 时，建议转入 `kwc-lwc-development`
-6. 若还无法判断 framework，先停下来向用户确认，不要直接继续写代码
+6. 若还无法判断 framework，先停下来向用户确认
+
+注意：不要同时加载三个框架开发 Skill；只根据当前工程的 framework 推荐一个。
 
 ## 需要用户提供或确认的输入
 
@@ -97,13 +102,12 @@ KWC 的核心交付对象是：
 
 关于 `isv`（开发商标识）：开发阶段可以留空，在组件与环境绑定时会从环境拉取开发商标识，`kd project deploy` 时会自动写入组件和页面元数据，因此不需要用户手工提供或维护。
 
-对 `app` 使用最严格的规则（本节为全文唯一权威定义，后续各章节不再重复）：
+对 `app` 使用最严格的规则（本节为全文唯一权威定义）：
 
-- `app` 不是 Skill 可以猜测或写死的值
-- `app` 必须由用户明确提供，或来自当前工程里已经存在的 `.kd/config.json`
-- 新建工程时，`kd project init` 的交互步骤里必须手动填写 `app`
-- 如果用户没有给 `app`，就不要继续初始化、生成正式元数据或部署
-- 不要把示例中的 `app` 值当默认值
+- `app` 必须由用户明确提供，或来自 `.kd/config.json`
+- 不可猜测、不可使用示例值
+- 新建工程时在 `kd project init` 交互中输入
+- 若无 `app`，不继续生成元数据或部署
 
 ## 由 Skill 自动决策或生成的内容
 
@@ -143,22 +147,10 @@ KWC 的核心交付对象是：
 - `name`：通常与组件名保持一致，作为组件类型标识
 - `masterLabel`：组件在页面装配侧显示的名称
 - `isv`：开发商标识，开发阶段可留空，deploy 时自动从环境拉取写入
-- `app`：规则见"需要用户提供或确认的输入"一节
+- `app`：规则见“需要用户提供或确认的输入”一节
 - `framework`
 - `targets`
 - `targetConfigs`
-
-属性设计原则：
-
-- 文本输入用 `String`
-- 整数范围用 `Integer`
-- 开关型配置用 `Boolean`
-- 固定枚举选择用 `Combo`
-
-只有当页面需要给组件实例传值时，才在组件元数据里声明 `<property>`。
-页面元数据 `<propertys>` 中出现的属性名，必须能在组件元数据里找到对应定义。
-
-`app` 的填写规则见"需要用户提供或确认的输入"一节；若当前工程无可信 `app`，不要生成正式可部署元数据。
 
 如果需要字段规则、类型和示例，读取：
 
@@ -183,9 +175,8 @@ KWC 的核心交付对象是：
 页面字段默认策略：
 
 - `template` 默认使用 `oneregion`
-- `isv`、`app` 以页面主信息为主
-
-`app` 的填写规则见"需要用户提供或确认的输入"一节。若发现页面元数据 `app` 与 `.kd/config.json` 不一致，优先停下来核对，不要直接 deploy。
+- `isv` deploy 时自动写入，无需手填
+- `app` 规则见“需要用户提供或确认的输入”一节
 
 如果需要字段规则、校验约束和示例，读取：
 
@@ -214,16 +205,12 @@ KWC 的核心交付对象是：
 
 1. 安装 CLI。
 2. 运行 `kd project init <project-name>`。
-4. 在交互流程中按用户要求选择框架和语言；若用户未指定框架和语言，不要擅自假定，应主动询问用户选择。
-5. 输入应用标识 `app` 编码，这个值必须由用户手工提供。
-6. 初始化完成后进入项目目录，执行 `npm install`。
-7. 仅在需要本地辅助预览组件时，再执行 `npm run dev`。
+3. 在交互流程中按用户要求选择框架和语言；若用户未指定，应主动询问。
+4. 输入应用标识 `app`（规则见“需要用户提供或确认的输入”一节）。
+5. 初始化完成后进入项目目录，执行 `npm install`。
+6. 仅在需要本地辅助预览组件时，再执行 `npm run dev`。
 
-若用户只是让你“创建一个 KWC 工程”，默认交付应至少覆盖：初始化命令、框架/语言选择、`app` 编码输入、依赖安装，以及后续如何继续创建组件、页面元数据和部署。
-
-如果用户没有提供 `app`，遵循"需要用户提供或确认的输入"中的 `app` 规则，先停在初始化前让用户补齐。
-
-补充：`kd project init` 依赖 `git clone` 下载模板，若失败优先检查 `git`。更多实测细节见 `references/validation-notes.md`。
+补充：`kd project init` 依赖 `git clone` 下载模板，若失败优先检查 `git`。
 
 ## 创建组件
 
@@ -238,7 +225,7 @@ KWC 的核心交付对象是：
 若用户只提供了页面结构想法，没有组件名，先根据语义生成稳定、可复用的组件名，再创建。
 若用户给的是完整业务诉求，而不是组件清单，先主动拆分组件职责，再批量创建。
 
-补充：组件生成在 `app/kwc/<ComponentName>/` 下；脚手架生成的 `.js-meta.kwc` 只是模板，需按上述规则补齐。更多实测细节见 `references/validation-notes.md`。
+补充：组件生成在 `app/kwc/<ComponentName>/` 下；脚手架生成的 `.js-meta.kwc` 只是模板，需按上述规则补齐。
 
 ## 创建页面元数据
 
@@ -258,12 +245,12 @@ KWC 的核心交付对象是：
 
 - `type` 是组件类型名，必须与组件元数据中的组件 `name` 完全一致，不能只做到语义对应或名称相近。
 - `name` 是组件实例名，需要在页面内唯一。
-- `app` 必须与当前苍穹应用编码一致。
-- `isv` 开发阶段可留空，deploy 时会自动从环境拉取并写入，不需要手工维护。
+- `isv` 开发阶段可留空，deploy 时会自动从环境拉取并写入
+- `app` 规则见“需要用户提供或确认的输入”一节
 
 若需要字段规则、校验约束和示例，读取 `references/page-metadata.md`。
 
-补充：新生成的 `page-meta.kwp` 默认只包含注释掉的 `<control>` 模板，Skill 必须根据需求主动补全 `<controls>`。更多实测细节见 `references/validation-notes.md`。
+补充：新生成的 `page-meta.kwp` 默认只包含注释掉的 `<control>` 模板，Skill 必须根据需求主动补全 `<controls>`。
 
 ## 脚手架命令的推荐编排
 
@@ -273,31 +260,37 @@ KWC 的核心交付对象是：
 2. 对每个“会出现在页面里的组件”执行 `kd project create <ComponentName> --type kwc`
 3. 确认当前工程 framework；若后续进入代码实现，建议切换到对应框架开发 Skill
 4. 实现组件代码
-5. 先确认当前工程 `.kd/config.json` 里的 `app` 是用户手工输入的真实值，再补全这些组件的 `.js-meta.kwc`
+5. 补全组件 `.js-meta.kwc`
 6. 执行 `kd project create <page-name> --type page`
 7. 补全页面 `app/pages/<page-name>.page-meta.kwp`
-8. 确认或创建目标环境
-9. 完成认证
-10. 若组件元数据或页面元数据有变更，执行 `kd project deploy`
-11. 需要联调时执行 `kd debug`
+8. 确认或创建目标环境，完成认证
+9. 若元数据有变更，执行 `kd project deploy`
+10. 需要联调时执行 `kd debug`
 
 如果是修改已有页面：
 
 1. 先识别是改组件实现、改组件元数据、改页面元数据，还是三者都改
-2. 若组件元数据或页面元数据变更，部署前一定检查版本号
-3. 若仅是组件实现代码变更，且所有元数据文件未变，通常不需要 `deploy`
-4. 若仅是组件实现代码变更，优先执行 `npm run build`；需要联调时再继续 `kd debug`
-
-不要采用下面这些错误顺序：
-
-- 先写页面元数据，再回头猜组件属性名
-- 先 deploy，再补版本号
-- 创建了组件后完全不检查 `.js-meta.kwc`
-- 把所有组件都保留元数据，即使它们只是内部辅助组件
+2. 参考“是否需要 deploy 决策”决定后续操作
 
 ## 配置环境
 
-在部署前先完成环境配置：
+在部署前先完成环境配置。
+
+### 环境存在性检查
+
+当用户提供了具体的环境名称或别名（如 `dev`、`sit`、`uat` 等）时，应先执行环境存在性检查：
+
+1. 运行 `kd env list` 查看当前已配置的环境列表
+2. 若目标环境已存在于列表中：
+   - 不需要再让用户提供 URL、Client ID/Secret 等环境信息
+   - 直接使用该环境进行后续操作（如 deploy、debug）
+   - 若该环境不是当前默认环境，可通过 `kd env set target-env <name>` 切换
+   - 使用 `kd env info` 确认环境认证状态
+3. 只有当环境不存在时，才进入完整的环境创建和认证流程
+
+### 新建环境流程
+
+当环境不存在时，按以下流程执行：
 
 1. 使用 `kd env create <env-name> --url <url>` 创建环境别名。
 2. 使用 `kd env auth openapi` 走交互式认证。
@@ -305,6 +298,8 @@ KWC 的核心交付对象是：
 4. 必要时使用 `kd env list` 和 `kd env info` 检查当前配置。
 
 优先采用 `openapi` 认证方式；`web` 模式暂不作为默认路径。
+
+### 需要收集环境信息的情况
 
 如果目标环境不存在，或环境存在但尚未完成认证，先停下来收集这些字段：
 
@@ -348,46 +343,35 @@ KWC 的核心交付对象是：
 说明：data center 不需要先手填，后续会由脚手架读取候选项供选择。
 ```
 
-补充：环境配置保存在 `~/.kd` 而非项目目录；创建后必须用 `kd env list` 复核是否持久化成功；`kd env auth openapi` 在 URL 不可达时会直接失败。更多实测细节见 `references/validation-notes.md`。
+补充：环境配置保存在 `~/.kd` 而非项目目录；创建后必须用 `kd env list` 复核是否持久化成功；`kd env auth openapi` 在 URL 不可达时会直接失败。
 
 ## 部署与调试
 
-不要把 `kd project deploy` 当成“每次改代码后都要跑”的固定步骤。
-`deploy` 的核心作用是把元数据上传到目标环境，因此只有组件元数据 `.js-meta.kwc` 或页面元数据 `.page-meta.kwp` 发生变更时，才需要考虑 `deploy`。
+### 是否需要 deploy 决策
 
-常用命令：
+```
+改了什么？
+├── 只改 .tsx/.vue/.js/.html/.scss → 不需要 deploy，执行 npm run build
+├── 改了 .js-meta.kwc → version + 1，然后 deploy
+├── 改了 .page-meta.kwp → version + 1，然后 deploy
+└── 新建组件/页面 → version = 1，然后 deploy
+```
+
+### 常用命令
 
 1. `kd project deploy`：部署整个项目到默认环境
 2. `kd project deploy -d app/kwc/MyComponent -e sit`：仅部署指定组件到 `sit`
-3. `kd project deploy -d app/pages/MyPage -e sit`：仅部署指定页面元数据到 `sit`
-4. `kd debug`：进入调试，并由脚手架自动打开浏览器
+3. `kd project deploy -d app/pages/my_page -e sit`：仅部署指定页面元数据到 `sit`
+4. `kd debug`：进入调试，脚手架自动打开浏览器
 
-调试默认约定：
+### 调试约定
 
 - 统一直接运行 `kd debug`
-- 若目标环境不是当前默认环境，先执行 `kd env set target-env <env-name>`，再运行 `kd debug`
-- 不要在输出命令时默认拼带页面参数的 `kd debug` 命令，也不要手工拼调试 URL
-- 调试时由 AI 自行结合当前任务、最近修改文件和 `app/pages/*.page-meta.kwp` 判断要优先预览哪个页面
-- 只有在多个页面都同样可能且误判风险明显时，才向用户确认
-- 浏览器会自动打开；进入浏览器后继续定位并验证目标页面，而不是把“让用户提供页面参数”当成默认前置条件
+- 若目标环境不是当前默认环境，先执行 `kd env set target-env <env-name>`
+- 不要手工拼调试 URL，由 AI 自行结合任务和页面元数据判断预览目标
+- 浏览器自动打开后继续定位目标页面
 
-版本管理规则：
-
-- 只改组件实现代码，如 `.tsx`、`.vue`、`.js`、`.html`、`.scss`，且没有改任何元数据文件：不需要 `deploy`，也不要递增 `version`
-- 改了组件元数据 `.js-meta.kwc`：递增该组件元数据的 `version`，再部署该组件或整个项目
-- 改了页面元数据 `.page-meta.kwp`：递增该页面元数据的 `version`，再部署该页面元数据或整个项目
-- 同时改了组件元数据和页面元数据：分别递增各自 `version`，再部署受影响路径或整个项目
-- 新建组件元数据或页面元数据：初始 `version` 设为 `1`，首次上传时执行 `deploy`
-
-判断原则：
-
-- 是否需要 `deploy`，先看元数据文件是否变更，不要只因为“刚改过代码”就默认部署
-- 是否需要递增 `version`，也先看对应元数据文件是否变更，不要因为构建、调试或纯代码改动而递增
-- 若只是组件代码改动，优先 `npm run build`；需要联调时继续 `kd debug`
-
-遇到跨应用调试时，优先检查 `.kd/config.json` 里的 `app` 编码是否需要手工切换。
-
-补充：环境未认证时 `kd project deploy` 会直接阻止部署；调试前若需要切换环境，先 `kd env set target-env <env>`，再直接执行 `kd debug`。更多实测细节见 `references/validation-notes.md`。
+补充：环境未认证时 `kd project deploy` 会直接阻止部署。
 
 ## 端到端执行原则
 
@@ -417,26 +401,34 @@ KWC 的核心交付对象是：
 - 是否真的需要 `deploy`
 - 若需要部署，是否因为元数据变更而必须递增 `version`
 
-## 常见失误
+## 故障排查速查表
 
-优先排查这些问题：
+| 症状 | 可能原因 | 解决方案 |
+|------|----------|----------|
+| `kd project deploy` 提示未认证 | 环境未执行 auth | `kd env auth openapi` |
+| 页面元数据上传失败 | version 未递增 | 递增 version 后重试 |
+| 页面显示空白 | control.type 与组件 name 不匹配 | 检查大小写完全一致 |
+| 组件属性不生效 | 属性未在 .js-meta.kwc 声明 | 添加 `<property>` 定义 |
+| name 校验失败 | 格式不符 | 字母开头，仅小写+数字+下划线，≤30字符 |
+| isv 不一致 | 页面与环境开发商不匹配 | deploy 会自动替换，无需手填 |
+| 在非 KWC 工程目录执行命令 | 缺少 .kd 目录 | 先执行 `kd project init` |
+| 创建了页面但组件不显示 | 未把组件写入 `<controls>` | 编辑 page-meta.kwp 添加 control |
+| `kd debug` 提示端口占用 | 3333 端口被占用 | 关闭占用进程或重启终端 |
 
-- 在非 KWC 工程目录里直接执行 `kd project create`
-- 创建了页面但没有把组件写入 `<controls>`
-- `type` 和真实组件名不一致
-- `app` 编码与目标应用不一致
-- 页面元数据重复上传但未递增 `version`
-- 只改了组件代码，却误以为必须立刻 `deploy`
-- 只创建了组件，却没有把组件写进页面元数据
-- 元数据已经变更，却只做了本地预览，没有继续 `deploy`
-- 未认证环境就直接执行 `deploy` 或 `debug`
+## 快速导航
+
+按常见场景快速定位参考文档：
+
+- **新工程初始化** → `cli-reference.md`（project init）+ 本文「初始化工程」章节
+- **添加组件** → `cli-reference.md`（project create）+ `component-metadata.md`
+- **创建页面** → `page-metadata.md` + 本文「创建页面元数据」章节
+- **环境配置与部署** → `env-setup.md` + `cli-reference.md`（deploy/debug）+ 本文「配置环境」「部署与调试」章节
 
 ## 参考资料
 
-在需要精确命令、参数说明、OpenAPI 字段说明和 page-meta 示例时，读取：
-
-- `references/cli-reference.md`
-- `references/component-metadata.md`
-- `references/env-setup.md`
-- `references/page-metadata.md`
-- `references/validation-notes.md`
+| 主题 | 参考文件 |
+|------|----------|
+| CLI 命令语法、参数、示例 | `references/cli-reference.md` |
+| 组件元数据字段与属性类型 | `references/component-metadata.md` |
+| 环境信息收集与认证流程 | `references/env-setup.md` |
+| 页面元数据字段、controls 规则、命名规范 | `references/page-metadata.md` |
