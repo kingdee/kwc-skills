@@ -1,11 +1,29 @@
 ---
 name: kwc-react-development
-description: KWC React 框架专用开发 Skill。仅当项目已确认使用 React 框架（通过 .kd/config.json 中的 framework=react 配置或 scaffold Skill 的框架识别结果）时才应加载本 Skill。本 Skill 提供 KWC React 项目的开发规范和组件使用指南（详见 rule.md）。
+description: 【脚手架后阶段 Skill】仅在 kwc-project-scaffold 完成工程初始化、且当前目录存在 .kd/config.json 并确认 framework=react 时才可使用。本 Skill 不负责工程创建、元数据生成、页面配置或部署，仅专注于 React 组件代码的实现与修改。若任务涉及 kd CLI、.page-meta.kwp、.js-meta.kwc、环境配置或部署，必须交由 kwc-project-scaffold 处理，禁止直接使用本 Skill。
 ---
 
 # KWC React 开发专家
 
 当项目确认使用 React 框架后，本 Skill 负责该框架下的代码编写规范与组件使用指导。
+
+## 重要：使用前置条件
+
+**必须同时满足以下条件才能使用本 Skill：**
+1. 当前目录已存在 `.kd/config.json` 文件
+2. 配置文件中 `framework` 字段值为 `react`
+3. 工程已通过 `kwc-project-scaffold` 完成初始化
+
+**以下场景禁止使用本 Skill，必须交由 `kwc-project-scaffold`：**
+- 工程初始化（`kd project init`）
+- 创建组件或页面（`kd project create`）
+- 生成或修改 `.js-meta.kwc` 组件元数据
+- 生成或修改 `.page-meta.kwp` 页面元数据
+- 环境配置（`kd env` 相关命令）
+- 部署操作（`kd project deploy`）
+- 调试操作（`kd debug`）
+
+若当前不满足上述前置条件，请立即停止并切换到 `kwc-project-scaffold` Skill。
 
 ## 核心职责
 你负责指导用户进行 KWC React 组件的开发、修改和维护。

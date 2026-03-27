@@ -1,6 +1,6 @@
 ---
 name: kwc-project-scaffold
-description: 使用 KWC CLI (kd) 将用户需求翻译成可交付的 KWC 工程、组件、页面元数据、环境配置、部署与调试结果。当 Agent 需要脚手架初始化或扩展 KWC 项目、拆分功能为 KWC 组件、创建或更新 *.page-meta.kwp、配置 kd env、部署元数据到目标环境，或引导从需求到 KWC 页面渲染的全流程时使用。
+description: 【KWC 工程唯一入口 Skill】负责 KWC 项目的脚手架初始化、组件/页面元数据生成、环境配置与部署。当用户请求涉及 KWC 工程创建、kd CLI 使用、.page-meta.kwp 或 .js-meta.kwc 元数据文件、环境部署时，必须优先使用本 Skill。本 Skill 是 KWC 工作流的总入口，框架开发 Skill（react/vue/lwc-development）仅在脚手架初始化完成后、且明确需要编写组件实现代码时才被激活。禁止在元数据操作、工程初始化、部署阶段直接使用框架开发 Skill。
 ---
 
 # KWC Project Scaffold
@@ -56,13 +56,30 @@ KWC 的核心交付对象是：
 
 将 `kwc-project-scaffold` 视为 KWC 工作流的总入口，但不要让它吞掉框架开发 Skill 的职责。
 
+### 硬性约束：代码实现必须移交框架 Skill
+
+**当任务进入"实现组件代码"阶段时，必须遵循以下强制规则：**
+
+1. **禁止直接编写代码**：本 Skill 严禁直接编写、修改任何组件实现代码（*.tsx / *.vue / *.js）
+2. **必须先加载框架 Skill**：在编写代码前，必须先调用并加载对应的框架开发 Skill（kwc-react-development / kwc-vue-development / kwc-lwc-development）
+3. **验证加载状态**：开始编码前必须确认框架 Skill 已激活，且其 rule.md 约束已生效
+4. **框架识别依据**：
+   - 新建工程：以 `kd project init` 时用户选择的 framework 为准
+   - 已有工程：以 `.kd/config.json` 中的 `framework` 字段为准
+   - 若无法识别 framework，必须停止并向用户确认，禁止猜测
+
+**违反以上约束的后果**：
+- 直接编写代码将导致不符合框架规范的输出（错误的导入路径、事件绑定方式等）
+- 元数据与代码实现可能不一致
+- 无法保证组件在目标环境中的正确渲染
+
 ### 协作边界表
 
 | 任务阶段 | 负责 Skill | 产出物 |
 |----------|------------|--------|
 | 工程初始化 | scaffold | .kd/config.json |
 | 创建组件目录 | scaffold | app/kwc/Component/ |
-| 编写组件代码 | react/vue/lwc-development | *.tsx / *.vue / *.js |
+| **编写组件代码** | **react/vue/lwc-development** | ***.tsx / *.vue / *.js** |
 | 补全组件元数据 | scaffold | *.js-meta.kwc |
 | 创建页面元数据 | scaffold | *.page-meta.kwp |
 | 环境配置与部署 | scaffold | 环境渲染结果 |
@@ -70,16 +87,25 @@ KWC 的核心交付对象是：
 ### 切换时机
 
 - 当任务仍处于需求拆分、脚手架命令、元数据、环境、`deploy`、`debug` 阶段时，继续由本 Skill 主导
-- 当 `kd project create` 完成后需写代码 → 切到框架 Skill
+- 当 `kd project create` 完成后需写代码 → **必须切到框架 Skill，禁止本 Skill 直接编写**
 - 当代码写完需补元数据或部署 → 回到 scaffold
+
+### 框架 Skill 激活检查清单
+
+在进入代码实现阶段前，确认以下事项：
+
+- [ ] 已识别当前工程 framework（react/vue/lwc）
+- [ ] 已调用对应的框架开发 Skill（kwc-*-development）
+- [ ] 框架 Skill 的 rule.md 约束已加载并生效
+- [ ] 本 Skill 不再直接处理任何代码文件内容
 
 ### 推荐规则
 
 1. 若是新建工程，以 `kd project init` 交互中用户选择的 framework 作为后续推荐 Skill 依据
 2. 若是已有工程，以 `.kd/config.json` 中的 `framework` 作为推荐 Skill 依据
-3. 当 `framework=react` 时，建议转入 `kwc-react-development`
-4. 当 `framework=vue` 时，建议转入 `kwc-vue-development`
-5. 当 `framework=lwc` 时，建议转入 `kwc-lwc-development`
+3. 当 `framework=react` 时，**必须**转入 `kwc-react-development`
+4. 当 `framework=vue` 时，**必须**转入 `kwc-vue-development`
+5. 当 `framework=lwc` 时，**必须**转入 `kwc-lwc-development`
 6. 若还无法判断 framework，先停下来向用户确认
 
 注意：不要同时加载三个框架开发 Skill；只根据当前工程的 framework 推荐一个。
@@ -218,14 +244,18 @@ KWC 的核心交付对象是：
 
 1. 运行 `kd project create <ComponentName> --type kwc`。
 2. 使用 `PascalCase` 组件名。
-3. 让 CLI 生成目录和基础文件，再在生成结果上修改代码。
-4. 立刻检查生成出来的 `.js-meta.kwc`，补齐可部署所需字段和属性定义。
-5. 若用户同时要创建多个组件，逐个执行创建命令，不要手工复制推断目录结构。
+3. 让 CLI 生成目录和基础文件。
+4. **立刻检查生成出来的 `.js-meta.kwc`，补齐可部署所需字段和属性定义**（这是本 Skill 的职责）。
+5. **组件代码实现移交**：确认 `.js-meta.kwc` 补齐后，必须停止本 Skill 的代码编写，转而加载对应的框架开发 Skill（kwc-react-development / kwc-vue-development / kwc-lwc-development）来编写组件实现代码。
+6. 若用户同时要创建多个组件，逐个执行创建命令，不要手工复制推断目录结构。
 
 若用户只提供了页面结构想法，没有组件名，先根据语义生成稳定、可复用的组件名，再创建。
 若用户给的是完整业务诉求，而不是组件清单，先主动拆分组件职责，再批量创建。
 
-补充：组件生成在 `app/kwc/<ComponentName>/` 下；脚手架生成的 `.js-meta.kwc` 只是模板，需按上述规则补齐。
+补充：
+- 组件生成在 `app/kwc/<ComponentName>/` 下
+- 脚手架生成的 `.js-meta.kwc` 只是模板，需按上述规则补齐
+- **严禁在本 Skill 中直接修改组件代码文件（*.tsx / *.vue / *.js），代码实现必须交由框架 Skill**
 
 ## 创建页面元数据
 
@@ -258,19 +288,25 @@ KWC 的核心交付对象是：
 
 1. 若无工程，执行 `kd project init`
 2. 对每个“会出现在页面里的组件”执行 `kd project create <ComponentName> --type kwc`
-3. 确认当前工程 framework；若后续进入代码实现，建议切换到对应框架开发 Skill
-4. 实现组件代码
-5. 补全组件 `.js-meta.kwc`
-6. 执行 `kd project create <page-name> --type page`
+3. **补全组件 `.js-meta.kwc`**（本 Skill 职责）
+4. **移交代码实现**：确认当前工程 framework，**必须**加载并切换到对应框架开发 Skill（kwc-react-development / kwc-vue-development / kwc-lwc-development）
+5. **框架 Skill 实现组件代码**（*.tsx / *.vue / *.js）
+6. 代码实现完成后，回到本 Skill：执行 `kd project create <page-name> --type page`
 7. 补全页面 `app/pages/<page-name>.page-meta.kwp`
 8. 确认或创建目标环境，完成认证
 9. 若元数据有变更，执行 `kd project deploy`
 10. 需要联调时执行 `kd debug`
 
+**关键原则**：
+- 步骤 3（元数据补全）必须由本 Skill 完成
+- 步骤 4-5（代码实现）**必须**由框架 Skill 完成，本 Skill 严禁直接编写代码
+- 步骤 6 起（页面创建及后续）回到本 Skill 主导
+
 如果是修改已有页面：
 
 1. 先识别是改组件实现、改组件元数据、改页面元数据，还是三者都改
-2. 参考“是否需要 deploy 决策”决定后续操作
+2. **若涉及组件代码修改**：必须加载对应框架 Skill，禁止本 Skill 直接修改代码
+3. 参考“是否需要 deploy 决策”决定后续操作
 
 ## 配置环境
 
