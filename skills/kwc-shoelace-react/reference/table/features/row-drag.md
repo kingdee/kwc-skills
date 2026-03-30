@@ -24,13 +24,8 @@ export default () => {
     { dataIndex: 'position', title: '岗位' }
   ];
 
-  const handleRowReorder = (e) => {
-    const { fromIndex, toIndex, newRows, rows } = e.detail;
-    console.log('fromIndex', fromIndex);
-    console.log('toIndex', toIndex);
-    console.log('newRows', newRows);
-    console.log('rows', rows);
-    setDataSource(newRows);
+  const handleRowReorder = (detail) => {
+    console.log(detail)
   };
 
   return (
