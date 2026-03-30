@@ -130,6 +130,8 @@ export default () => (
 | `fixed` | 固定列位置 | `false \| 'left' \| 'right'` | `false` |
 | `ellipsis` | 是否省略超长文本 | `boolean` | `false` |
 | `slot` | 是否启用 slot 自定义渲染 | `boolean` | `false` |
+| `headExtralSlot` | 是否启用表头插槽 | `boolean` | `false` |
+| `colSpan` | 表头列合并属性 | `number` | - |
 | `defaultSortOrder` | 默认排序状态 | `'asc' \| 'desc'` | - |
 | `sorter` | 排序函数（服务端可设为 `() => null`） | `(a, b) => number` | - |
 | `sortOrder` | 受控排序状态 | `'asc' \| 'desc'` | - |
@@ -233,6 +235,9 @@ export default () => (
 | `table-body` | 表体区域 |
 | `table-body-row` | 表体行容器 |
 | `table-body-cell` | 表体单元格容器 |
+| `table-foot` | 表尾区域 |
+| `table-foot-row` | 表尾行容器 |
+| `table-foot-cell` | 表尾单元格容器 |
 
 ### CSS 设计变量
 
