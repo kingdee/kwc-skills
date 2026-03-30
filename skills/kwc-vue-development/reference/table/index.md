@@ -143,7 +143,7 @@ const dataSource = [
 | `fixed` | 固定列位置 | `false \| 'left' \| 'right'` | `false` |
 | `ellipsis` | 是否省略超长文本 | `boolean` | `false` |
 | `slot` | 是否启用 slot 自定义渲染 | `boolean` | `false` |
-| `headExtralSlot` | 是否启用表头插槽 | `boolean` | `false` |
+| `headExtraSlot` | 是否启用表头插槽 | `boolean` | `false` |
 | `colSpan` | 表头列合并属性 | `number` | - |
 | `defaultSortOrder` | 默认排序状态 | `'asc' \| 'desc'` | - |
 | `sorter` | 排序函数（服务端可设为 `() => null`） | `(a, b) => number` | - |
