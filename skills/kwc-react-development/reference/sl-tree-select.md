@@ -1156,10 +1156,10 @@ export default () => {
 
 ## 动态更新数据
 
-通过 `ref` 动态更新 `treeData` 和 `value` 属性。
+通过 `useState` 管理 `treeData` 和 `value`，状态变化时 React 重渲染并将新值传给组件。
 
 ```jsx
-import React, { useRef } from 'react';
+import React, { useState, useCallback } from 'react';
 import SlTreeSelect from '@kdcloudjs/shoelace/dist/react/tree-select/index.js';
 import SlButton from '@kdcloudjs/shoelace/dist/react/button/index.js';
 
@@ -1176,34 +1176,31 @@ const defaultData = [
 ];
 
 export default () => {
-  const ref = useRef(null);
+  const [treeData, setTreeData] = useState(defaultData);
+  const [value, setValue] = useState('');
 
-  const handleSetValue = () => {
-    if (ref.current) ref.current.value = 'frontend';
-  };
+  const handleSetValue = useCallback(() => {
+    setValue('frontend');
+  }, []);
 
-  const handleUpdateData = () => {
-    if (ref.current) {
-      ref.current.treeData = [
-        {
-          title: '新部门A',
-          value: 'new-a',
-          children: [
-            { title: '子部门1', value: 'new-a-1' },
-            { title: '子部门2', value: 'new-a-2' }
-          ]
-        },
-        { title: '新部门B', value: 'new-b' }
-      ];
-    }
-  };
+  const handleUpdateData = useCallback(() => {
+    setTreeData([
+      {
+        title: '新部门A',
+        value: 'new-a',
+        children: [
+          { title: '子部门1', value: 'new-a-1' },
+          { title: '子部门2', value: 'new-a-2' }
+        ]
+      },
+      { title: '新部门B', value: 'new-b' }
+    ]);
+  }, []);
 
-  const handleReset = () => {
-    if (ref.current) {
-      ref.current.treeData = defaultData;
-      ref.current.value = '';
-    }
-  };
+  const handleReset = useCallback(() => {
+    setTreeData(defaultData);
+    setValue('');
+  }, []);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -1218,7 +1215,7 @@ export default () => {
           重置
         </SlButton>
       </div>
-      <SlTreeSelect ref={ref} treeData={defaultData} placeholder="请选择" clearable style={{ width: '300px' }} />
+      <SlTreeSelect treeData={treeData} value={value} placeholder="请选择" clearable style={{ width: '300px' }} />
     </div>
   );
 };
@@ -1382,7 +1379,7 @@ export default () => {
 | sl-search     | `onSlSearch`    | 搜索值变化时触发           | `{ value: string }`                   |
 | sl-lazy-load  | `onSlLazyLoad`  | 懒加载节点展开时触发       | `{ value: string, item: SlTreeItem }` |
 
-## Methods
+## CSS Custom Properties
 
 | 方法名              | 描述                               | 参数                                                  | 返回值                    |
 | ------------------- | ---------------------------------- | ----------------------------------------------------- | ------------------------- |
