@@ -34,12 +34,8 @@ const dataSource = ref([
   { id: '3', name: 'Carol White', position: 'UX' }
 ]);
 
-const handleRowReorder = (event) => {
-  const { fromIndex, newRows, rows, toIndex } = event.detail;
-  console.log('fromIndex', fromIndex);
-  console.log('newRows', newRows);
-  console.log('rows', rows);
-  console.log('toIndex', toIndex);
+const handleRowReorder = (detail) => {
+  console.log(detail);
 };
 </script>
 ```
