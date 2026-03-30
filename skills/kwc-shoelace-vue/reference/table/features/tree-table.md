@@ -4,7 +4,7 @@
 
 ## 功能说明
 
-表格支持树形数据的展示，当数据中有 children 字段时会自动展示为树形表格，如果需要使用其他字段可以用 tree.childrenRecordName 进行配置。另外可以通过设置 tree.indentSize 以控制每一层的缩进宽度。
+表格支持树形数据的展示，当数据中有 children 字段时会自动展示为树形表格，如果需要使用其他字段可以用 tree.childrenRecordName 进行配置。另外可以通过设置 tree.expandColumnKey 以控制树形表的展开列。
 
 ## 示例代码（Vue）
 
@@ -50,7 +50,7 @@ const dataSource = ref([
 
 const tree = {
   childrenRecordName: 'children',
-  indentSize: 16
+  expandColumnKey: 'seq'
 };
 </script>
 ```
