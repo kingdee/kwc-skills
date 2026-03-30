@@ -72,8 +72,17 @@
 - **导航 (Nav)**:
   - 文档：`./reference/sl-nav.md`
   - 涉及 `sl-nav`、`sl-nav-item`、`sl-nav-group`、`sl-nav-submenu` 时必须先阅读
+- **Markdown 渲染器 (XMarkdown)**:
+  - 文档：`./reference/sl-xmarkdown.md`
+  - 涉及 `sl-x-markdown` 时必须先阅读
 - **思考过程 (Think)**:
   - 文档：`./reference/sl-think.md`
+- **消息发送 (Sender)**:
+  - 文档：`./reference/sender/index.md` (**涉及 Sender 开发时必须读取**)
+  - 包含 `sl-sender`（主体）、`sl-sender-header`（可折叠头部）、`sl-sender-switch`（功能开关）三个子组件
+  - 需导入对应的 `.js` 定义文件，标签必须加 `kwc:external`
+  - **自定义插槽**：优先使用 `lit` 中的 `html` 模板字面量（`import { html } from 'lit'`）实现自定义插槽功能（如 `header`、`footer`、`suffixContent`、`prefixContent`），而非 DOM 操作或原生 slot 元素
+  - **自定义 footer**：必须使用函数式 `footer`（`sender.footer = (defaultFooter, { components }) => html\`...\``），并通过 `components` 解构使用 `SendButton`、`ClearButton`、`LoadingButton` 等内置按钮渲染器，禁止手动创建发送/清空/加载按钮
 
 ## 7. 常见排障
 1. **构建报错 `(!) Unresolved dependencies`**：例如提示 `sl/tabPanel` 无法解析。这是因为 HTML 中 Shoelace 组件缺少 `kwc:external` 属性，导致编译器将其误判为 LWC 组件。

@@ -115,8 +115,17 @@
 - **导航 (Nav)**:
   - 文档：`./reference/sl-nav.md`
   - 涉及 `sl-nav`、`sl-nav-item`、`sl-nav-group`、`sl-nav-submenu` 时必须先阅读
+- **Markdown 渲染器 (XMarkdown)**:
+  - 文档：`./reference/sl-xmarkdown.md`
+  - 涉及 `sl-x-markdown` 时必须先阅读
 - **思考过程 (Think)**:
   - 文档：`./reference/sl-think.md`
+- **消息发送 (Sender)**:
+  - 文档：`./reference/sender/index.md` (**涉及 Sender 开发时必须读取**)
+  - 包含 `sl-sender`（主体）、`sl-sender-header`（可折叠头部）、`sl-sender-switch`（功能开关）三个子组件
+  - 需导入对应的 `.js` 定义文件
+  - **自定义插槽**：优先使用 `lit` 中的 `html` 模板字面量（`import { html } from 'lit'`）实现自定义插槽功能（如 `header`、`footer`、`suffixContent`、`prefixContent`），而非 DOM 操作或原生 Vue 模板
+  - **自定义 footer**：必须使用函数式 `footer`（`sender.footer = (defaultFooter, { components }) => html\`...\``），并通过 `components` 解构使用 `SendButton`、`ClearButton`、`LoadingButton` 等内置按钮渲染器，禁止手动创建发送/清空/加载按钮
 
 ## 7. 开发工具与环境约束 (Tools & Environment)
 - **严禁运行 ESLint/Prettier 修复与校验**：**绝对禁止**运行任何形式的 lint fix 命令（无论是手动还是自动，如 `eslint --fix`）。同时，**不需要**关注或修复 ESLint 格式报错。KWC Vue 的特殊语法可能与通用规则冲突，强行修复会导致代码损坏。

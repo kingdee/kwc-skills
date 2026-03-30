@@ -1,1 +1,2 @@
-*.DS_Store          # 忽略Mac系统的隐藏文件
+# Ignore macOS Finder metadata files.
+.DS_Store

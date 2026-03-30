@@ -35,12 +35,8 @@ export default class TableRowDrag extends KingdeeElement {
     { id: '2', name: 'Bob Johnson', position: 'PM' },
     { id: '3', name: 'Carol White', position: 'UX' }
   ];
-  handleRowReorder(args) {
-    const { fromIndex, newRows, rows, toIndex } = args;
-    console.log('fromIndex', fromIndex);
-    console.log('newRows', newRows);
-    console.log('rows', rows);
-    console.log('toIndex', toIndex);
+  handleRowReorder(detail) {
+    console.log(detail);
   }
 }
 ```

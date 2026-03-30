@@ -29,6 +29,7 @@
 | RTL 方向 | 从右到左布局、RTL + 固定列 | [rtl.md](./features/rtl.md) |
 | 行/单元格属性 | slRow、slHeaderRow、slCell、slHeaderCell | [row-cell-props.md](./features/row-cell-props.md) |
 | 树形数据展示 | 展示树形数据 childrenRecordName indentSize| [tree-table.md](./features/tree-table.md) |
+| 表头分组 | columns children 多级表头、嵌套分组 | [header-group.md](./features/header-group.md) |
 
 ## 核心约束
 
@@ -122,12 +123,15 @@ export default () => (
 |------|------|------|--------|
 | `title` | 列标题（必填） | `string` | - |
 | `dataIndex` | 列字段名（必填且唯一） | `string` | - |
+| `children` | 表头合并时用于子列的设置 | `Column[]` | - |
 | `align` | 对齐方式 | `'left' \| 'right' \| 'center'` | `'left'` |
 | `className` | 列样式类名 | `string` | - |
 | `width` | 列宽 | `number` | - |
 | `fixed` | 固定列位置 | `false \| 'left' \| 'right'` | `false` |
 | `ellipsis` | 是否省略超长文本 | `boolean` | `false` |
 | `slot` | 是否启用 slot 自定义渲染 | `boolean` | `false` |
+| `headExtraSlot` | 是否启用表头插槽 | `boolean` | `false` |
+| `colSpan` | 表头列合并属性 | `number` | - |
 | `defaultSortOrder` | 默认排序状态 | `'asc' \| 'desc'` | - |
 | `sorter` | 排序函数（服务端可设为 `() => null`） | `(a, b) => number` | - |
 | `sortOrder` | 受控排序状态 | `'asc' \| 'desc'` | - |
@@ -218,6 +222,7 @@ export default () => (
 | `table-empty` | 空数据时显示的内容 |
 | `custom-cell-{dataIndex}-{rowKey}` | 自定义单元格内容 |
 | `custom-row-{rowKey}` | 展开行内容 |
+| `custon-head-extra-{columnID}` | 表头插槽 |
 
 ### CSS Parts
 
@@ -231,6 +236,9 @@ export default () => (
 | `table-body` | 表体区域 |
 | `table-body-row` | 表体行容器 |
 | `table-body-cell` | 表体单元格容器 |
+| `table-foot` | 表尾区域 |
+| `table-foot-row` | 表尾行容器 |
+| `table-foot-cell` | 表尾单元格容器 |
 
 ### CSS 设计变量
 
