@@ -88,6 +88,8 @@ description: 【脚手架后阶段 Skill】仅在 kwc-project-scaffold 完成工
   - XMarkdown: `reference/sl-xmarkdown.md`
   - Think: `reference/sl-think.md`
   - TreeSelect: `reference/sl-tree-select.md`
+  - FloatButton: `reference/sl-float-button.md`
+  - FloatButtonGroup: `reference/sl-float-button.md`
   - Sender: `reference/sender/index.md`
   - SenderHeader: `reference/sender/index.md`
   - SenderSwitch: `reference/sender/index.md`
