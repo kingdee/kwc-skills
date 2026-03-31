@@ -30,6 +30,7 @@
 | 行/单元格属性 | slRow、slHeaderRow、slCell、slHeaderCell | [row-cell-props.md](./features/row-cell-props.md) |
 | 树形数据展示 | 展示树形数据 childrenRecordName indentSize| [tree-table.md](./features/tree-table.md) |
 | 表头分组 | columns children 多级表头、嵌套分组 | [header-group.md](./features/header-group.md) |
+| 总结栏 | summary 页尾汇总行、自定义表尾内容 | [summary.md](./features/summary.md) |
 
 ## 核心约束
 
@@ -116,6 +117,7 @@ export default () => (
 | `slColumnResize` | 列宽调整回调 | `(size: Record<string, number>) => void` | - |
 | `rowDrag` | 是否开启行拖拽 | `boolean` | `false` |
 | `slRowReorder` | 行拖拽排序回调 | `(e: CustomEvent) => void` | - |
+| `summary` | 总结栏配置，用于在表格底部展示汇总行 | `SummaryObject[]` | - |
 
 ### Column 列配置
 
@@ -215,6 +217,13 @@ export default () => (
 | `childrenRecordName` | 树形表格 `dataSource` 中每行元素中表示子级数据的字段 | `string` | `children` |
 | `indentSize` | 	树形结构 `TableCell` 的缩进大小 | `number` | `16` |
 
+### SummaryObject 总结栏配置
+
+| 属性 | 说明 | 类型 | 默认值 |
+|------|------|------|--------|
+| `rowIndex` | 总结行的索引，用于标识该行在表尾中的位置 | `number` | - |
+| `cells` | 传递给每个单元格的属性（如 style、onclick 等），key 为列的 `dataIndex` | `Record<string, unknown>[]` | - |
+
 ### Slots（插槽）
 
 | Slot | 说明 |
@@ -222,6 +231,8 @@ export default () => (
 | `table-empty` | 空数据时显示的内容 |
 | `custom-cell-{dataIndex}-{rowKey}` | 自定义单元格内容 |
 | `custom-row-{rowKey}` | 展开行内容 |
+| `custom-tfoot-cell-{rowIndex}-{dataIndex}` | 总结栏单元格内容 |
+| `custom-tfoot` | 自定义页尾内容（summary 传空数组时渲染） |
 | `custon-head-extra-{columnID}` | 表头插槽 |
 
 ### CSS Parts

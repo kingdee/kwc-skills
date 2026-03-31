@@ -82,7 +82,12 @@ export default StrictTemplate;
 - **表格 (Table)**:
   - 文档：`./reference/table/index.md` (**涉及表格开发时必须读取**)
   - React 中需特别注意列配置 (`columns`) 和数据源 (`dataSource`) 的传递方式。
-  - 需导入 `@kdcloudjs/shoelace/dist/components/table/utils.js` 中的 `generateCustomSlot` 工具函数用于自定义单元格渲染。
+  - 使用自定义渲染时（如自定义单元格，自定义行展开等）需严格按照以下要求：
+    - 导入：`import { generateCustomSlot } from '@kdcloudjs/shoelace/dist/components/table/utils.js'`
+    - 调用：`generateCustomSlot(rowKeyField, dataSource, [{ type: 'customCell | customRow', columnId, callback }])`
+    - callback 类型：`(props: { slotName: string; rowInfo: any; cellInfo?: any; rowIndex?: number }) => any[]`
+    - 必须读完整文档：`./reference/table/features/custom-cell.md`
+    - 必须读完整案例：`./reference/table/example/editableCell/index.tsx`
 - **日期选择器 (DatePicker)**:
   - 文档：`./reference/datepicker/index.md`
   - 严禁使用 `<SlInput type="date">`，必须使用 `<SlDatepicker>`。
