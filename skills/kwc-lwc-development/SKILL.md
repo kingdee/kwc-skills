@@ -94,6 +94,7 @@ description: 【脚手架后阶段 Skill】仅在 kwc-project-scaffold 完成工
   - SenderSwitch: `reference/sender/index.md`
   - FloatButton: `reference/sl-float-button.md`
   - FloatButtonGroup: `reference/sl-float-button.md`
+  - Steps: `reference/sl-steps.md`
   - **使用前必须阅读相应文档**。
 
 ## 6. 输出检查清单
