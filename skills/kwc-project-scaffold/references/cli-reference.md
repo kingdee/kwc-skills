@@ -135,7 +135,7 @@ OpenAPI 认证时通常需要：
 - Client Secret
 - Username
 
-注意：这里的“数据中心”应由脚手架在认证过程中读取列表后供用户选择，不应和其他凭据一样让用户手动输入。
+注意：这里的"数据中心"应由脚手架在认证过程中读取列表后供用户选择，不应和其他凭据一样让用户手动输入。
 
 如果环境不存在，先向用户收集以下字段，再继续：
 
@@ -211,35 +211,41 @@ kd project deploy -d app/pages/my_page -e sit
 
 - 是否需要 `deploy`，先看元数据文件是否变更。
 - 是否需要递增 `version`，也先看对应元数据文件是否变更。
-- 只改组件代码，不要因为“刚改了东西”就盲目 `deploy`。
+- 只改组件代码，不要因为"刚改了东西"就盲目 `deploy`。
 
 ## 调试
 
 ```bash
-kd env set target-env sit
-kd debug
+kd debug                              # 交互选择表单
+kd debug -e sit                       # 指定环境
+kd debug -f kdtest_demo_page           # 直接指定表单（值为页面元数据中 <name> 节点的值）
+kd debug -f kdtest_demo_page -e sit    # 同时指定表单和环境
 ```
 
-调试默认约定：
+### 选项说明
 
-- 默认先确保 `target-env` 正确，再直接运行 `kd debug`
-- 不要默认输出带页面参数的 `kd debug` 命令，也不要要求用户先提供页面参数
-- AI 应结合当前任务、最近修改页面和 `app/pages/*.page-meta.kwp` 自行判断预览目标
+- `-e, --target-env <name>`：指定调试连接的后端环境
+- `-f, --formid <name>`：指定调试表单。**表单名称需要传入页面元数据内的 `<name>` 标识，不是表单文件名称**
+
+### 调试约定
+
+- AI 在执行调试时，应根据当前任务中已创建或已部署的页面元数据，自动使用 `-f <page_name>` 参数
+- `<page_name>` 的值是页面元数据 XML 中 `<name>` 节点的值（如 `kdtest_demo_page`），不是文件名
+- 若当前任务只涉及一个页面元数据，直接传入该 name 值
+- 若涉及多个页面元数据，让用户选择或按上下文判断
 - `kd debug` 会自动打开浏览器，后续在浏览器里继续定位并验证目标页面
 
-调试前确认：
+### 调试前确认
 
 - 已部署过组件或页面元数据
-- 当前默认环境正确，或已通过 `kd env set target-env <env>` 切换
+- 当前默认环境正确，或已通过 `-e <env>` 参数指定
 - `.kd/config.json` 中 `app` 编码与目标应用一致
 - 若 `.kd/config.json` 缺少 `isv/app`，静态路由不会挂载
 - `localhost:3333` 未被占用
 
-调试补充：
+### 注意事项
 
-- 在 `kd 0.0.9` 的本地验证里，显式使用 `-e/-f` 参数的 `kd debug` 曾出现环境解析异常。
-- 当前更稳妥的方式是先 `kd env set target-env <env>`，再直接运行 `kd debug`。
-- 调试启动后脚手架会自动打开浏览器，因此当前 Skill 不再把“指定页面参数”和“约束页面名称写法”作为默认操作。
+- 若需在不同 app 间切换调试，请手动修改 `.kd/config.json` 中的 `app` 编码
 
 按需深入读取：
 
