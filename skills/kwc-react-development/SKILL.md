@@ -71,12 +71,17 @@ description: 【脚手架后阶段 Skill】仅在 kwc-project-scaffold 完成工
   - XMarkdown: `reference/sl-xmarkdown.md`
   - Think: `reference/sl-think.md`
   - TreeSelect: `reference/sl-tree-select.md`
+  - Cascader: `reference/sl-cascader.md`
   - FloatButton: `reference/sl-float-button.md`
   - FloatButtonGroup: `reference/sl-float-button.md`
   - Sender: `reference/sender/index.md`
   - SenderHeader: `reference/sender/index.md`
   - SenderSwitch: `reference/sender/index.md`
   - Steps: `reference/sl-steps.md`
+  - Grid: `reference/sl-grid.md`
+  - Notification: `reference/sl-notification.md`
+  - RadioGroup: `reference/sl-radio-group.md`
+  - Space: `reference/sl-space.md`
   - **使用前必须阅读相应文档**。
 - **标准组件文档**：[https://shoelace.style/](https://shoelace.style/)
 

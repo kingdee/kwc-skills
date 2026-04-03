@@ -31,10 +31,17 @@ description: 通用 Vue 项目的组件开发专家。适用于不依赖 KWC 工
 - DatePicker: `reference/datepicker/index.md`
 - TimePicker: `reference/sl-timepicker.md`
 - Pagination: `reference/sl-pagination.md`
+- Daterangepicker: `reference/sl-daterangepicker.md`
+- ThoughtChain: `reference/sl-thought-chain.md`
 - Nav: `reference/sl-nav.md`
 - XMarkdown: `reference/sl-xmarkdown.md`
 - Think: `reference/sl-think.md`
+- TreeSelect: `reference/sl-tree-select.md`
+- Cascader: `reference/sl-cascader.md`
 - Steps: `reference/sl-steps.md`
+- Grid: `reference/sl-grid.md`
+- Notification: `reference/sl-notification.md`
+- RadioGroup: `reference/sl-radio-group.md`
 - Design Token: `reference/css-design-tokens.md`
 
 ## 5. 输出检查清单
