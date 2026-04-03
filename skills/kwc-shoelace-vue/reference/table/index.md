@@ -116,6 +116,7 @@ const dataSource = [
 | `loading` | 是否显示加载状态 | `boolean` | `false` |
 | `show-header` | 是否显示表头 | `boolean` | `true` |
 | `bordered` | 是否显示边框 | `boolean` | `false` |
+| `size` | 表格尺寸 | `'small' \| 'middle' \| 'default'` | `'default'` |
 | `direction` | 表格方向 | `'ltr' \| 'rtl'` | `'ltr'` |
 | `row-selection` | 行选择配置 | `RowSelection` | - |
 | `table-scroll` | 滚动配置 | `TableScroll` | - |

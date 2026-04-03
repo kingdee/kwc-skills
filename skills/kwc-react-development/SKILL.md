@@ -76,6 +76,7 @@ description: 【脚手架后阶段 Skill】仅在 kwc-project-scaffold 完成工
   - Sender: `reference/sender/index.md`
   - SenderHeader: `reference/sender/index.md`
   - SenderSwitch: `reference/sender/index.md`
+  - Steps: `reference/sl-steps.md`
   - **使用前必须阅读相应文档**。
 - **标准组件文档**：[https://shoelace.style/](https://shoelace.style/)
 

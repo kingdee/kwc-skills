@@ -34,6 +34,7 @@ description: 通用 Vue 项目的组件开发专家。适用于不依赖 KWC 工
 - Nav: `reference/sl-nav.md`
 - XMarkdown: `reference/sl-xmarkdown.md`
 - Think: `reference/sl-think.md`
+- Steps: `reference/sl-steps.md`
 - Design Token: `reference/css-design-tokens.md`
 
 ## 5. 输出检查清单
