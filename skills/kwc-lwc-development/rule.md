@@ -14,6 +14,7 @@
 - **属性绑定**：属性绑定禁止使用引号包裹表达式。
   - ❌ 禁止：`value="{val}"`
   - ✅ 必须：`value={val}`
+- **禁止属性缩写**：自定义属性名禁止缩写（如 `<sl-input disabled></sl-input>`），必须使用完整属性赋值（如 `<sl-input disabled={isTrue}></sl-input>`）。
 - **禁止 ID 选择器**：禁止在元素上定义 `id` 属性用于 CSS 或 JS 获取。必须使用 `class`，并通过 `this.template.querySelector('.class')` 获取。
 
 ## 3. Shoelace 组件集成规范
@@ -102,7 +103,7 @@
 ## 10. 强制自检清单
 - [ ] 继承自 `KingdeeElement` 而非 `LightningElement`
 - [ ] **所有Shoelace 组件**（`sl-*`）有 `kwc:external`，**所有KWC 内部组件**（`kwc-*`）没有 `kwc:external`
-- [ ] HTML 无 JS 表达式，无自闭合标签
+- [ ] HTML 无 JS 表达式，无自闭合标签，无属性缩写
 - [ ] Shoelace 事件 (`sl-change`) 在 JS 中绑定
 - [ ] 扩展组件（Table/DatePicker等）已参考本地 reference 文档
 - [ ] CSS 样式使用 Design Token，无硬编码 hex 色值或 px 间距/字号/圆角
