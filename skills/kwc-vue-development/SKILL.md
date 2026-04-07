@@ -21,7 +21,7 @@ description: 【脚手架后阶段 Skill】仅在 kwc-project-scaffold 完成工
 - 生成或修改 `.page-meta.kwp` 页面元数据
 - 环境配置（`kd env` 相关命令）
 - 部署操作（`kd project deploy`）
-- 调试操作（`kd debug`）
+- 调试操作（`kd debug`）— 调试由 kwc-project-scaffold 负责，须以后台模式运行（`is_background: true`），详见其调试约定
 
 若当前不满足上述前置条件，请立即停止并切换到 `kwc-project-scaffold` Skill。
 

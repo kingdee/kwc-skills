@@ -53,6 +53,19 @@ kd project create DemoComponent2 --type kwc
 - 先让 CLI 生成组件工程，再补充具体实现代码。
 - 生成后应继续检查并完善 `.js-meta.kwc`，不要把脚手架模板直接当成最终元数据。
 
+## 创建 Controller
+
+```bash
+kd project create myController --type controller
+kd project create myController --type controller -e dev  # 指定拉取 SDK 的目标环境
+```
+
+建议：
+
+- 使用 `PascalCase` 作为控制器名，建议以 `Controller` 后缀结尾。
+- Controller 工程生成在 `app/ks/controller/<ControllerName>/` 下。
+- 创建后应继续检查并完善 XML 配置文件，补齐 name、isv、app、version、url、scriptFile、methods 等必填字段。
+
 ## 创建页面
 
 ```bash
@@ -170,6 +183,46 @@ OpenAPI 认证时通常需要：
 - 在受限环境中执行 `kd env create` 后，务必再跑 `kd env list` 检查是否真正保存成功。
 - 删除环境后要重新确认默认环境是否被 CLI 自动切换。
 
+## 构建
+
+全量构建（前端 + Controller + 元数据）：
+
+```bash
+npm run build
+```
+
+仅构建前端组件：
+
+```bash
+npm run build:frontend
+npm run build:frontend -- ExampleComponent      # 构建指定组件
+npm run build:frontend -- ComponentA ComponentB  # 构建多个组件
+```
+
+仅构建 Controller：
+
+```bash
+npm run build:controller
+npm run build:controller -- --env=dev           # 指定目标环境
+npm run build:controller -- MyController        # 构建指定 Controller
+```
+
+也可以使用 kd CLI 构建：
+
+```bash
+kd project build --type frontend              # 构建前端资源
+kd project build --type controller            # 构建 Controller
+kd project build --type controller -e dev     # 构建 Controller 到指定环境
+kd project build myComponent --type frontend  # 构建指定组件
+```
+
+构建说明：
+
+- 前端构建输出到 `dist/kwc/`
+- Controller 构建输出到 `dist/controller/`
+- 元数据文件拷贝到 `dist/metadata/`
+- Controller 构建前会检查 `app/ks/controller/` 目录是否存在
+
 ## 部署
 
 部署整个项目：
@@ -206,6 +259,7 @@ kd project deploy -d app/pages/my_page -e sit
 | 改了页面元数据 `.page-meta.kwp` | 是，递增该页面元数据 `version` | 是 | 部署该页面元数据或整个项目 |
 | 同时改了组件元数据和页面元数据 | 是，分别递增 | 是 | 部署受影响路径或整个项目 |
 | 新建组件元数据或页面元数据 | 初始值设为 `1` | 是 | 首次上传 |
+| 修改 Controller 代码或 XML 配置 | 是，递增 Controller 元数据 version | 是 | `npm run build:controller` 然后 `kd project deploy` |
 
 判断提醒：
 
@@ -227,12 +281,44 @@ kd debug -f kdtest_demo_page -e sit    # 同时指定表单和环境
 - `-e, --target-env <name>`：指定调试连接的后端环境
 - `-f, --formid <name>`：指定调试表单。**表单名称需要传入页面元数据内的 `<name>` 标识，不是表单文件名称**
 
-### 调试约定
+### 表单名称与 ISV 前缀机制
 
-- AI 在执行调试时，应根据当前任务中已创建或已部署的页面元数据，自动使用 `-f <page_name>` 参数
-- `<page_name>` 的值是页面元数据 XML 中 `<name>` 节点的值（如 `kdtest_demo_page`），不是文件名
-- 若当前任务只涉及一个页面元数据，直接传入该 name 值
-- 若涉及多个页面元数据，让用户选择或按上下文判断
+理解 `kd debug -f` 参数时，需要明确表单名称在 deploy 前后的变化：
+
+1. **创建页面阶段**：你在 `.page-meta.kwp` 中填写的 `<name>` 可以是业务标识，如 `demo_page`
+2. **Deploy 阶段**：执行 `kd project deploy` 时，脚手架会：
+   - 自动从环境拉取 isv 标识（如 `kdtest`）
+   - 将 isv 前缀拼接到 name 上，形成 `kdtest_demo_page` 上传到远端
+   - **同时更新本地的 `.page-meta.kwp` 文件**，将 `<name>` 改为 `kdtest_demo_page`，并填入 `<isv>kdtest</isv>`
+3. **Debug 阶段**：`kd debug -f` 参数应传入**当前本地文件中 `<name>` 节点的实际值**
+   - 首次 deploy 前，本地 name 可能是 `demo_page`
+   - Deploy 后，本地 name 会自动变成 `kdtest_demo_page`
+   - 因此 debug 时应使用 deploy 后的完整名称
+
+示例流程：
+
+```bash
+# 1. 创建页面，此时 .page-meta.kwp 中 <name>demo_page</name>
+kd project create demo_page --type page
+
+# 2. 部署后，脚手架自动更新本地文件为 <name>kdtest_demo_page</name> 和 <isv>kdtest</isv>
+kd project deploy
+
+# 3. 调试时使用更新后的完整名称
+kd debug -f kdtest_demo_page
+```
+
+如果不确定当前的 name 值，可以直接打开 `.page-meta.kwp` 查看 `<name>` 节点。
+
+### 调试默认约定
+
+- 运行 `kd debug` 时**必须使用后台模式**（`is_background: true`），因为这是一个持续运行的开发服务器，不会自动结束
+- 若使用前台模式运行 `kd debug`，命令会在 90 秒后因超时被强制终止，导致本地服务被 kill
+- `kd debug` 启动后会先打开浏览器访问对应地址，但此时本地服务可能尚未完全启动，需等待服务启动完成后再刷新
+- 可以通过 `get_terminal_output` 查看 `kd debug` 的运行状态和输出
+- 默认先确保 `target-env` 正确，再直接运行 `kd debug`
+- 不要默认输出带页面参数的 `kd debug` 命令，也不要要求用户先提供页面参数
+- AI 应结合当前任务、最近修改页面和 `app/pages/*.page-meta.kwp` 自行判断预览目标
 - `kd debug` 会自动打开浏览器，后续在浏览器里继续定位并验证目标页面
 
 ### 调试前确认

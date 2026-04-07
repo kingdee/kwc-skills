@@ -114,15 +114,58 @@ export default StrictTemplate;
 - **严禁运行 ESLint/Prettier 修复与校验**：**绝对禁止**运行任何形式的 lint fix 命令（无论是手动还是自动，如 `eslint --fix`）。同时，**不需要**关注或修复 ESLint 格式报错。KWC React 的特殊语法可能与通用规则冲突，强行修复会导致代码损坏。
 - **严禁修改既有配置**：严禁修改 `.eslintrc`, `.prettierrc` 或 `package.json` 中的构建脚本。
 
-## 7. CSS 样式规范 — 必须使用 Design Token
+## 7. ⚠️ API 响应防御性校验约束（P0 高频问题）
+
+**背景**：KS 运行时在序列化后端响应时，**可能将 JavaScript 数组 `[]` 转换为空对象 `{}`**，导致前端代码调用 `.map()` 等数组方法时崩溃白屏。
+
+### 7.1 禁止对 adapterApi 响应直接使用 `as` 类型断言
+
+```typescript
+// ❌ 危险：直接强转，运行时数据类型可能与接口定义不符
+setData(responseData as MyResponse);
+
+// ✅ 安全：逐字段校验 + 容错
+const raw = responseData || {};
+setData({
+  title: raw.title ?? '',
+  summary: raw.summary ?? '',
+  items: Array.isArray(raw.items) ? raw.items : [],
+});
+```
+
+### 7.2 数组字段必须用 `Array.isArray()` 校验后再调用 `.map()`
+
+```tsx
+// ❌ 危险：如果 items 实际是 {}，直接崩溃
+{data.items.map((item) => <li key={item}>{item}</li>)}
+
+// ✅ 安全：先校验再渲染
+{Array.isArray(data.items) && data.items.map((item) => <li key={item}>{item}</li>)}
+```
+
+### 7.3 如后端返回 JSON 字符串化的数组，前端需安全 parse
+
+```typescript
+const items: string[] = (() => {
+  try {
+    const parsed = JSON.parse(raw.items);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+})();
+```
+
+## 8. CSS 样式规范 — 必须使用 Design Token
 - 编写 CSS 时，颜色、间距、字号、圆角等属性**必须**使用 Shoelace Design Token，**禁止**硬编码 hex 色值或 px 数值。
 - 完整的 Token 速查表（颜色/间距/字号/圆角映射、正反示例、例外情况）请参考：`./reference/css-design-tokens.md`
 - **编写 CSS 代码前必须阅读该文档。**
 
-## 8. 强制自检清单 (Checklist)
+## 9. 强制自检清单 (Checklist)
 1.  [ ] **导入路径**: 是否使用了 `dist/react/...` 路径？
 2.  [ ] **事件命名**: 是否使用了 `onSl*` 前缀（如 `onSlChange`）
 3.  [ ] **类型断言**: 是否正确处理了 `event.target` 的类型断言？
 4.  [ ] **Ref 使用**: 是否正确使用 `ref` 调用组件方法？
 5.  [ ] **扩展组件**: 是否参考了本地 reference 文档（如 Table, DatePicker）？
-6.  [ ] **工具约束**: 是否**未运行**任何 ESLint/Prettier 修复命令？
+6.  [ ] **API 响应校验**: 是否对 adapterApi 响应做了防御性校验？是否禁止了直接 `as` 强转？数组字段是否用 `Array.isArray()` 校验？
+7.  [ ] **工具约束**: 是否**未运行**任何 ESLint/Prettier 修复命令？

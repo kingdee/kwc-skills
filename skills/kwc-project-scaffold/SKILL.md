@@ -48,7 +48,7 @@ KWC 的核心交付对象是：
 2. 需要几个组件，各自承担什么职责
 3. 需要几个页面元数据文件，页面里如何组合这些组件
 4. 最终要部署到哪个环境
-5. 是否还需要进入 `kd debug` 做联调验证
+5. 是否还需要进入 `kd debug` 做联调验证（须后台模式运行，见下方调试约定）
 
 只有把这几项补齐，脚手架命令才有明确目标。
 
@@ -83,12 +83,17 @@ KWC 的核心交付对象是：
 | 补全组件元数据 | scaffold | *.js-meta.kwc |
 | 创建页面元数据 | scaffold | *.page-meta.kwp |
 | 环境配置与部署 | scaffold | 环境渲染结果 |
+| 创建 Controller 目录 | scaffold | app/ks/controller/ControllerName/ |
+| 构建 Controller | scaffold | dist/controller/ |
+| **编写 Controller 代码** | **kwc-ks-controller-development** | **XML 配置 + .ts 脚本** |
 
 ### 切换时机
 
 - 当任务仍处于需求拆分、脚手架命令、元数据、环境、`deploy`、`debug` 阶段时，继续由本 Skill 主导
 - 当 `kd project create` 完成后需写代码 → **必须切到框架 Skill，禁止本 Skill 直接编写**
 - 当代码写完需补元数据或部署 → 回到 scaffold
+- 当 Controller 目录已创建且需要编写脚本代码 → **必须切到 `kwc-ks-controller-development`，禁止本 Skill 直接编写**
+- 当 Controller 脚本代码写完需构建或部署 → 回到 scaffold
 
 ### 框架 Skill 激活检查清单
 
@@ -107,6 +112,8 @@ KWC 的核心交付对象是：
 4. 当 `framework=vue` 时，**必须**转入 `kwc-vue-development`
 5. 当 `framework=lwc` 时，**必须**转入 `kwc-lwc-development`
 6. 若还无法判断 framework，先停下来向用户确认
+7. 当任务涉及 Controller/脚本控制器代码编写时，**必须**转入 `kwc-ks-controller-development`
+8. Controller 代码实现与前端框架无关，不受 framework 字段影响
 
 注意：不要同时加载三个框架开发 Skill；只根据当前工程的 framework 推荐一个。
 
@@ -257,6 +264,22 @@ KWC 的核心交付对象是：
 - 脚手架生成的 `.js-meta.kwc` 只是模板，需按上述规则补齐
 - **严禁在本 Skill 中直接修改组件代码文件（*.tsx / *.vue / *.js），代码实现必须交由框架 Skill**
 
+## 创建 Controller
+
+在已有项目中新增 KingScript 脚本控制器时：
+
+1. 运行 `kd project create <ControllerName> --type controller`。
+2. 使用 `PascalCase` 控制器名，建议以 `Controller` 后缀结尾。
+3. 让 CLI 生成目录和基础文件。Controller 工程生成在 `app/ks/controller/<ControllerName>/` 下。
+4. 创建后检查生成的 XML 配置文件，补齐必填字段（name/isv/app/version/url/scriptFile/methods）。
+5. **Controller 代码实现移交**：确认 XML 配置补齐后，必须停止本 Skill 的代码编写，转而加载 `kwc-ks-controller-development` 来编写控制器脚本代码。
+6. 若需指定拉取 SDK 的目标环境，可使用 `-e` 选项：`kd project create <ControllerName> --type controller -e dev`。
+
+补充：
+- Controller 与前端组件（KWC）是独立的工程实体，可以在同一个项目中共存
+- 脚手架生成的 XML 配置只是模板，需按控制器开发指南补齐
+- **严禁在本 Skill 中直接修改 Controller 脚本代码（*.ts），代码实现必须交由 `kwc-ks-controller-development`**
+
 ## 创建页面元数据
 
 页面元数据是最终交付链路的核心。
@@ -295,7 +318,7 @@ KWC 的核心交付对象是：
 7. 补全页面 `app/pages/<page-name>.page-meta.kwp`
 8. 确认或创建目标环境，完成认证
 9. 若元数据有变更，执行 `kd project deploy`
-10. 需要联调时执行 `kd debug`
+10. 需要联调时执行 `kd debug`（须后台模式，见调试约定）
 
 **关键原则**：
 - 步骤 3（元数据补全）必须由本 Skill 完成
@@ -306,7 +329,17 @@ KWC 的核心交付对象是：
 
 1. 先识别是改组件实现、改组件元数据、改页面元数据，还是三者都改
 2. **若涉及组件代码修改**：必须加载对应框架 Skill，禁止本 Skill 直接修改代码
-3. 参考“是否需要 deploy 决策”决定后续操作
+3. 参考"是否需要 deploy 决策"决定后续操作
+
+如果是新增 Controller：
+
+1. 若无工程，执行 `kd project init`
+2. 执行 `kd project create <ControllerName> --type controller` 创建 Controller
+3. **补全 Controller XML 配置**（本 Skill 职责）
+4. **移交代码实现**：**必须**加载并切换到 `kwc-ks-controller-development`
+5. **controller-development Skill 编写脚本代码**（*.ts）
+6. 代码实现完成后，回到本 Skill：执行 `npm run build:controller` 构建
+7. 执行 `kd project deploy` 部署到目标环境
 
 ## 配置环境
 
@@ -383,6 +416,17 @@ KWC 的核心交付对象是：
 
 ## 部署与调试
 
+### Controller 构建
+
+Controller 脚本在部署前需要先构建：
+
+1. `npm run build:controller`：构建所有 Controller
+2. `npm run build:controller -- MyController`：构建指定 Controller
+3. `npm run build:controller -- --env=dev`：指定目标环境构建
+4. `kd project build --type controller`：使用 kd CLI 构建
+
+构建输出到 `dist/controller/` 目录。构建完成后通过 `kd project deploy` 部署到目标环境。
+
 ### 是否需要 deploy 决策
 
 ```
@@ -390,7 +434,8 @@ KWC 的核心交付对象是：
 ├── 只改 .tsx/.vue/.js/.html/.scss → 不需要 deploy，执行 npm run build
 ├── 改了 .js-meta.kwc → version + 1，然后 deploy
 ├── 改了 .page-meta.kwp → version + 1，然后 deploy
-└── 新建组件/页面 → version = 1，然后 deploy
+├── 新建组件/页面 → version = 1，然后 deploy
+└── 改了 Controller 代码或 XML 配置 → version + 1，npm run build:controller，然后 deploy
 ```
 
 ### 常用命令
@@ -398,15 +443,15 @@ KWC 的核心交付对象是：
 1. `kd project deploy`：部署整个项目到默认环境
 2. `kd project deploy -d app/kwc/MyComponent -e sit`：仅部署指定组件到 `sit`
 3. `kd project deploy -d app/pages/my_page -e sit`：仅部署指定页面元数据到 `sit`
-4. `kd debug`：进入调试，脚手架自动打开浏览器
+4. `kd debug`：进入调试，脚手架自动打开浏览器（**必须使用 `is_background: true` 运行**）
 
 ### 调试约定
 
-- AI 在执行调试时，应根据当前任务中已创建或已部署的页面元数据，自动使用 `-f <page_name>` 参数
-- `<page_name>` 的值是页面元数据 XML 中 `<name>` 节点的值（如 `kdtest_demo_page`），不是文件名
-- 若当前任务只涉及一个页面元数据，直接传入该 name 值
-- 若涉及多个页面元数据，让用户选择或按上下文判断
-- 若目标环境不是当前默认环境，使用 `-e <env-name>` 参数指定
+- 运行 `kd debug` 时**必须使用后台模式**（`is_background: true`），因为这是一个持续运行的开发服务器，不会自动结束
+- 若使用前台模式运行 `kd debug`，命令会在 90 秒后因超时被强制终止，导致本地服务被 kill
+- `kd debug` 启动后会先打开浏览器访问对应地址，但此时本地开发服务可能尚未完全启动，页面可能暂时无法访问。应等待服务启动完成后再刷新浏览器
+- 可以通过 `get_terminal_output` 查看 `kd debug` 的运行状态和输出
+- 若目标环境不是当前默认环境，先执行 `kd env set target-env <env-name>`
 - 不要手工拼调试 URL，由 AI 自行结合任务和页面元数据判断预览目标
 - 浏览器自动打开后继续定位目标页面
 
@@ -453,7 +498,14 @@ KWC 的核心交付对象是：
 | 在非 KWC 工程目录执行命令 | 缺少 .kd 目录 | 先执行 `kd project init` |
 | 创建了页面但组件不显示 | 未把组件写入 `<controls>` | 编辑 page-meta.kwp 添加 control |
 | `kd debug` 提示端口占用 | 3333 端口被占用 | 关闭占用进程或重启终端 |
-| `kd debug` 启动后无法找到目标表单 / 进入了错误的表单 | 未使用 `-f` 参数指定页面元数据 name，或传入了文件名而非元数据 name 值 | 使用 `kd debug -f <page_name>`，其中 `<page_name>` 为页面元数据中 `<name>` 节点的值 |
+| `kd debug` 启动后无法找到目标表单 / 进入了错误的表单 | 未使用 `-f` 参数指定页面元数据 name，或传入了文件名而非元数据 name 值 | 使用 `kd debug -f <page_name>`，其中 `<page_name>` 为**当前本地 `.page-meta.kwp` 文件中 `<name>` 节点的实际值**。注意：deploy 后脚手架会自动更新本地文件中的 name（拼接 isv 前缀），因此应使用 deploy 后的完整名称，如 `kdtest_demo_page` |
+
+### 表单名称与 ISV 前缀说明
+
+- **创建阶段**：`.page-meta.kwp` 中的 `<name>` 可填写业务标识，如 `demo_page`
+- **Deploy 阶段**：脚手架自动从环境拉取 isv（如 `kdtest`），拼接成 `kdtest_demo_page` 上传到远端，并**同步更新本地文件**
+- **Debug 阶段**：`kd debug -f` 应传入**当前本地文件中的 `<name>` 值**（即 deploy 后的完整名称）
+- 如果不确定，直接打开 `.page-meta.kwp` 查看 `<name>` 节点即可
 
 ## 快速导航
 
