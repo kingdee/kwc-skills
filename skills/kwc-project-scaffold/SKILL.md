@@ -1,39 +1,58 @@
 ---
 name: kwc-project-scaffold
-description: 【KWC 工程唯一入口 Skill】负责 KWC 项目的脚手架初始化、组件/页面元数据生成、环境配置与部署。当用户请求涉及 KWC 工程创建、kd CLI 使用、.page-meta.kwp 或 .js-meta.kwc 元数据文件、环境部署时，必须优先使用本 Skill。本 Skill 是 KWC 工作流的总入口，框架开发 Skill（react/vue/lwc-development）仅在脚手架初始化完成后、且明确需要编写组件实现代码时才被激活。禁止在元数据操作、工程初始化、部署阶段直接使用框架开发 Skill。
+description: 【KWC 工程唯一入口 Skill】负责 KWC 项目的脚手架初始化、组件/页面/Controller 元数据生成、环境配置与部署。当用户请求涉及 KWC 工程创建、kd CLI 使用、.page-meta.kwp / .js-meta.kwc / .kws 元数据文件、环境部署时，必须优先使用本 Skill。本 Skill 是 KWC 工作流的总入口，框架开发 Skill（react/vue/lwc-development）仅在脚手架初始化完成后、且明确需要编写组件实现代码时才被激活。禁止在元数据操作、工程初始化、部署阶段直接使用框架开发 Skill。
 ---
 
 # KWC Project Scaffold
 
 将本 Skill 作为 KWC 工程脚手架工作的入口。
-优先把用户需求归入以下几类：初始化项目、创建组件、创建页面元数据、配置环境、部署、查看环境效果、调试。
+优先把用户需求归入以下几类：初始化项目、创建组件、创建 Controller、创建页面元数据、配置环境、部署、查看环境效果、调试。
 
 ## 正确认知交付对象
 
 不要把 KWC 工作流理解成“本地把一个组件渲染出来”。
 KWC 的核心交付对象是：
 
-1. 组件工程本身
+1. 组件工程本身（前端代码 + 组件元数据 `.js-meta.kwc`）
 2. 页面元数据 `*.page-meta.kwp`
-3. 目标环境配置与认证
-4. 通过 `kd project deploy` 上传后的环境渲染结果
+3. KS Controller 元数据 `*.kws` 和脚本代码（当功能涉及后端数据交互时）
+4. 目标环境配置与认证
+5. 通过 `kd project deploy` 上传后的环境渲染结果
 
 页面最终展示依赖页面元数据中的 `<controls>` 和组件类型映射，而不是本地 `main.tsx` 是否挂载了某个组件。
-`main.tsx` 和 `npm run dev` 只用于本地辅助预览，不是最终交付路径。
+main.tsx` 和 `npm run dev` 只用于本地辅助预览，不是最终交付路径。
 
-## 元数据优先的开发模型
+KWC 不仅是前端开发框架。当页面需要读取或操作业务数据时，KS Controller 提供后端 REST API 能力，通过 KingScript 脚本访问苍穹平台的数据查询、业务操作等服务。一个完整的业务功能通常包含前端组件（展示与交互）和后端 Controller（数据获取与业务逻辑）两部分。
 
-从用户开发角度看，一个 KWC 功能要拆成三层：
+Controller 也遵循"元数据 + 代码"的二元模型：
+- Controller 元数据（.kws）：定义路由 URL、HTTP 方法、权限策略等声明式配置
+- Controller 脚本代码（.ts）：实现具体的业务逻辑
 
-1. 组件代码：真正负责渲染和行为逻辑
-2. 组件元数据 `.js-meta.kwc`：声明“这个组件可以被页面如何引用、可以暴露哪些可配置属性”
-3. 页面元数据 `.page-meta.kwp`：声明“这个页面由哪些组件实例组成，并给每个实例传什么属性值”
+这与前端的"组件元数据 .kwc + 组件代码"模式完全对称。
+
+## 元数据驱动的全栈开发模型
+
+从用户开发角度看，一个完整的 KWC 功能最多涵盖以下层次：
+
+**前端（展示与交互）：**
+1. 组件代码（*.tsx / *.vue / *.js）：负责渲染和交互逻辑
+2. 组件元数据 `.js-meta.kwc`：声明"这个组件可以被页面如何引用、可以暴露哪些可配置属性"
+3. 页面元数据 `.page-meta.kwp`：声明"这个页面由哪些组件实例组成，并给每个实例传什么属性值"
+
+**后端（数据与业务逻辑）：**
+4. Controller 元数据 `.kws`：声明"这个 Controller 暴露哪些 API 端点、使用什么 HTTP 方法、需要什么权限"
+5. Controller 脚本代码（*.ts）：实现具体的数据查询、业务操作等后端逻辑
+
+前端和后端都遵循"元数据先行、代码实现跟进"的模式——先声明结构和契约，再填充实现。
 
 因此，面对需求时不要只问“要写几个组件”，还要继续判断：
 
 - 哪些参数是写死在组件代码里的
 - 哪些参数需要暴露给页面配置者，通过组件元数据定义为 `<property>`
 - 哪些组件实例会出现在页面元数据的 `<controls>` 中
+- 组件是否需要调用后端 API 获取数据或提交操作
+- 若需要，Controller 元数据（.kws）需要定义哪些 API 端点（URL、HTTP 方法、权限）
+- Controller 脚本需要调用哪些 SDK 能力（数据查询、业务操作等）
 
 默认原则：
 
@@ -46,9 +65,9 @@ KWC 的核心交付对象是：
 
 1. 是否需要新建工程，还是在已有工程里继续开发
 2. 需要几个组件，各自承担什么职责
-3. 需要几个页面元数据文件，页面里如何组合这些组件
-4. 最终要部署到哪个环境
-5. 部署后是查看环境效果（`kd open`）还是需要本地联调（`kd debug`）
+3. 组件是否需要后端数据支持？若需要，规划对应的 KS Controller 和 API 方法
+4. 需要几个页面元数据文件，页面里如何组合这些组件
+5. 最终要部署到哪个环境
 
 只有把这几项补齐，脚手架命令才有明确目标。
 
@@ -84,8 +103,9 @@ KWC 的核心交付对象是：
 | 创建页面元数据 | scaffold | *.page-meta.kwp |
 | 环境配置与部署 | scaffold | 环境渲染结果 |
 | 创建 Controller 目录 | scaffold | app/ks/controller/ControllerName/ |
+| 补全 Controller 元数据 | scaffold | *.kws（URL、方法、权限配置） |
 | 构建 Controller | scaffold | dist/controller/ |
-| **编写 Controller 代码** | **kwc-ks-controller-development** | **XML 配置 + .ts 脚本** |
+| **编写 Controller 脚本代码** | **kwc-ks-controller-development** | **.ts 脚本（业务逻辑实现）** |
 
 ### 切换时机
 
@@ -178,7 +198,7 @@ KWC 的核心交付对象是：
 
 - `version`：自然数；脚手架模板可能留空，Skill 需要补成有效值
 - `name`：通常与组件名保持一致，作为组件类型标识
-- `masterLabel`：组件在页面装配侧显示的名称
+- `masterLabel`：组件的中文名称（如「销售订单卡片」「采购申请列表」），作为组件在页面装配侧的显示标题
 - `isv`：开发商标识，开发阶段可留空，deploy 时自动从环境拉取写入
 - `app`：规则见“需要用户提供或确认的输入”一节
 - `framework`
@@ -207,6 +227,7 @@ KWC 的核心交付对象是：
 
 页面字段默认策略：
 
+- `masterLabel`：页面的中文名称（如「销售订单」「采购申请」「库存查询」），作为页面在导航和管理界面的显示标题
 - `template` 默认使用 `oneregion`
 - `isv` deploy 时自动写入，无需手填
 - `app` 规则见“需要用户提供或确认的输入”一节
@@ -271,13 +292,13 @@ KWC 的核心交付对象是：
 1. 运行 `kd project create <ControllerName> --type controller`。
 2. 使用 `PascalCase` 控制器名，建议以 `Controller` 后缀结尾。
 3. 让 CLI 生成目录和基础文件。Controller 工程生成在 `app/ks/controller/<ControllerName>/` 下。
-4. 创建后检查生成的 XML 配置文件，补齐必填字段（name/isv/app/version/url/scriptFile/methods）。
-5. **Controller 代码实现移交**：确认 XML 配置补齐后，必须停止本 Skill 的代码编写，转而加载 `kwc-ks-controller-development` 来编写控制器脚本代码。
+4. 创建后检查生成的 .kws 元数据文件，补齐必填字段（name/isv/app/version/url/scriptFile/methods）。
+5. **Controller 代码实现移交**：确认 .kws 元数据补齐后，必须停止本 Skill 的代码编写，转而加载 `kwc-ks-controller-development` 来编写控制器脚本代码。
 6. 若需指定拉取 SDK 的目标环境，可使用 `-e` 选项：`kd project create <ControllerName> --type controller -e dev`。
 
 补充：
 - Controller 与前端组件（KWC）是独立的工程实体，可以在同一个项目中共存
-- 脚手架生成的 XML 配置只是模板，需按控制器开发指南补齐
+- 脚手架生成的 .kws 元数据只是模板，需按控制器开发指南补齐
 - **严禁在本 Skill 中直接修改 Controller 脚本代码（*.ts），代码实现必须交由 `kwc-ks-controller-development`**
 
 ## 创建页面元数据
@@ -307,7 +328,42 @@ KWC 的核心交付对象是：
 
 ## 脚手架命令的推荐编排
 
-当用户要新增一个完整 KWC 页面功能时，优先按这条顺序执行：
+### 需求前后端评估
+
+面对完整业务需求时，先判断是否涉及后端：
+
+- 页面需要从后端获取数据（列表查询、详情查看、统计图表等）→ 需要 Controller
+- 页面需要向后端提交操作（保存、提交、审核等）→ 需要 Controller
+- 页面仅展示静态内容或本地计算 → 不需要 Controller
+- 不确定 → 询问用户"该功能是否需要与后端系统交互？"
+
+### 前后端统一编排
+
+当需求同时涉及前端组件和后端 Controller 时，按以下流程执行（元数据先于代码）：
+
+1. 若无工程，执行 `kd project init`
+2. 创建工程结构（本 Skill 职责）：
+   a. 对每个前端组件执行 `kd project create <ComponentName> --type kwc`
+   b. 对每个后端 Controller 执行 `kd project create <ControllerName> --type controller`
+3. 补全所有元数据（本 Skill 职责，元数据先行）：
+   a. 补全组件元数据 `.js-meta.kwc`
+   b. 补全 Controller 元数据 `.kws`（定义 URL、方法、权限配置）
+4. **移交前端代码实现**：加载框架开发 Skill 编写组件代码（*.tsx / *.vue / *.js）
+5. **移交后端代码实现**：加载 `kwc-ks-controller-development` 编写 Controller 脚本（*.ts）
+6. 回到本 Skill：创建页面元数据并补全 `<controls>`
+7. 构建 Controller：`npm run build:controller`
+8. 确认或创建目标环境，完成认证
+9. 执行 `kd project deploy`
+10. 部署成功后，调用 `form-link.mjs` 输出渲染卡片（见「部署完成标准输出」章节）
+
+**关键原则**：
+- 步骤 3（元数据补全）中，组件元数据 `.kwc` + Controller 元数据 `.kws` 都由本 Skill 完成
+- 步骤 4-5（代码实现）分别移交给对应的开发 Skill，本 Skill 严禁直接编写代码
+- 步骤 6 起回到本 Skill 主导
+
+### 仅前端编排
+
+若确认不涉及后端，仅前端开发时，优先按这条顺序执行：
 
 1. 若无工程，执行 `kd project init`
 2. 对每个“会出现在页面里的组件”执行 `kd project create <ComponentName> --type kwc`
@@ -332,11 +388,13 @@ KWC 的核心交付对象是：
 2. **若涉及组件代码修改**：必须加载对应框架 Skill，禁止本 Skill 直接修改代码
 3. 参考"是否需要 deploy 决策"决定后续操作
 
-如果是新增 Controller：
+### 仅后端 Controller 编排
+
+若确认仅涉及后端，不需要新增前端组件时：
 
 1. 若无工程，执行 `kd project init`
 2. 执行 `kd project create <ControllerName> --type controller` 创建 Controller
-3. **补全 Controller XML 配置**（本 Skill 职责）
+3. **补全 Controller 元数据 `.kws`**（本 Skill 职责）
 4. **移交代码实现**：**必须**加载并切换到 `kwc-ks-controller-development`
 5. **controller-development Skill 编写脚本代码**（*.ts）
 6. 代码实现完成后，回到本 Skill：执行 `npm run build:controller` 构建
@@ -438,7 +496,7 @@ Controller 脚本在部署前需要先构建：
 ├── 改了 .js-meta.kwc → version + 1，然后 deploy
 ├── 改了 .page-meta.kwp → version + 1，然后 deploy
 ├── 新建组件/页面 → version = 1，然后 deploy
-└── 改了 Controller 代码或 XML 配置 → version + 1，npm run build:controller，然后 deploy
+└── 改了 Controller 代码或 .kws 元数据 → version + 1，npm run build:controller，然后 deploy
 ```
 
 ### 常用命令
@@ -451,7 +509,9 @@ Controller 脚本在部署前需要先构建：
 
 ## 查看环境效果（kd open）
 
-部署后默认使用 `kd open` 查看环境上的表单效果：
+> 注意：部署后默认仅输出渲染卡片（见「部署完成标准输出」），不自动执行 kd open。仅当用户明确要求查看环境效果时才使用本命令。
+
+部署后使用 `kd open` 查看环境上的表单效果：
 
 - `kd open -e <env> -f <page_name>`：直接在浏览器中打开对应环境上已部署的表单页面
 - `-e` 指定目标环境（必填），`-f` 传入页面元数据 `<name>` 值（必填），取值规则与 `kd debug -f` 一致
@@ -478,10 +538,44 @@ Controller 脚本在部署前需要先构建：
 用户意图判断：
 ├── "看效果/打开页面/查看部署结果/看看环境上的表单" → kd open
 ├── "调试/联调/本地调试/实时预览修改" → kd debug
-└── 未明确表达 → 默认推荐 kd open
+└── 未明确表达 → 默认输出渲染卡片即结束，不自动执行 kd open 或 kd debug
 ```
 
 补充：环境未认证时 `kd project deploy` 会直接阻止部署。
+
+## 部署完成标准输出
+
+`kd project deploy` 成功后，**必须**立即调用 `form-link.mjs` 脚本生成渲染卡片并输出给用户，展示已部署页面的访问入口。
+
+### 调用命令
+
+```bash
+# 页面无关联实体时（纯展示页、配置页等）
+node "{form_link}" generate --pageMeta app/pages/<page-name>.page-meta.kwp [--env <envName>]
+
+# 页面关联了业务实体时（如销售订单、采购申请等）
+node "{form_link}" generate --pageMeta app/pages/<page-name>.page-meta.kwp --formNumber <entity-formNumber> [--env <envName>]
+```
+
+### metadata 字段判断规则
+
+- `metadata` 字段是**条件性**的，仅当页面关联了业务实体时才输出
+- `--formNumber` 传入的是**实体的 formNumber**（如 `sal_salorder`），不是页面元数据的 `<name>`
+- AI 需根据开发上下文判断当前页面是否关联了业务实体：
+  - 若开发过程中使用了元数据查询（`getEntityFields`）、Controller 配置了 `entityNumber`、或用户明确提供了表单编码 → 传入对应的 formNumber
+  - 若页面无关联实体（纯展示页、配置页、仪表盘等） → 不传 `--formNumber`，输出中不包含 `metadata` 字段
+
+### 执行顺序
+
+```
+deploy 成功 → 调用 form-link.mjs 输出渲染卡片（强制） → 询问菜单发布（可选）
+```
+
+### 强制约束
+
+- 部署成功后**必须**输出渲染卡片，不可省略或跳过
+- 脚本输出内容必须直接呈现给用户
+- 所有值从实际文件和环境中读取，禁止猜测
 
 ## 应用菜单管理
 
@@ -565,7 +659,10 @@ node "{menu_api}" queryTree --bizAppNumber {bizAppNumber}
 
 ### 与部署流程的集成
 
-`kd project deploy` 成功后，在展示部署结果的同时，询问用户：
+`kd project deploy` 成功后：
+
+1. **先输出渲染卡片**：调用 `form-link.mjs` 生成部署完成渲染卡片（见「部署完成标准输出」章节）
+2. **再引导菜单发布**：询问用户是否需要将页面发布到应用菜单
 
 > 部署成功。是否需要将页面发布到应用菜单？
 
@@ -649,15 +746,20 @@ node "{meta_query_api}" getEntityFields --formNumber {formNumber}
 
 1. 识别是新工程还是已有工程
 2. 收集不可推断的环境输入
-3. 拆分组件并创建组件工程
-4. 实现组件代码
-5. 创建并补全页面元数据
-6. 配置环境并确认认证状态
-7. 若元数据有变更，执行 `deploy`
-8. 部署后使用 `kd open` 查看环境效果
-9. 仅当用户明确要求时执行 `kd debug` 进行本地联调
+3. 评估需求是否涉及后端数据交互，若是则规划 Controller
+4. 拆分组件并创建组件工程；若需要 Controller，一并创建 Controller 工程
+5. 补全所有元数据：组件元数据 `.js-meta.kwc`、Controller 元数据 `.kws`（若有）
+6. 实现前端组件代码（移交框架 Skill）
+7. 若有 Controller，实现 Controller 脚本代码（移交 kwc-ks-controller-development）
+8. 创建并补全页面元数据
+9. 若有 Controller，执行 `npm run build:controller`
+10. 配置环境并确认认证状态
+11. 若元数据有变更，执行 `deploy`
+12. 部署成功后，调用 `form-link.mjs` 输出渲染卡片（见「部署完成标准输出」章节）
+13. 仅当用户明确要求查看效果时，执行 `kd open`
+14. 仅当用户明确要求本地联调时，执行 `kd debug`
 
-不要只完成其中的“创建组件”或“本地跑起来”，除非用户明确只要某个局部步骤。
+不要只完成其中的"创建组件"或"本地跑起来"，除非用户明确只要某个局部步骤。
 
 ## 输出要求
 
@@ -671,6 +773,7 @@ node "{meta_query_api}" getEntityFields --formNumber {formNumber}
 - 页面元数据将如何组合组件
 - 是否真的需要 `deploy`
 - 若需要部署，是否因为元数据变更而必须递增 `version`
+- 部署成功后是否已输出 `:::render:kdform` 渲染卡片（见「部署完成标准输出」章节）
 
 ## 故障排查速查表
 

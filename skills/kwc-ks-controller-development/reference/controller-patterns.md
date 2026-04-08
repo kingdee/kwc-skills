@@ -6,7 +6,7 @@
 
 一个最简单的单方法 Controller，用于获取单个资源。
 
-### 1.1 XML 配置
+### 1.1 .kws 元数据配置
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -68,7 +68,7 @@ Response (200):
 
 一个包含增删改查四个方法的完整 Controller。
 
-### 2.1 XML 配置
+### 2.1 .kws 元数据配置
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -394,7 +394,7 @@ export { kwcController };
 
 同时使用路径参数、查询参数、请求头、请求体的完整示例。
 
-### 5.1 XML 配置
+### 5.1 .kws 元数据配置
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>

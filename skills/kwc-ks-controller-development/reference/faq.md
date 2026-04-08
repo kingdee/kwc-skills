@@ -11,7 +11,7 @@
 **回答**：`source` 对应后端 Controller 的完整 URL 路径，**去掉 `/{isv}/{app}/` 前缀**，路径参数替换为实际值。
 
 ```
-Controller XML url:  /<isv>/<app>/sample/users
+Controller .kws url:  /<isv>/<app>/sample/users
 方法 url:            /{id}
 完整路径:            /<isv>/<app>/sample/users/{id}
 
@@ -37,7 +37,7 @@ source 值:           sample/users/123
 
 **解决步骤**：
 
-1. 打开 Controller 的 XML 配置文件
+1. 打开 Controller 的 .kws 元数据文件
 2. 找到 `<version>` 标签
 3. 将版本号加 1
 
@@ -97,7 +97,7 @@ export { kwcController };
 
 ## Q4: 权限配置中 entityNumber 和 permItemId 从何处获取？
 
-**问题**：XML 配置中 `<entityNumber>` 和 `<permItemId>` 的值从哪里来？
+**问题**：.kws 元数据配置中 `<entityNumber>` 和 `<permItemId>` 的值从哪里来？
 
 **回答**：这两个字段用于标准权限验证：
 
@@ -201,10 +201,10 @@ const userId = request.getLongPathVariable('id');       // → 12345
 
 3. **检查部署状态**
    - Controller 是否已执行 `npm run build:controller` + `kd project deploy`
-   - XML 中的 version 是否已递增
+   - .kws 元数据中的 version 是否已递增
 
 4. **检查 HTTP 方法**
-   - `doGet` / `doPost` 是否与 Controller XML 中的 `<httpMethod>` 一致
+   - `doGet` / `doPost` 是否与 Controller .kws 元数据中的 `<httpMethod>` 一致
 
 5. **检查 isv 和 app**
    - `endpointConfig.isv` 和 `endpointConfig.app` 是否与部署环境一致
@@ -213,12 +213,12 @@ const userId = request.getLongPathVariable('id');       // → 12345
 
 ## Q8: 修改 Controller 代码后如何生效？
 
-**问题**：修改了 Controller 的 XML 或 TypeScript 代码，但调用接口仍返回旧结果。
+**问题**：修改了 Controller 的 .kws 元数据或 TypeScript 代码，但调用接口仍返回旧结果。
 
 **回答**：每次修改 Controller 后，必须执行以下三个步骤：
 
 ```bash
-# 步骤 1: 递增 XML 中的 version
+# 步骤 1: 递增 .kws 元数据中的 version
 #   <version>1</version>  →  <version>2</version>
 
 # 步骤 2: 重新构建

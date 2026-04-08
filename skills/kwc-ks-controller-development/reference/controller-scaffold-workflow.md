@@ -20,7 +20,7 @@ my-kwc-project/
 │   └── ks/
 │       └── controller/       # Controller 目录
 │           └── UserController/
-│               ├── UserController.xml    # XML 配置文件
+│               ├── UserController.kws    # .kws 元数据文件
 │               └── UserController.ts     # 脚本文件
 ├── dist/
 │   ├── kwc/                  # 前端构建输出
@@ -34,7 +34,7 @@ my-kwc-project/
 
 | 文件 | 说明 | 示例 |
 |------|------|------|
-| XML 配置文件 | 定义路由、方法、权限 | `UserController.xml` |
+| .kws 元数据文件 | 定义路由、方法、权限 | `UserController.kws` |
 | TypeScript 脚本文件 | 实现业务逻辑 | `UserController.ts` |
 
 ## 2. 创建 Controller
@@ -68,7 +68,7 @@ kd project create OrderController --type controller -e dev
 ```
 app/ks/controller/
 └── UserController/
-    ├── UserController.xml    # 模板配置文件
+    ├── UserController.kws    # 模板元数据文件
     └── UserController.ts     # 模板脚本文件
 ```
 
@@ -104,10 +104,10 @@ kd project build --type controller -e dev   # 指定环境
 dist/
 └── controller/
     ├── UserController/
-    │   ├── UserController.xml
+    │   ├── UserController.kws
     │   └── UserController.js
     └── OrderController/
-        ├── OrderController.xml
+        ├── OrderController.kws
         └── OrderController.js
 ```
 
@@ -115,7 +115,7 @@ dist/
 
 构建命令会检查：
 - `app/ks/controller/` 目录是否存在
-- XML 配置文件是否有效
+- .kws 元数据文件是否有效
 - 脚本文件语法是否正确
 
 ## 4. 部署 Controller
@@ -138,7 +138,7 @@ kd project deploy -d dist/controller/UserController
 ### 4.2 部署时的自动处理
 
 部署时会自动：
-- 从环境拉取 isv 值并写入 XML 配置
+- 从环境拉取 isv 值并写入 .kws 元数据
 - 校验版本号（必须大于已部署版本）
 - 注册 Controller 路由
 
@@ -146,7 +146,7 @@ kd project deploy -d dist/controller/UserController
 
 - 已通过 `kd env auth` 完成环境认证
 - 已执行构建命令生成部署产物
-- XML 中的 version 大于服务端已有版本
+- .kws 元数据中的 version 大于服务端已有版本
 
 ## 5. 版本管理
 
@@ -185,7 +185,7 @@ kd project deploy -d dist/controller/UserController
 1. kd project create UserController --type controller
    └── 生成模板文件
    
-2. 编写 XML 配置
+2. 编写 .kws 元数据
    └── 定义 url、methods、permission
    
 3. 编写脚本代码
@@ -201,9 +201,9 @@ kd project deploy -d dist/controller/UserController
 ### 6.2 更新 Controller 流程
 
 ```
-1. 修改 XML 或脚本代码
+1. 修改 .kws 元数据或脚本代码
 
-2. 递增 XML 中的 version
+2. 递增 .kws 元数据中的 version
    └── <version>2</version>
    
 3. npm run build:controller
@@ -230,7 +230,7 @@ kd project deploy -d dist/controller/UserController
 
 ### 7.1 kwc-ks-controller-development 职责
 
-- ✅ 编写/修改 Controller XML 配置
+- ✅ 编写/修改 Controller 元数据 (.kws)
 - ✅ 编写/修改 Controller 脚本代码
 - ✅ 查阅 SDK 文档和索引
 
@@ -249,7 +249,7 @@ kwc-project-scaffold          kwc-ks-controller-development
        │  kd project create               │
        │────────────────────────────►     │
        │                                   │
-       │                          编写 XML 配置
+       │                          编写 .kws 元数据
        │                          编写脚本代码
        │                                   │
        │  返回构建部署                     │

@@ -1,11 +1,11 @@
 ---
 name: kwc-ks-controller-development
-description: 【KWC KS Controller 开发阶段 Skill】由 kwc-orchestrator 在 Controller 代码实现阶段调度，仅当 app/ks/controller/ 目录存在时激活。本 Skill 专注于 KingScript 脚本控制器的 XML 配置编写和 TypeScript/KingScript 代码实现，不负责工程创建、构建或部署（交由 kwc-project-scaffold），也不负责 UI/UX 设计（交由 kwc-design）。涉及 KingScript 语言规范和 SDK 使用时，引用 kingscript-code-generator 技能包。若任务涉及 kd CLI、构建、部署，必须通知 kwc-orchestrator 切换到 kwc-project-scaffold。
+description: 【KWC KS Controller 开发阶段 Skill】由 kwc-orchestrator 在 Controller 代码实现阶段调度，仅当 app/ks/controller/ 目录存在时激活。本 Skill 专注于 KingScript 脚本控制器的 .kws 元数据编写和 TypeScript/KingScript 代码实现，不负责工程创建、构建或部署（交由 kwc-project-scaffold），也不负责 UI/UX 设计（交由 kwc-design）。涉及 KingScript 语言规范和 SDK 使用时，引用 kingscript-code-generator 技能包。若任务涉及 kd CLI、构建、部署，必须通知 kwc-orchestrator 切换到 kwc-project-scaffold。
 ---
 
 # KWC KS Controller 开发专家
 
-当项目中需要开发 KingScript 脚本控制器（后端 REST API）时，本 Skill 负责控制器的 XML 配置编写和脚本代码实现。
+当项目中需要开发 KingScript 脚本控制器（后端 REST API）时，本 Skill 负责控制器的 .kws 元数据配置和脚本代码实现。
 
 ## 重要：使用前置条件
 
@@ -29,7 +29,7 @@ description: 【KWC KS Controller 开发阶段 Skill】由 kwc-orchestrator 在 
 ## 核心职责
 
 你负责指导用户进行 KingScript 脚本控制器的开发、修改和维护，包括：
-- 编写和修改 Controller XML 配置文件
+- 编写和修改 Controller 元数据文件 (.kws)
 - 编写和修改 Controller KingScript/TypeScript 脚本代码
 - 使用 KS SDK 进行数据查询和业务操作
 
@@ -42,7 +42,8 @@ description: 【KWC KS Controller 开发阶段 Skill】由 kwc-orchestrator 在 
 
 | 场景 | 引用路径 |
 |------|---------|
-| Controller XML 配置和请求/响应 API | `../kingscript-code-generator/references/docs/custom-development/脚本控制器开发指南.md` |
+| Controller .kws 元数据配置 | `./reference/kws-metadata-reference.md` |
+| Controller 脚本开发 API（请求处理/响应处理） | `../kingscript-code-generator/references/docs/custom-development/脚本控制器开发指南.md` |
 | KingScript 语言基础（变量、类、方法、模块、异常处理） | `../kingscript-code-generator/references/language/kingscript/README.md` |
 | SDK 类型查询 | `../kingscript-code-generator/references/sdk/indexes/class-index.md` |
 | SDK 方法查询 | `../kingscript-code-generator/references/sdk/indexes/method-index.md` |
@@ -56,7 +57,7 @@ description: 【KWC KS Controller 开发阶段 Skill】由 kwc-orchestrator 在 
 ## 标准工作流 (Workflow)
 
 1. **确认目录存在**：Controller 目录已由 scaffold 创建（`app/ks/controller/<Name>/`）
-2. **编写 XML 配置**：编写/修改 Controller XML 配置文件，定义 URL 路由、HTTP 方法和权限
+2. **编写 .kws 元数据**：编写/修改 Controller 元数据文件 (.kws)，定义 URL 路由、HTTP 方法和权限
 3. **编写脚本代码**：编写/修改 Controller TypeScript/KingScript 脚本代码，实现业务逻辑
 4. **查阅 SDK**：涉及 SDK 使用时，查阅 kingscript-code-generator 技能包的 SDK 索引和知识卡
 5. **交付构建**：完成后通知用户回到 scaffold 进行构建和部署
@@ -79,7 +80,7 @@ description: 【KWC KS Controller 开发阶段 Skill】由 kwc-orchestrator 在 
 ## 输出检查清单
 
 提交代码前，请自查：
-- [ ] XML 必填字段完整（name/isv/app/version/url/scriptFile/methods）
+- [ ] .kws 元数据必填字段完整（name/isv/app/version/url/scriptFile/methods）
 - [ ] URL 路径符合 `/{isv}/{app}/...` 规则（至少 3 级）
 - [ ] 每个 method 配置了 permission
 - [ ] 脚本文件正确导出了 `kwcController` 实例

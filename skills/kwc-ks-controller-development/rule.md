@@ -50,7 +50,9 @@ export { kwcController };
   }
   ```
 
-## 2. XML 配置约束
+## 2. Controller 元数据 (.kws) 约束
+
+> .kws 文件使用 XML 格式编写，但后缀为 `.kws`，是 KWC 生态中 Controller 的元数据文件格式（类似组件元数据 `.kwc`、页面元数据 `.kwp`）。
 
 ### 2.1 必填字段
 
@@ -374,7 +376,7 @@ try {
 
 1. [ ] **类导出**：是否正确导出了 `kwcController` 实例？
 2. [ ] **方法签名**：是否使用了 `(request: any, response: any)` 参数？
-3. [ ] **XML 必填**：name/isv/app/version/url/scriptFile/methods 是否完整？
+3. [ ] **.kws 元数据必填**：name/isv/app/version/url/scriptFile/methods 是否完整？
 4. [ ] **URL 路径**：是否至少 3 级路径？
 5. [ ] **权限配置**：每个 method 是否都有 permission？
 6. [ ] **参数获取**：是否使用了正确的类型方法（如 `getLongPathVariable`）？

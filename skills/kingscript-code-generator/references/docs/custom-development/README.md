@@ -12,7 +12,7 @@
 
 - `脚本控制器开发指南.md`
   - 面向 KWC（Kingdee Web Controller）脚本控制器开发
-  - 包含控制器 XML 配置、URL 规则、权限配置、请求处理 API、响应处理 API
+  - 包含控制器 .kws 元数据配置、URL 规则、权限配置、请求处理 API、响应处理 API
 
 ## 使用建议
 
