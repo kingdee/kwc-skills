@@ -99,6 +99,7 @@ description: 【脚手架后阶段 Skill】仅在 kwc-project-scaffold 完成工
   - Notification: `reference/sl-notification.md`
   - RadioGroup: `reference/sl-radio-group.md`
   - Space: `reference/sl-space.md`
+  - Upload: `reference/upload/index.md`
   - **使用前必须阅读相应文档**。
 - **标准组件文档**：[https://shoelace.style/](https://shoelace.style/)
 

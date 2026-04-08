@@ -99,6 +99,7 @@ description: 【脚手架后阶段 Skill】仅在 kwc-project-scaffold 完成工
   - Grid: `reference/sl-grid.md`
   - Notification: `reference/sl-notification.md`
   - RadioGroup: `reference/sl-radio-group.md`
+  - Upload: `reference/upload/index.md`
   - **使用前必须阅读相应文档**。
 
 ## 6. 输出检查清单

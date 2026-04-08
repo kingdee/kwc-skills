@@ -71,6 +71,8 @@ function handleSubmit() {
 - KWC 扩展组件必须先阅读本地文档，严禁猜测 API
 - `sl-table` 不支持 `sl-table-column`，必须使用 `columns` 属性定义列
 - 日期选择器必须使用 `sl-datepicker`，不要退回到原生日期输入控件
+- Upload 组件的对象/数组属性必须使用 `.prop` 修饰符（`:headers.prop`、`:fileList.prop`、`:beforeUpload.prop` 等）
+- Upload 组件涉及自定义渲染（`itemRender`、`iconRender`）时，需使用 `lit` 的 `html` 模板字面量返回 `TemplateResult`
 
 ## 7. 样式规范
 - 颜色、间距、字号、圆角优先使用 Shoelace Design Token
