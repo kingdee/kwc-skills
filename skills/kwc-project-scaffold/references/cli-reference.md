@@ -248,13 +248,14 @@ kd project deploy -d app/pages/my_page -e sit
 - 部署时脚手架会自动替换组件及页面元数据中的 `isv`。
 - 若未指定环境，则使用默认环境。
 - 若环境未认证，CLI 会直接阻止部署。
+- 从 0.0.13 版本开始，部署到开发环境时，deploy 会同时将前端构建产物（静态文件）上传到该环境。
 - 不要把 `deploy` 当成每次改代码后的必跑步骤；先看是否真的改了元数据文件。
 
 版本管理规则：
 
 | 变更类型 | 是否需要递增 `version` | 是否需要 `deploy` | 推荐动作 |
 | --- | --- | --- | --- |
-| 只改组件实现代码，未改任何元数据 | 否 | 否 | `npm run build`，需要联调时再 `kd debug` |
+| 只改组件实现代码，未改任何元数据 | 否 | 视需求 | 本地调试：`npm run build` + `kd debug`；查看环境效果：`npm run build` + `kd project deploy`（上传静态文件）+ `kd open` |
 | 改了组件元数据 `.js-meta.kwc` | 是，递增该组件元数据 `version` | 是 | 部署该组件或整个项目 |
 | 改了页面元数据 `.page-meta.kwp` | 是，递增该页面元数据 `version` | 是 | 部署该页面元数据或整个项目 |
 | 同时改了组件元数据和页面元数据 | 是，分别递增 | 是 | 部署受影响路径或整个项目 |
@@ -267,7 +268,40 @@ kd project deploy -d app/pages/my_page -e sit
 - 是否需要递增 `version`，也先看对应元数据文件是否变更。
 - 只改组件代码，不要因为"刚改了东西"就盲目 `deploy`。
 
+## 打开表单
+
+部署后直接在浏览器中打开环境上已部署的表单页面，无需 DNS 代理：
+
+```bash
+kd open -e dev -f kdtest_demo_page          # 打开 dev 环境的表单
+kd open -e sit -f kdtest_demo_page          # 打开 sit 环境的表单
+```
+
+### 选项说明
+
+- `-e, --target-env <name>`：**（必填）** 指定目标环境（如 `dev`, `sit`）
+- `-f, --formid <name>`：**（必填）** 指定表单。**值为页面元数据中 `<name>` 节点的值，不是表单文件名称**
+
+### 与 kd debug 的区别
+
+| 对比项 | `kd debug` | `kd open` |
+|--------|-----------|----------|
+| 运行方式 | 通过 DNS 代理，将本地开发服务器与环境连接 | 直接打开环境上已部署的页面，无 DNS 代理 |
+| 适用场景 | 本地开发调试，实时预览代码修改 | 部署后验证线上效果 |
+| 是否需要本地服务 | 是，需要本地 dev server 运行 | 否，直接访问远端环境 |
+| `-f` 参数 | 页面元数据中 `<name>` 标签的值 | 页面元数据中 `<name>` 标签的值 |
+
+### 使用前提
+
+- 已通过 `kd project deploy` 将元数据和前端静态文件部署到目标环境
+
+### 表单名称取值
+
+与 `kd debug` 一致，`-f` 传入当前本地 `.page-meta.kwp` 中 `<name>` 节点的实际值。deploy 后脚手架会自动更新本地文件中的 name（拼接 isv 前缀），因此应使用 deploy 后的完整名称。
+
 ## 调试
+
+> 仅当用户明确要求本地调试或联调时使用 `kd debug`。若只需查看环境上的部署效果，应使用 `kd open`。
 
 ```bash
 kd debug                              # 交互选择表单
@@ -310,14 +344,14 @@ kd debug -f kdtest_demo_page
 
 如果不确定当前的 name 值，可以直接打开 `.page-meta.kwp` 查看 `<name>` 节点。
 
-### 调试默认约定
+### 调试约定（按需触发）
 
+- 仅当用户明确要求本地调试或联调时才使用 `kd debug`；查看环境效果优先使用 `kd open`
 - 运行 `kd debug` 时**必须使用后台模式**（`is_background: true`），因为这是一个持续运行的开发服务器，不会自动结束
 - 若使用前台模式运行 `kd debug`，命令会在 90 秒后因超时被强制终止，导致本地服务被 kill
 - `kd debug` 启动后会先打开浏览器访问对应地址，但此时本地服务可能尚未完全启动，需等待服务启动完成后再刷新
 - 可以通过 `get_terminal_output` 查看 `kd debug` 的运行状态和输出
-- 默认先确保 `target-env` 正确，再直接运行 `kd debug`
-- 不要默认输出带页面参数的 `kd debug` 命令，也不要要求用户先提供页面参数
+- 先确保 `target-env` 正确，再运行 `kd debug`
 - AI 应结合当前任务、最近修改页面和 `app/pages/*.page-meta.kwp` 自行判断预览目标
 - `kd debug` 会自动打开浏览器，后续在浏览器里继续定位并验证目标页面
 
