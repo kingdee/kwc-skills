@@ -37,20 +37,21 @@ description: 【KWC KS Controller 开发阶段 Skill】由 kwc-orchestrator 在 
 
 ## KingScript 技能引用映射
 
-本 Skill 的 KingScript 语言和 SDK 知识来自 `kingscript-code-generator` 技能包。当需要查阅语言规范、SDK 类和方法时，应引用以下路径：
+本 Skill 的 KingScript 语言和 SDK 知识来自 `kingscript-code-generator
+` 技能包。当需要查阅语言规范、SDK 类和方法时，应引用以下路径：
 
 | 场景 | 引用路径 |
 |------|---------|
-| Controller XML 配置和请求/响应 API | `kingscript-code-generator/references/docs/custom-development/脚本控制器开发指南.md` |
-| KingScript 语言基础（变量、类、方法、模块、异常处理） | `kingscript-code-generator/references/language/kingscript/README.md` |
-| SDK 类型查询 | `kingscript-code-generator/references/sdk/indexes/class-index.md` |
-| SDK 方法查询 | `kingscript-code-generator/references/sdk/indexes/method-index.md` |
-| 按场景查找 SDK 用法 | `kingscript-code-generator/references/sdk/indexes/scenario-index.md` |
-| 数据对象操作（DynamicObject） | `kingscript-code-generator/references/sdk/classes/DynamicObject.md` |
-| 数据库查询（QueryServiceHelper） | `kingscript-code-generator/references/sdk/classes/QueryServiceHelper.md` |
-| 业务数据操作（BusinessDataServiceHelper） | `kingscript-code-generator/references/sdk/classes/BusinessDataServiceHelper.md` |
-| Java-KingScript 类型桥接 | `kingscript-code-generator/references/sdk/docs/java-kingscript-bridge.md` |
-| SDK 完整策略和降级链路 | `kingscript-code-generator/references/sdk/strategy.md` |
+| Controller XML 配置和请求/响应 API | `../kingscript-code-generator/references/docs/custom-development/脚本控制器开发指南.md` |
+| KingScript 语言基础（变量、类、方法、模块、异常处理） | `../kingscript-code-generator/references/language/kingscript/README.md` |
+| SDK 类型查询 | `../kingscript-code-generator/references/sdk/indexes/class-index.md` |
+| SDK 方法查询 | `../kingscript-code-generator/references/sdk/indexes/method-index.md` |
+| 按场景查找 SDK 用法 | `../kingscript-code-generator/references/sdk/indexes/scenario-index.md` |
+| 数据对象操作（DynamicObject） | `../kingscript-code-generator/references/sdk/classes/DynamicObject.md` |
+| 数据库查询（QueryServiceHelper） | `../kingscript-code-generator/references/sdk/classes/QueryServiceHelper.md` |
+| 业务数据操作（BusinessDataServiceHelper） | `../kingscript-code-generator/references/sdk/classes/BusinessDataServiceHelper.md` |
+| Java-KingScript 类型桥接 | `../kingscript-code-generator/references/sdk/docs/java-kingscript-bridge.md` |
+| SDK 完整策略和降级链路 | `../kingscript-code-generator/references/sdk/strategy.md` |
 
 ## 标准工作流 (Workflow)
 
@@ -73,7 +74,7 @@ description: 【KWC KS Controller 开发阶段 Skill】由 kwc-orchestrator 在 
 
 - **Controller 在 KWC 工程中的集成工作流**：`reference/controller-scaffold-workflow.md`
 - **Controller 常见模式和代码示例**：`reference/controller-patterns.md`
-- **脚本控制器开发完整指南**（位于 kingscript-code-generator 技能包）：`kingscript-code-generator/references/docs/custom-development/脚本控制器开发指南.md`
+- **脚本控制器开发完整指南**（位于 kingscript-code-generator 技能包）：`../kingscript-code-generator/references/docs/custom-development/脚本控制器开发指南.md`
 
 ## 输出检查清单
 

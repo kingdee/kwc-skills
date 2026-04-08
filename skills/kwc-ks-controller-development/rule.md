@@ -334,9 +334,9 @@ try {
 ### 8.1 调用前确认
 
 调用任何 SDK 类/方法前，**必须**先在 kingscript-code-generator 技能包的索引中确认其存在：
-- 类查询：`kingscript-code-generator/references/sdk/indexes/class-index.md`
-- 方法查询：`kingscript-code-generator/references/sdk/indexes/method-index.md`
-- 场景查询：`kingscript-code-generator/references/sdk/indexes/scenario-index.md`
+- 类查询：`../kingscript-code-generator/references/sdk/indexes/class-index.md`
+- 方法查询：`../kingscript-code-generator/references/sdk/indexes/method-index.md`
+- 场景查询：`../kingscript-code-generator/references/sdk/indexes/scenario-index.md`
 
 ### 8.2 类型注意事项
 

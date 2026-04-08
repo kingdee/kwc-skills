@@ -1,2 +1,23 @@
 # Ignore macOS Finder metadata files.
 .DS_Store
+
+# Qoder 运行时数据
+.qoder/
+
+# IDE & 编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 依赖
+node_modules/
+
+# kingscript-code-generator SDK 全量方法清单（体积较大，不默认提交）
+skills/kingscript-code-generator/references/sdk/manifests/methods.json
+skills/kingscript-code-generator/references/sdk/manifests/methods-*.json
+skills/kingscript-code-generator/references/sdk/manifests/*.json.gz
+
+# 日志与临时文件
+*.log
