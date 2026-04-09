@@ -10,6 +10,7 @@
 |------|------|----------|
 | 基础用法 | 日期选择、占位符、默认值、尺寸、清除等基础功能 | [basic-usage.md](./features/basic-usage.md) |
 | 日期时间模式 | datetime 模式选择日期和时间 | [datetime-mode.md](./features/datetime-mode.md) |
+| 日期格式化 | 通过 format 自定义日期显示格式（基于 dayjs） | [format.md](./features/format.md) |
 | 日期范围限制 | 通过 min/max 限制可选日期范围 | [date-range.md](./features/date-range.md) |
 | 表单集成 | 表单关联、必填校验 | [form-integration.md](./features/form-integration.md) |
 | 事件处理 | sl-change、sl-input 事件监听与处理 | [events.md](./features/events.md) |
@@ -97,6 +98,7 @@ export default () => {
 | `min` | 最小可选日期 | `string` | `'0001-01-01'` |
 | `max` | 最大可选日期 | `string` | `'9999-12-31'` |
 | `pattern` | 输入格式正则 | `string` | - |
+| `format` | 日期显示格式（dayjs） | `string` | `'YYYY-MM-DD'` / `'YYYY-MM-DD HH:mm:ss'` |
 | `hoist` | 弹出层提升到固定定位 | `boolean` | `false` |
 | `filled` | 填充样式 | `boolean` | `false` |
 | `pill` | 圆角药丸样式 | `boolean` | `false` |

@@ -6,7 +6,7 @@
 
 - **弹出面板**：点击输入框弹出时间滚动面板（时/分/秒三列），桌面端使用 Popup，移动端自动切换为 Drawer
 - **手动输入**：支持在输入框中直接键入时间值（格式 `HH:mm:ss`），输入合法时实时同步面板
-- **自定义格式**：通过 `format` 属性控制时间格式，默认 `HH:mm:ss`
+- **自定义格式**：通过 `format` 属性控制时间格式（基于 dayjs），默认 `HH:mm:ss`
 - **清除按钮**：默认启用清除按钮（`clearable` 默认为 `true`）
 - **键盘操作**：支持 `Enter` 确认选择、`Escape` 关闭面板
 - **表单集成**：实现标准表单控件接口，支持 `name`、`required`、`form` 等属性
@@ -43,6 +43,139 @@ import { KingdeeElement } from '@kdcloudjs/kwc';
 import '@kdcloudjs/shoelace/dist/components/timepicker/timepicker.js';
 
 export default class TimepickerInitialValue extends KingdeeElement {}
+```
+
+## 自定义格式（format）
+
+通过 `format` 属性自定义时间的显示格式。格式化底层基于 [dayjs](https://day.js.org/docs/en/display/format) 实现，支持 dayjs 的时间格式化符号。`format` 仅影响输入框的显示文本，`value` 始终保持与 `format` 一致的格式。
+
+### 支持的格式符号（dayjs）
+
+| 符号 | 说明 | 示例 |
+|------|------|------|
+| `HH` | 24 小时制小时（补零） | `08`、`23` |
+| `H` | 24 小时制小时（不补零） | `8`、`23` |
+| `hh` | 12 小时制小时（补零） | `02`、`11` |
+| `h` | 12 小时制小时（不补零） | `2`、`11` |
+| `mm` | 分钟（补零） | `05`、`59` |
+| `m` | 分钟（不补零） | `5`、`59` |
+| `ss` | 秒（补零） | `00`、`59` |
+| `s` | 秒（不补零） | `0`、`59` |
+| `A` | 上午/下午（大写） | `AM`、`PM` |
+| `a` | 上午/下午（小写） | `am`、`pm` |
+
+### 常用格式示例
+
+| 格式字符串 | 显示效果 | 说明 |
+|-----------|---------|------|
+| `HH:mm:ss` | `14:30:00` | 默认，24 小时制含秒 |
+| `HH:mm` | `14:30` | 24 小时制不含秒 |
+| `hh:mm:ss A` | `02:30:00 PM` | 12 小时制含秒 |
+| `hh:mm A` | `02:30 PM` | 12 小时制不含秒 |
+| `HH时mm分ss秒` | `14时30分00秒` | 中文格式 |
+| `HH时mm分` | `14时30分` | 中文格式不含秒 |
+
+### 仅显示时分（省略秒）
+
+设置 `format="HH:mm"` 后，时间面板将只显示时和分两列，隐藏秒列。
+
+```html
+<template>
+  <sl-timepicker kwc:external class="timepicker-el"
+    label="时分选择"
+    format="HH:mm"
+    placeholder="HH:mm"
+  ></sl-timepicker>
+</template>
+```
+```javascript
+import { KingdeeElement } from '@kdcloudjs/kwc';
+import '@kdcloudjs/shoelace/dist/components/timepicker/timepicker.js';
+
+export default class TimepickerHourMinute extends KingdeeElement {}
+```
+
+### 12 小时制
+
+设置 `format="hh:mm:ss A"` 后，时间面板将以 12 小时制显示，并附带 AM/PM 选择。
+
+```html
+<template>
+  <sl-timepicker kwc:external class="timepicker-el"
+    label="12 小时制"
+    format="hh:mm:ss A"
+    placeholder="hh:mm:ss AM/PM"
+  ></sl-timepicker>
+</template>
+```
+```javascript
+import { KingdeeElement } from '@kdcloudjs/kwc';
+import '@kdcloudjs/shoelace/dist/components/timepicker/timepicker.js';
+
+export default class TimepickerAmPm extends KingdeeElement {}
+```
+
+### 12 小时制仅时分
+
+```html
+<template>
+  <sl-timepicker kwc:external class="timepicker-el"
+    label="12 小时制（时分）"
+    format="hh:mm A"
+    placeholder="hh:mm AM/PM"
+  ></sl-timepicker>
+</template>
+```
+```javascript
+import { KingdeeElement } from '@kdcloudjs/kwc';
+import '@kdcloudjs/shoelace/dist/components/timepicker/timepicker.js';
+
+export default class TimepickerAmPmHourMinute extends KingdeeElement {}
+```
+
+### 中文格式
+
+```html
+<template>
+  <sl-timepicker kwc:external class="timepicker-el"
+    label="中文时间格式"
+    format="HH时mm分ss秒"
+    placeholder="请选择时间"
+  ></sl-timepicker>
+</template>
+```
+```javascript
+import { KingdeeElement } from '@kdcloudjs/kwc';
+import '@kdcloudjs/shoelace/dist/components/timepicker/timepicker.js';
+
+export default class TimepickerChineseFormat extends KingdeeElement {}
+```
+
+### 多种格式对比
+
+```html
+<template>
+  <div class="timepicker-group">
+    <sl-timepicker kwc:external class="tp-default" label="默认 (HH:mm:ss)" value="14:30:00"></sl-timepicker>
+    <sl-timepicker kwc:external class="tp-hm" label="时分 (HH:mm)" format="HH:mm" value="14:30:00"></sl-timepicker>
+    <sl-timepicker kwc:external class="tp-12h" label="12 小时制 (hh:mm A)" format="hh:mm A" value="14:30:00"></sl-timepicker>
+    <sl-timepicker kwc:external class="tp-cn" label="中文 (HH时mm分)" format="HH时mm分" value="14:30:00"></sl-timepicker>
+  </div>
+</template>
+```
+```css
+.timepicker-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sl-spacing-medium);
+  width: 230px;
+}
+```
+```javascript
+import { KingdeeElement } from '@kdcloudjs/kwc';
+import '@kdcloudjs/shoelace/dist/components/timepicker/timepicker.js';
+
+export default class TimepickerFormatComparison extends KingdeeElement {}
 ```
 
 ## 标签
@@ -794,7 +927,7 @@ export default class TimepickerSlot extends KingdeeElement {}
 | 属性          | 描述                                                         | 类型                              | 默认值       |
 | ------------- | ------------------------------------------------------------ | --------------------------------- | ------------ |
 | value         | 时间选择器的当前值，格式由 `format` 决定，默认 `HH:mm:ss`。 | `string`                          | `''`         |
-| format        | 时间格式字符串。                                             | `string`                          | `'HH:mm:ss'` |
+| format        | 时间格式字符串（基于 dayjs）。                               | `string`                          | `'HH:mm:ss'` |
 | name          | 表单名称，随表单数据以"名称/值"对的形式提交。                | `string`                          | `''`         |
 | placeholder   | 为空时的占位提示文本。                                       | `string`                          | `''`         |
 | label         | 标签文本。                                                   | `string`                          | `''`         |

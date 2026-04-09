@@ -36,6 +36,100 @@ export default () => (
 );
 ```
 
+## 自定义格式（format）
+
+通过 `format` 属性自定义时间的显示格式。格式化底层基于 [dayjs](https://day.js.org/docs/en/display/format) 实现，支持 dayjs 的时间格式化符号。`format` 仅影响输入框的显示文本，`value` 始终保持与 `format` 一致的格式。
+
+### 支持的格式符号（dayjs）
+
+| 符号 | 说明 | 示例 |
+|------|------|------|
+| `HH` | 24 小时制小时（补零） | `08`、`23` |
+| `H` | 24 小时制小时（不补零） | `8`、`23` |
+| `hh` | 12 小时制小时（补零） | `02`、`11` |
+| `h` | 12 小时制小时（不补零） | `2`、`11` |
+| `mm` | 分钟（补零） | `05`、`59` |
+| `m` | 分钟（不补零） | `5`、`59` |
+| `ss` | 秒（补零） | `00`、`59` |
+| `s` | 秒（不补零） | `0`、`59` |
+| `A` | 上午/下午（大写） | `AM`、`PM` |
+| `a` | 上午/下午（小写） | `am`、`pm` |
+
+### 常用格式示例
+
+| 格式字符串 | 显示效果 | 说明 |
+|-----------|---------|------|
+| `HH:mm:ss` | `14:30:00` | 默认，24 小时制含秒 |
+| `HH:mm` | `14:30` | 24 小时制不含秒 |
+| `hh:mm:ss A` | `02:30:00 PM` | 12 小时制含秒 |
+| `hh:mm A` | `02:30 PM` | 12 小时制不含秒 |
+| `HH时mm分ss秒` | `14时30分00秒` | 中文格式 |
+| `HH时mm分` | `14时30分` | 中文格式不含秒 |
+
+### 仅显示时分（省略秒）
+
+设置 `format="HH:mm"` 后，时间面板将只显示时和分两列，隐藏秒列。
+
+```jsx
+import React from "react";
+import SlTimepicker from '@kdcloudjs/shoelace/dist/react/timepicker/index.js';
+
+export default () => (
+  <SlTimepicker style={{ width: "230px" }} label="时分选择" format="HH:mm" placeholder="HH:mm" />
+);
+```
+
+### 12 小时制
+
+设置 `format="hh:mm:ss A"` 后，时间面板将以 12 小时制显示，并附带 AM/PM 选择。
+
+```jsx
+import React from "react";
+import SlTimepicker from '@kdcloudjs/shoelace/dist/react/timepicker/index.js';
+
+export default () => (
+  <SlTimepicker style={{ width: "230px" }} label="12 小时制" format="hh:mm:ss A" placeholder="hh:mm:ss AM/PM" />
+);
+```
+
+### 12 小时制仅时分
+
+```jsx
+import React from "react";
+import SlTimepicker from '@kdcloudjs/shoelace/dist/react/timepicker/index.js';
+
+export default () => (
+  <SlTimepicker style={{ width: "230px" }} label="12 小时制（时分）" format="hh:mm A" placeholder="hh:mm AM/PM" />
+);
+```
+
+### 中文格式
+
+```jsx
+import React from "react";
+import SlTimepicker from '@kdcloudjs/shoelace/dist/react/timepicker/index.js';
+
+export default () => (
+  <SlTimepicker style={{ width: "230px" }} label="中文时间格式" format="HH时mm分ss秒" placeholder="请选择时间" />
+);
+```
+
+### 多种格式对比
+
+```jsx
+import React from "react";
+import SlTimepicker from '@kdcloudjs/shoelace/dist/react/timepicker/index.js';
+
+export default () => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "16px", width: "230px" }}>
+    <SlTimepicker label="默认 (HH:mm:ss)" value="14:30:00" />
+    <SlTimepicker label="时分 (HH:mm)" format="HH:mm" value="14:30:00" />
+    <SlTimepicker label="12 小时制 (hh:mm A)" format="hh:mm A" value="14:30:00" />
+    <SlTimepicker label="中文 (HH时mm分)" format="HH时mm分" value="14:30:00" />
+  </div>
+);
+```
+
 ## 标签
 
 使用 `label` 属性为选择器提供标签。若标签内需包含 HTML，请改用 `label` 插槽。
@@ -431,7 +525,7 @@ export default () => (
 | 属性          | 描述                                                         | 类型                              | 默认值       |
 | ------------- | ------------------------------------------------------------ | --------------------------------- | ------------ |
 | value         | 时间选择器的当前值，格式由 `format` 决定，默认 `HH:mm:ss`。 | `string`                          | `''`         |
-| format        | 时间格式字符串。                                             | `string`                          | `'HH:mm:ss'` |
+| format        | 时间格式字符串（基于 dayjs）。                               | `string`                          | `'HH:mm:ss'` |
 | name          | 表单名称，随表单数据以"名称/值"对的形式提交。                | `string`                          | `''`         |
 | placeholder   | 为空时的占位提示文本。                                       | `string`                          | `''`         |
 | label         | 标签文本。                                                   | `string`                          | `''`         |

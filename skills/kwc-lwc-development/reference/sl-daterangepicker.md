@@ -190,6 +190,158 @@ import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
 export default class DaterangepickerDatetime extends KingdeeElement {}
 ```
 
+## 自定义格式（format）
+
+通过 `format` 属性自定义日期在输入框中的显示格式。格式化底层基于 [dayjs](https://day.js.org/docs/en/display/format) 实现，支持 dayjs 的所有格式化符号。`format` 仅影响输入框的显示文本，`value`（`[Date | null, Date | null]`）不受影响。
+
+### 支持的格式符号（dayjs）
+
+| 符号 | 说明 | 示例 |
+|------|------|------|
+| `YYYY` | 四位年份 | `2024` |
+| `YY` | 两位年份 | `24` |
+| `MM` | 两位月份（补零） | `01`、`12` |
+| `M` | 月份（不补零） | `1`、`12` |
+| `DD` | 两位日期（补零） | `05`、`31` |
+| `D` | 日期（不补零） | `5`、`31` |
+| `HH` | 24 小时制小时（补零） | `08`、`23` |
+| `hh` | 12 小时制小时（补零） | `02`、`11` |
+| `mm` | 分钟（补零） | `05`、`59` |
+| `ss` | 秒（补零） | `00`、`59` |
+| `A` | 上午/下午（大写） | `AM`、`PM` |
+
+### 常用格式示例
+
+| 格式字符串 | 显示效果 | 说明 |
+|-----------|---------|------|
+| `YYYY-MM-DD` | `2025-01-01` | 默认格式 |
+| `YYYY/MM/DD` | `2025/01/01` | 斜杠分隔 |
+| `DD.MM.YYYY` | `01.01.2025` | 欧洲风格 |
+| `MM-DD-YYYY` | `01-01-2025` | 美式风格 |
+| `YYYY年MM月DD日` | `2025年01月01日` | 中文格式 |
+| `YYYY-MM-DD HH:mm:ss` | `2025-01-01 08:00:00` | datetime 默认 |
+| `YYYY/MM/DD HH:mm` | `2025/01/01 08:00` | datetime 省略秒 |
+
+### 斜杠分隔格式
+
+```html
+<template>
+  <sl-daterangepicker kwc:external class="daterange-el"
+    label="斜杠格式"
+    format="YYYY/MM/DD"
+    style="width: 400px"
+  ></sl-daterangepicker>
+</template>
+```
+```javascript
+import { KingdeeElement } from '@kdcloudjs/kwc';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
+
+export default class DaterangepickerSlashFormat extends KingdeeElement {}
+```
+
+### 中文日期格式
+
+```html
+<template>
+  <sl-daterangepicker kwc:external class="daterange-el"
+    label="中文格式"
+    format="YYYY年MM月DD日"
+    style="width: 460px"
+  ></sl-daterangepicker>
+</template>
+```
+```javascript
+import { KingdeeElement } from '@kdcloudjs/kwc';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
+
+export default class DaterangepickerChineseFormat extends KingdeeElement {}
+```
+
+### 欧洲风格格式
+
+```html
+<template>
+  <sl-daterangepicker kwc:external class="daterange-el"
+    label="欧洲格式"
+    format="DD.MM.YYYY"
+    style="width: 400px"
+  ></sl-daterangepicker>
+</template>
+```
+```javascript
+import { KingdeeElement } from '@kdcloudjs/kwc';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
+
+export default class DaterangepickerEuropeanFormat extends KingdeeElement {}
+```
+
+### datetime 模式自定义格式
+
+在 `type="datetime"` 模式下，`format` 应包含时间部分。
+
+```html
+<template>
+  <sl-daterangepicker kwc:external class="daterange-el"
+    label="自定义 datetime 格式"
+    type="datetime"
+    format="YYYY/MM/DD HH:mm"
+    style="width: 500px"
+  ></sl-daterangepicker>
+</template>
+```
+```javascript
+import { KingdeeElement } from '@kdcloudjs/kwc';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
+
+export default class DaterangepickerDatetimeFormat extends KingdeeElement {}
+```
+
+### 多种格式对比
+
+```html
+<template>
+  <div class="daterange-group">
+    <sl-daterangepicker kwc:external class="dr-default"
+      label="默认 (YYYY-MM-DD)"
+      value="2025-01-01 ~ 2025-06-30"
+      style="width: 400px"
+    ></sl-daterangepicker>
+    <sl-daterangepicker kwc:external class="dr-slash"
+      label="斜杠 (YYYY/MM/DD)"
+      format="YYYY/MM/DD"
+      value="2025-01-01 ~ 2025-06-30"
+      style="width: 400px"
+    ></sl-daterangepicker>
+    <sl-daterangepicker kwc:external class="dr-cn"
+      label="中文 (YYYY年MM月DD日)"
+      format="YYYY年MM月DD日"
+      value="2025-01-01 ~ 2025-06-30"
+      style="width: 460px"
+    ></sl-daterangepicker>
+    <sl-daterangepicker kwc:external class="dr-eu"
+      label="欧洲 (DD.MM.YYYY)"
+      format="DD.MM.YYYY"
+      value="2025-01-01 ~ 2025-06-30"
+      style="width: 400px"
+    ></sl-daterangepicker>
+  </div>
+</template>
+```
+```css
+.daterange-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sl-spacing-medium);
+}
+```
+```javascript
+import { KingdeeElement } from '@kdcloudjs/kwc';
+import '@kdcloudjs/shoelace/dist/components/daterangepicker/daterangepicker.js';
+
+export default class DaterangepickerFormatComparison extends KingdeeElement {}
+```
+
 ## 填充样式
 
 添加 `filled` 属性可绘制填充样式的选择器。
@@ -829,7 +981,7 @@ export default class DaterangepickerSlot extends KingdeeElement {}
 | required     | 是否为必填项。                                                                                             | `boolean`                        | `false`                    |
 | min          | 最小允许日期（YYYY-MM-DD 格式）。                                                                          | `string`                         | `'0001-01-01'`             |
 | max          | 最大允许日期（YYYY-MM-DD 格式）。                                                                          | `string`                         | `'9999-12-31'`             |
-| format       | 日期格式字符串。                                                                                           | `string`                         | `'YYYY-MM-DD'`             |
+| format       | 日期格式字符串（基于 dayjs）。                                                                             | `string`                         | `'YYYY-MM-DD'`             |
 | startDate    | 开始日期（仅通过 JS 设置/读取）。                                                                          | `Date \| null`                   | `null`                     |
 | endDate      | 结束日期（仅通过 JS 设置/读取）。                                                                          | `Date \| null`                   | `null`                     |
 | disabledDate | 自定义禁用日期的回调函数（仅通过 JS 设置）。                                                               | `(date: Date) => boolean`        | `undefined`                |

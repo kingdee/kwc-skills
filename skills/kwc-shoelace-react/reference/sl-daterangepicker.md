@@ -108,6 +108,84 @@ import SlDaterangepicker from '@kdcloudjs/shoelace/dist/react/daterangepicker/in
 export default () => <SlDaterangepicker style={{ width: '500px' }} label="日期时间范围" type="datetime" />;
 ```
 
+## 自定义格式（format）
+
+通过 `format` 属性自定义日期在输入框中的显示格式。格式化底层基于 [dayjs](https://day.js.org/docs/en/display/format) 实现，支持 dayjs 的所有格式化符号。`format` 仅影响输入框的显示文本，`value`（`[Date | null, Date | null]`）不受影响。
+
+### 支持的格式符号（dayjs）
+
+| 符号 | 说明 | 示例 |
+|------|------|------|
+| `YYYY` | 四位年份 | `2024` |
+| `YY` | 两位年份 | `24` |
+| `MM` | 两位月份（补零） | `01`、`12` |
+| `M` | 月份（不补零） | `1`、`12` |
+| `DD` | 两位日期（补零） | `05`、`31` |
+| `D` | 日期（不补零） | `5`、`31` |
+| `HH` | 24 小时制小时（补零） | `08`、`23` |
+| `hh` | 12 小时制小时（补零） | `02`、`11` |
+| `mm` | 分钟（补零） | `05`、`59` |
+| `ss` | 秒（补零） | `00`、`59` |
+| `A` | 上午/下午（大写） | `AM`、`PM` |
+
+### 常用格式示例
+
+| 格式字符串 | 显示效果 | 说明 |
+|-----------|---------|------|
+| `YYYY-MM-DD` | `2025-01-01` | 默认格式 |
+| `YYYY/MM/DD` | `2025/01/01` | 斜杠分隔 |
+| `DD.MM.YYYY` | `01.01.2025` | 欧洲风格 |
+| `YYYY年MM月DD日` | `2025年01月01日` | 中文格式 |
+| `YYYY-MM-DD HH:mm:ss` | `2025-01-01 08:00:00` | datetime 默认 |
+| `YYYY/MM/DD HH:mm` | `2025/01/01 08:00` | datetime 省略秒 |
+
+### 斜杠分隔格式
+
+```jsx
+import React from 'react';
+import SlDaterangepicker from '@kdcloudjs/shoelace/dist/react/daterangepicker/index.js';
+
+export default () => <SlDaterangepicker style={{ width: '400px' }} label="斜杠格式" format="YYYY/MM/DD" />;
+```
+
+### 中文日期格式
+
+```jsx
+import React from 'react';
+import SlDaterangepicker from '@kdcloudjs/shoelace/dist/react/daterangepicker/index.js';
+
+export default () => <SlDaterangepicker style={{ width: '460px' }} label="中文格式" format="YYYY年MM月DD日" />;
+```
+
+### datetime 模式自定义格式
+
+在 `type="datetime"` 模式下，`format` 应包含时间部分。
+
+```jsx
+import React from 'react';
+import SlDaterangepicker from '@kdcloudjs/shoelace/dist/react/daterangepicker/index.js';
+
+export default () => (
+  <SlDaterangepicker style={{ width: '500px' }} label="自定义 datetime 格式" type="datetime" format="YYYY/MM/DD HH:mm" />
+);
+```
+
+### 多种格式对比
+
+```jsx
+import React from 'react';
+import SlDaterangepicker from '@kdcloudjs/shoelace/dist/react/daterangepicker/index.js';
+
+export default () => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+    <SlDaterangepicker style={{ width: '400px' }} label="默认 (YYYY-MM-DD)" value={[new Date(2025, 0, 1), new Date(2025, 5, 30)]} />
+    <SlDaterangepicker style={{ width: '400px' }} label="斜杠 (YYYY/MM/DD)" format="YYYY/MM/DD" value={[new Date(2025, 0, 1), new Date(2025, 5, 30)]} />
+    <SlDaterangepicker style={{ width: '460px' }} label="中文 (YYYY年MM月DD日)" format="YYYY年MM月DD日" value={[new Date(2025, 0, 1), new Date(2025, 5, 30)]} />
+    <SlDaterangepicker style={{ width: '400px' }} label="欧洲 (DD.MM.YYYY)" format="DD.MM.YYYY" value={[new Date(2025, 0, 1), new Date(2025, 5, 30)]} />
+  </div>
+);
+```
+
 ## 填充样式
 
 添加 `filled` 属性可绘制填充样式的选择器。
@@ -412,7 +490,7 @@ export default () => (
 | required    | 是否为必填项。                                                                                             | `boolean`                        | `false`                    |
 | min         | 最小允许日期（YYYY-MM-DD 格式）。                                                                          | `string`                         | `'0001-01-01'`             |
 | max         | 最大允许日期（YYYY-MM-DD 格式）。                                                                          | `string`                         | `'9999-12-31'`             |
-| format      | 日期格式字符串。                                                                                           | `string`                         | `'YYYY-MM-DD'`             |
+| format      | 日期格式字符串（基于 dayjs）。                                                                             | `string`                         | `'YYYY-MM-DD'`             |
 | startDate   | 开始日期（仅通过 JS 设置/读取）。                                                                          | `Date \| null`                   | `null`                     |
 | endDate     | 结束日期（仅通过 JS 设置/读取）。                                                                          | `Date \| null`                   | `null`                     |
 
