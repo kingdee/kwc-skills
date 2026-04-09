@@ -200,7 +200,8 @@ const items: string[] = (() => {
 import { adapterApi } from '@kdcloudjs/kwc-shared-utils/api';
 import { ref, onUnmounted } from 'vue';
 
-const props = defineProps<{ config: { isvId: string; app: string } }>();
+// KWC 组件直接接收 config 作为 props（与 React 的 (config) => {} 等价）
+const config = defineProps<{ isvId: string; app: string }>();
 
 let adapter: any = null;
 const data = ref<any>(null);
@@ -216,8 +217,8 @@ function fetchData() {
 
   adapter.update({
     endpointConfig: {
-      isv: props.config.isvId,
-      app: props.config.app,
+      isv: config.isvId,
+      app: config.app,
       source: 'sample/users',   // Controller XML url 去掉 /{isv}/{app}/ 前缀
       version: 'v1',
     },

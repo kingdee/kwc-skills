@@ -179,7 +179,7 @@ const items: string[] = (() => {
 ```typescript
 import { adapterApi } from '@kdcloudjs/kwc-shared-utils/api';
 
-// GET 请求（config 从组件 props 获取）
+// GET 请求（config 为组件直接接收的参数）
 const adapter = adapterApi.doGet(({ data, error }) => {
   if (error) { console.error(error.message); return; }
   // 处理 data（注意防御性校验，见第 7 节）

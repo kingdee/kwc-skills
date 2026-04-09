@@ -1,6 +1,6 @@
 # 前端通过 adapterApi 调用 Controller API 集成指南
 
-> **职责边界声明**：前端组件开发由 `kwc-react-development`、`kwc-vue-development`、`kwc-lwc-development` 等技能包负责。本指南仅作为 **API 消费者的参考**，帮助理解前端如何调用后端 Controller 接口，以便在编写 Controller 时更好地设计 API。
+> **职责说明**：本指南是前端调用后端 Controller API 的**统一参考文档**，被 `kwc-react-development`、`kwc-vue-development`、`kwc-lwc-development` 三个前端技能包交叉引用。编写前端组件中的 API 调用代码前，必须阅读本文档。
 
 ## 1. adapterApi 基础用法
 
@@ -130,15 +130,14 @@ endpointConfig.source: myController/user/123
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { adapterApi } from '@kdcloudjs/kwc-shared-utils/api';
 
+// 这里声明的就是config对象类型
 interface UserListProps {
-  config: {
     isvId: string;
     app: string;
     pageId: string;
     formId: string;
     controlId: string;
     metaProps: Record<string, string>;
-  };
 }
 
 interface User {
@@ -265,7 +264,7 @@ export default UserList;
 | 可能原因 | 排查方式 |
 |---------|---------|
 | source 路径填写错误 | 检查 source 是否正确去掉了 `/{isv}/{app}/` 前缀 |
-| Controller 未部署 | 确认已执行 `build → deploy` 流程 |
+| Controller 未部署 | 确认已执行 `kd project deploy` |
 | version 不匹配 | 确认部署的 version 与线上一致 |
 | HTTP 方法不匹配 | 确认 doGet/doPost 与 Controller XML 中的 httpMethod 一致 |
 
