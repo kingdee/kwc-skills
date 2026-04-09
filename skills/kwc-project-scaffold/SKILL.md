@@ -345,43 +345,48 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 2. 创建工程结构（本 Skill 职责）：
    a. 对每个前端组件执行 `kd project create <ComponentName> --type kwc`
    b. 对每个后端 Controller 执行 `kd project create <ControllerName> --type controller`
-3. 补全所有元数据（本 Skill 职责，元数据先行）：
+3. **查询业务实体字段**（当 Controller 涉及实体数据操作时）：
+   - 用户提供了表单名称/编码/实体相关信息时，使用 `meta-query-api.mjs` 查询真实字段
+   - 先 `queryFormsByApp` 搜索表单，再 `getEntityFields` 获取字段结构（见「元数据查询」章节）
+   - 查询结果用于指导后续 Controller 元数据和代码编写，**禁止猜测字段名**
+4. 补全所有元数据（本 Skill 职责，元数据先行）：
    a. 补全组件元数据 `.js-meta.kwc`
    b. 补全 Controller 元数据 `.kws`（定义 URL、方法、权限配置）
-4. **移交前端代码实现**：加载框架开发 Skill 编写组件代码（*.tsx / *.vue / *.js）
-5. **移交后端代码实现**：加载 `kwc-ks-controller-development` 编写 Controller 脚本（*.ts）
-6. 回到本 Skill：创建页面元数据并补全 `<controls>`
-7. 构建前端：`npm run build:frontend`
-8. 确认或创建目标环境，完成认证
-9. 执行 `kd project deploy`
-10. 部署成功后，调用 `form-link.mjs` 输出渲染卡片（见「部署完成标准输出」章节）
+5. **移交前端代码实现**：加载框架开发 Skill 编写组件代码（*.tsx / *.vue / *.js）
+6. **移交后端代码实现**：加载 `kwc-ks-controller-development` 编写 Controller 脚本（*.ts）
+7. 回到本 Skill：创建页面元数据并补全 `<controls>`
+8. 构建前端：`npm run build:frontend`
+9. 确认或创建目标环境，完成认证
+10. 执行 `kd project deploy`
+11. 部署成功后，调用 `form-link.mjs` 输出渲染卡片（见「部署完成标准输出」章节）
 
 **关键原则**：
-- 步骤 3（元数据补全）中，组件元数据 `.kwc` + Controller 元数据 `.kws` 都由本 Skill 完成
-- 步骤 4-5（代码实现）分别移交给对应的开发 Skill，本 Skill 严禁直接编写代码
-- 步骤 6 起回到本 Skill 主导
+- 步骤 4（元数据补全）中，组件元数据 `.kwc` + Controller 元数据 `.kws` 都由本 Skill 完成
+- 步骤 5-6（代码实现）分别移交给对应的开发 Skill，本 Skill 严禁直接编写代码
+- 步骤 7 起回到本 Skill 主导
 
 ### 仅前端编排
 
 若确认不涉及后端，仅前端开发时，优先按这条顺序执行：
 
 1. 若无工程，执行 `kd project init`
-2. 对每个“会出现在页面里的组件”执行 `kd project create <ComponentName> --type kwc`
+2. 对每个"会出现在页面里的组件"执行 `kd project create <ComponentName> --type kwc`
 3. **补全组件 `.js-meta.kwc`**（本 Skill 职责）
-4. **移交代码实现**：确认当前工程 framework，**必须**加载并切换到对应框架开发 Skill（kwc-react-development / kwc-vue-development / kwc-lwc-development）
-5. **框架 Skill 实现组件代码**（*.tsx / *.vue / *.js）
-6. 代码实现完成后，回到本 Skill：执行 `kd project create <page-name> --type page`
-7. 补全页面 `app/pages/<page-name>.page-meta.kwp`
-8. 确认或创建目标环境，完成认证
-9. 构建前端：`npm run build:frontend`
-10. 若元数据有变更或需要更新环境上的静态文件，执行 `kd project deploy`（部署到开发环境时会同时上传前端静态文件）
-11. 当次任务所有部署完成后，调用 `form-link.mjs` 输出渲染卡片（见「部署完成标准输出」，**不可跳过**）
-12. 仅当用户明确要求查看效果时执行 `kd open`，明确要求本地联调时执行 `kd debug`（须后台模式）
+4. **查询关联业务实体**（可选，当组件涉及表单数据绑定时）：使用 `meta-query-api.mjs` 查询关联表单的字段结构，辅助组件设计（见「元数据查询」章节）
+5. **移交代码实现**：确认当前工程 framework，**必须**加载并切换到对应框架开发 Skill（kwc-react-development / kwc-vue-development / kwc-lwc-development）
+6. **框架 Skill 实现组件代码**（*.tsx / *.vue / *.js）
+7. 代码实现完成后，回到本 Skill：执行 `kd project create <page-name> --type page`
+8. 补全页面 `app/pages/<page-name>.page-meta.kwp`
+9. 确认或创建目标环境，完成认证
+10. 构建前端：`npm run build:frontend`
+11. 若元数据有变更或需要更新环境上的静态文件，执行 `kd project deploy`（部署到开发环境时会同时上传前端静态文件）
+12. 当次任务所有部署完成后，调用 `form-link.mjs` 输出渲染卡片（见「部署完成标准输出」，**不可跳过**）
+13. 仅当用户明确要求查看效果时执行 `kd open`，明确要求本地联调时执行 `kd debug`（须后台模式）
 
 **关键原则**：
 - 步骤 3（元数据补全）必须由本 Skill 完成
-- 步骤 4-5（代码实现）**必须**由框架 Skill 完成，本 Skill 严禁直接编写代码
-- 步骤 6 起（页面创建及后续）回到本 Skill 主导
+- 步骤 5-6（代码实现）**必须**由框架 Skill 完成，本 Skill 严禁直接编写代码
+- 步骤 7 起（页面创建及后续）回到本 Skill 主导
 
 如果是修改已有页面：
 
@@ -395,11 +400,12 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 
 1. 若无工程，执行 `kd project init`
 2. 执行 `kd project create <ControllerName> --type controller` 创建 Controller
-3. **补全 Controller 元数据 `.kws`**（本 Skill 职责）
-4. **移交代码实现**：**必须**加载并切换到 `kwc-ks-controller-development`
-5. **controller-development Skill 编写脚本代码**（*.ts）
-6. 代码实现完成后，回到本 Skill：执行 `kd project deploy` 部署到目标环境（Controller 无需预先 build）
-7. 当次任务所有部署完成后，调用 `form-link.mjs` 输出渲染卡片（见「部署完成标准输出」，**不可跳过**）
+3. **查询业务实体字段**（当 Controller 涉及实体数据操作时）：使用 `meta-query-api.mjs` 先搜索表单再获取字段结构（见「元数据查询」章节），**禁止猜测字段名**
+4. **补全 Controller 元数据 `.kws`**（本 Skill 职责）
+5. **移交代码实现**：**必须**加载并切换到 `kwc-ks-controller-development`
+6. **controller-development Skill 编写脚本代码**（*.ts）
+7. 代码实现完成后，回到本 Skill：执行 `kd project deploy` 部署到目标环境（Controller 无需预先 build）
+8. 当次任务所有部署完成后，调用 `form-link.mjs` 输出渲染卡片（见「部署完成标准输出」，**不可跳过**）
 
 ## 配置环境
 
