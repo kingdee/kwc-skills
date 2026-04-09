@@ -146,12 +146,64 @@ try {
 this.items = items;
 ```
 
-## 10. CSS 样式规范 — 必须使用 Design Token
+## 10. Controller API 调用规范
+
+当组件需要调用后端 Controller API 时，**必须**使用 `adapterApi` 的 `doGet` / `doPost` 方法，并正确配置 `endpointConfig`。
+
+> **完整用法、参数说明和示例请参考**：`../kwc-ks-controller-development/reference/frontend-integration.md`——编写 Controller API 调用代码前**必须阅读**该文档。
+
+### 10.1 关键约束
+
+- `endpointConfig` 中的 `isv` 和 `app` **必须**从 `this.config.isvId` 和 `this.config.app` 动态获取，**禁止**硬编码
+- `source` 字段必须与 Controller XML 配置中的 URL 路径一致（去掉 `/{isv}/{app}/` 前缀）
+- `version` 固定为 `'v1'`
+- 组件销毁时**必须**调用 `adapter.disconnect()` 防止内存泄漏（在 `disconnectedCallback` 中处理）
+
+### 10.2 快速参考
+
+```javascript
+import { adapterApi } from '@kdcloudjs/kwc-shared-utils/api';
+
+export default class MyComponent extends KingdeeElement {
+  adapter = null;
+
+  connectedCallback() {
+    this.fetchData();
+  }
+
+  disconnectedCallback() {
+    if (this.adapter) this.adapter.disconnect();
+  }
+
+  fetchData() {
+    if (this.adapter) this.adapter.disconnect();
+
+    this.adapter = adapterApi.doGet(({ data, error }) => {
+      if (error) { console.error(error.message); return; }
+      // 处理 data（注意防御性校验，见第 9 节）
+      this.data = data;
+    });
+
+    this.adapter.update({
+      endpointConfig: {
+        isv: this.config.isvId,
+        app: this.config.app,
+        source: 'sample/users',   // Controller XML url 去掉 /{isv}/{app}/ 前缀
+        version: 'v1',
+      },
+      params: { page: 1, size: 10 },
+      headers: {},
+    });
+  }
+}
+```
+
+## 11. CSS 样式规范 — 必须使用 Design Token
 - 编写 CSS 时，颜色、间距、字号、圆角等属性**必须**使用 Shoelace Design Token，**禁止**硬编码 hex 色值或 px 数值。
 - 完整的 Token 速查表（颜色/间距/字号/圆角映射、正反示例、例外情况）请参考：`./reference/css-design-tokens.md`
 - **编写 CSS 代码前必须阅读该文档。**
 
-## 11. 强制自检清单
+## 12. 强制自检清单
 - [ ] 继承自 `KingdeeElement` 而非 `LightningElement`
 - [ ] **所有Shoelace 组件**（`sl-*`）有 `kwc:external`，**所有KWC 内部组件**（`kwc-*`）没有 `kwc:external`
 - [ ] HTML 无 JS 表达式，无自闭合标签，无属性缩写
@@ -159,4 +211,5 @@ this.items = items;
 - [ ] 扩展组件（Table/DatePicker等）已参考本地 reference 文档
 - [ ] CSS 样式使用 Design Token，无硬编码 hex 色值或 px 间距/字号/圆角
 - [ ] **API 响应校验**: 是否对 adapterApi 响应做了防御性校验？禁止直接信任响应结构？数组字段是否用 `Array.isArray()` 校验？
+- [ ] **API 调用规范**: 调用 Controller API 时是否使用 `adapterApi`？`isv`/`app` 是否从 `config` 动态获取？
 - [ ] **未运行**任何 ESLint/Prettier 修复命令，并**忽略**了所有 ESLint 格式报错

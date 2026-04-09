@@ -161,16 +161,55 @@ const items: string[] = (() => {
 })();
 ```
 
-## 8. CSS 样式规范 — 必须使用 Design Token
+## 8. Controller API 调用规范
+
+当组件需要调用后端 Controller API 时，**必须**使用 `adapterApi` 的 `doGet` / `doPost` 方法，并正确配置 `endpointConfig`。
+
+> **完整用法、参数说明和示例请参考**：`../kwc-ks-controller-development/reference/frontend-integration.md`——编写 Controller API 调用代码前**必须阅读**该文档。
+
+### 8.1 关键约束
+
+- `endpointConfig` 中的 `isv` 和 `app` **必须**从组件参数 `config.isvId` 和 `config.app` 动态获取，**禁止**硬编码
+- `source` 字段必须与 Controller XML 配置中的 URL 路径一致（去掉 `/{isv}/{app}/` 前缀）
+- `version` 固定为 `'v1'`
+- 组件卸载时**必须**调用 `adapter.disconnect()` 防止内存泄漏
+
+### 8.2 快速参考
+
+```typescript
+import { adapterApi } from '@kdcloudjs/kwc-shared-utils/api';
+
+// GET 请求（config 从组件 props 获取）
+const adapter = adapterApi.doGet(({ data, error }) => {
+  if (error) { console.error(error.message); return; }
+  // 处理 data（注意防御性校验，见第 7 节）
+});
+adapter.update({
+  endpointConfig: {
+    isv: config.isvId,
+    app: config.app,
+    source: 'sample/users',   // Controller XML url 去掉 /{isv}/{app}/ 前缀
+    version: 'v1',
+  },
+  params: { page: 1, size: 10 },
+  headers: {},
+});
+
+// 组件卸载时断开连接
+adapter.disconnect();
+```
+
+## 9. CSS 样式规范 — 必须使用 Design Token
 - 编写 CSS 时，颜色、间距、字号、圆角等属性**必须**使用 Shoelace Design Token，**禁止**硬编码 hex 色值或 px 数值。
 - 完整的 Token 速查表（颜色/间距/字号/圆角映射、正反示例、例外情况）请参考：`./reference/css-design-tokens.md`
 - **编写 CSS 代码前必须阅读该文档。**
 
-## 9. 强制自检清单 (Checklist)
+## 10. 强制自检清单 (Checklist)
 1.  [ ] **导入路径**: 是否使用了 `dist/react/...` 路径？
 2.  [ ] **事件命名**: 是否使用了 `onSl*` 前缀（如 `onSlChange`）
 3.  [ ] **类型断言**: 是否正确处理了 `event.target` 的类型断言？
 4.  [ ] **Ref 使用**: 是否正确使用 `ref` 调用组件方法？
 5.  [ ] **扩展组件**: 是否参考了本地 reference 文档（如 Table, DatePicker）？
 6.  [ ] **API 响应校验**: 是否对 adapterApi 响应做了防御性校验？是否禁止了直接 `as` 强转？数组字段是否用 `Array.isArray()` 校验？
-7.  [ ] **工具约束**: 是否**未运行**任何 ESLint/Prettier 修复命令？
+7.  [ ] **API 调用规范**: 调用 Controller API 时是否使用 `adapterApi`？`isv`/`app` 是否从 `config` 动态获取？
+8.  [ ] **工具约束**: 是否**未运行**任何 ESLint/Prettier 修复命令？

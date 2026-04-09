@@ -75,6 +75,7 @@ description: 【KWC KS Controller 开发阶段 Skill】由 kwc-orchestrator 在 
 
 - **Controller 在 KWC 工程中的集成工作流**：`reference/controller-scaffold-workflow.md`
 - **Controller 常见模式和代码示例**：`reference/controller-patterns.md`
+- **前端通过 adapterApi 调用 Controller API 集成指南**：`reference/frontend-integration.md`
 - **脚本控制器开发完整指南**（位于 kingscript-code-generator 技能包）：`../kingscript-code-generator/references/docs/custom-development/脚本控制器开发指南.md`
 
 ## 输出检查清单
