@@ -375,8 +375,8 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 8. 确认或创建目标环境，完成认证
 9. 构建前端：`npm run build:frontend`
 10. 若元数据有变更或需要更新环境上的静态文件，执行 `kd project deploy`（部署到开发环境时会同时上传前端静态文件）
-11. 部署后使用 `kd open -e <env> -f <page_name>` 查看环境效果
-12. 仅当用户明确要求本地联调时，才执行 `kd debug`（须后台模式，见调试约定）
+11. 当次任务所有部署完成后，调用 `form-link.mjs` 输出渲染卡片（见「部署完成标准输出」，**不可跳过**）
+12. 仅当用户明确要求查看效果时执行 `kd open`，明确要求本地联调时执行 `kd debug`（须后台模式）
 
 **关键原则**：
 - 步骤 3（元数据补全）必须由本 Skill 完成
@@ -399,6 +399,7 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 4. **移交代码实现**：**必须**加载并切换到 `kwc-ks-controller-development`
 5. **controller-development Skill 编写脚本代码**（*.ts）
 6. 代码实现完成后，回到本 Skill：执行 `kd project deploy` 部署到目标环境（Controller 无需预先 build）
+7. 当次任务所有部署完成后，调用 `form-link.mjs` 输出渲染卡片（见「部署完成标准输出」，**不可跳过**）
 
 ## 配置环境
 
@@ -516,6 +517,47 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 5. `kd open -e dev -f kdtest_demo_page`：部署后直接打开环境上的表单查看效果（无 DNS 代理）
 6. `kd debug`：进入本地调试，通过 DNS 代理连接环境（**必须使用 `is_background: true` 运行**，仅当用户明确要求调试时使用）
 
+## 部署完成标准输出
+
+每当 AI 完成一段工作并且部署成功后，**必须**调用 `form-link.mjs` 脚本生成渲染卡片并输出给用户，展示已部署页面的访问入口。渲染卡片是用户触发预览效果的入口。
+
+关键规则：
+- **完成即输出**：每完成一段可预览的工作（该段涉及的所有 deploy 均已成功），立即输出渲染卡片。多轮对话中，每段完成的工作都应有渲染卡片输出，不要攒到最后才输出
+- **同一段工作内不重复**：如果一段工作涉及多次 deploy（如先部署组件、再部署页面、再部署 Controller），应在该段全部部署完成后输出一次，不要每执行一条 deploy 命令就输出一次
+- 适用于任何 deploy 形式：整体部署（`kd project deploy`）、指定路径部署（`-d app/kwc/...`、`-d app/pages/...`、`-d app/ks/controller/...`）
+
+### 调用命令
+
+```bash
+# 页面无关联实体时（纯展示页、配置页等）
+node "{form_link}" generate --pageMeta app/pages/<page-name>.page-meta.kwp [--env <envName>]
+
+# 页面关联了业务实体时（如销售订单、采购申请等）
+node "{form_link}" generate --pageMeta app/pages/<page-name>.page-meta.kwp --formNumber <entity-formNumber> [--env <envName>]
+```
+
+### metadata 字段判断规则
+
+- `metadata` 字段是**条件性**的，仅当页面关联了业务实体时才输出
+- `--formNumber` 传入的是**实体的 formNumber**（如 `sal_salorder`），不是页面元数据的 `<name>`
+- AI 需根据开发上下文判断当前页面是否关联了业务实体：
+  - 若开发过程中使用了元数据查询（`getEntityFields`）、Controller 配置了 `entityNumber`、或用户明确提供了表单编码 → 传入对应的 formNumber
+  - 若页面无关联实体（纯展示页、配置页、仪表盘等） → 不传 `--formNumber`，输出中不包含 `metadata` 字段
+
+### 执行顺序
+
+```
+当段工作所有 deploy 完成 → 调用 form-link.mjs 输出渲染卡片（强制） → 询问菜单发布（可选）
+```
+
+### 强制约束
+
+- 每段工作的部署完成后**必须**输出渲染卡片，不可省略或跳过
+- 多轮对话中每段完成的工作都应输出，不要只在最终结束时才输出
+- 同一段工作内不重复输出（多条 deploy 命令属于同一段工作时，等全部完成后输出一次）
+- 脚本输出内容必须直接呈现给用户
+- 所有值从实际文件和环境中读取，禁止猜测
+
 ## 查看环境效果（kd open）
 
 > 注意：部署后默认仅输出渲染卡片（见「部署完成标准输出」），不自动执行 kd open。仅当用户明确要求查看环境效果时才使用本命令。
@@ -547,6 +589,7 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 - 已完成代码编写
 - 已执行必要的 build 命令（若修改了代码）
 - 已执行 kd project deploy（若需要部署）
+- 已输出渲染卡片（见「部署完成标准输出」，部署后必须先输出渲染卡片再执行 open/debug）
 - 环境已认证
 
 ```
@@ -557,46 +600,6 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 ```
 
 补充：环境未认证时 `kd project deploy` 会直接阻止部署。
-
-## 部署完成标准输出
-
-当次任务的所有部署完成后（所有需要 deploy 的组件、页面、Controller 均已成功部署），**必须**调用 `form-link.mjs` 脚本生成渲染卡片并输出给用户，展示已部署页面的访问入口。渲染卡片是用户触发预览效果的入口。
-
-关键规则：
-- **一次任务输出一次**：如果任务涉及多次 deploy（如先部署组件、再部署页面、再部署 Controller），应在全部部署完成后统一输出一次渲染卡片，不要每次 deploy 后都输出
-- **输出时机**：所有部署完成、效果可查看时才输出
-- 适用于任何 deploy 形式：整体部署（`kd project deploy`）、指定路径部署（`-d app/kwc/...`、`-d app/pages/...`、`-d app/ks/controller/...`）
-
-### 调用命令
-
-```bash
-# 页面无关联实体时（纯展示页、配置页等）
-node "{form_link}" generate --pageMeta app/pages/<page-name>.page-meta.kwp [--env <envName>]
-
-# 页面关联了业务实体时（如销售订单、采购申请等）
-node "{form_link}" generate --pageMeta app/pages/<page-name>.page-meta.kwp --formNumber <entity-formNumber> [--env <envName>]
-```
-
-### metadata 字段判断规则
-
-- `metadata` 字段是**条件性**的，仅当页面关联了业务实体时才输出
-- `--formNumber` 传入的是**实体的 formNumber**（如 `sal_salorder`），不是页面元数据的 `<name>`
-- AI 需根据开发上下文判断当前页面是否关联了业务实体：
-  - 若开发过程中使用了元数据查询（`getEntityFields`）、Controller 配置了 `entityNumber`、或用户明确提供了表单编码 → 传入对应的 formNumber
-  - 若页面无关联实体（纯展示页、配置页、仪表盘等） → 不传 `--formNumber`，输出中不包含 `metadata` 字段
-
-### 执行顺序
-
-```
-当次任务所有 deploy 完成 → 调用 form-link.mjs 输出渲染卡片（强制） → 询问菜单发布（可选）
-```
-
-### 强制约束
-
-- 当次任务所有部署完成后**必须**输出渲染卡片，不可省略或跳过
-- 一次任务只输出一次渲染卡片，不要每次 deploy 后重复输出
-- 脚本输出内容必须直接呈现给用户
-- 所有值从实际文件和环境中读取，禁止猜测
 
 ## 应用菜单管理
 
