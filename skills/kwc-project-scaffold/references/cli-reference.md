@@ -243,6 +243,19 @@ kd project deploy -d app/kwc/MyComponent -e sit
 kd project deploy -d app/pages/my_page -e sit
 ```
 
+仅部署指定 Controller 到 `sit` 环境：
+
+```bash
+kd project deploy -d app/ks/controller/MyController -e sit
+```
+
+部署包含的内容（一次 deploy 上传全部）：
+
+1. 组件元数据（.js-meta.kwc）
+2. 页面元数据（.page-meta.kwp）
+3. Controller 元数据（.kws）及 Controller 脚本 — 开发阶段由 deploy 直接处理，无需预先 build
+4. 前端静态文件（dist/kwc/）— 需先执行 `npm run build:frontend`，开发环境自动上传
+
 注意：
 
 - 部署时脚手架会自动替换组件及页面元数据中的 `isv`。
@@ -260,13 +273,20 @@ kd project deploy -d app/pages/my_page -e sit
 | 改了页面元数据 `.page-meta.kwp` | 是，递增该页面元数据 `version` | 是 | 部署该页面元数据或整个项目 |
 | 同时改了组件元数据和页面元数据 | 是，分别递增 | 是 | 部署受影响路径或整个项目 |
 | 新建组件元数据或页面元数据 | 初始值设为 `1` | 是 | 首次上传 |
-| 修改 Controller 代码或 .kws 元数据 | 是，递增 Controller 元数据 version | 是 | `npm run build:controller` 然后 `kd project deploy` |
+| 修改 Controller 代码或 .kws 元数据 | 是，递增 Controller 元数据 version | 是 | 直接 `kd project deploy`（开发阶段无需 build） |
 
 判断提醒：
 
 - 是否需要 `deploy`，先看元数据文件是否变更。
 - 是否需要递增 `version`，也先看对应元数据文件是否变更。
 - 只改组件代码，不要因为"刚改了东西"就盲目 `deploy`。
+
+构建前置条件（开发阶段）：
+
+- 改了前端代码 → 先 `npm run build:frontend`，再 deploy
+- 改了 Controller 代码或 .kws → 直接 deploy，不需要 build（开发阶段 deploy 直接处理 Controller）
+- 只改元数据文件 → 直接 deploy，不需要 build
+- `npm run build:controller` 和 `npm run build` 仅用于生产环境构建产物
 
 ## 打开表单
 
