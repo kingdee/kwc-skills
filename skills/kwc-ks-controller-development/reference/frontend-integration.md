@@ -148,7 +148,7 @@ interface User {
   department: string;
 }
 
-const UserList: React.FC<UserListProps> = ({ config }) => {
+const UserList: React.FC<UserListProps> = (config) => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
