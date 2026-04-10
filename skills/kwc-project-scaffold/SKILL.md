@@ -546,9 +546,16 @@ node "{form_link}" generate --pageMeta app/pages/<page-name>.page-meta.kwp --for
 
 - `metadata` 字段是**条件性**的，仅当页面关联了业务实体时才输出
 - `--formNumber` 传入的是**实体的 formNumber**（如 `sal_salorder`），不是页面元数据的 `<name>`
-- AI 需根据开发上下文判断当前页面是否关联了业务实体：
-  - 若开发过程中使用了元数据查询（`getEntityFields`）、Controller 配置了 `entityNumber`、或用户明确提供了表单编码 → 传入对应的 formNumber
-  - 若页面无关联实体（纯展示页、配置页、仪表盘等） → 不传 `--formNumber`，输出中不包含 `metadata` 字段
+- **必须传入 `--formNumber` 的场景**（满足任一即必须传入）：
+  - 用户需求提及了任何已有的表单、实体或元数据名称（如"销售订单"、"采购申请"等业务对象）
+  - 开发过程中使用了 `meta-query-api.mjs` 查询过表单/字段（如 `queryFormsByApp`、`getEntityFields`）
+  - Controller 配置了 `entityNumber`
+  - 用户明确提供了表单编码 / formNumber
+- **已有实体主动查询规则**：当需求涉及一个已经存在的实体、元数据或表单时，**必须**先通过 `meta-query-api.mjs` 的 `queryFormsByApp` 搜索表单获取 formNumber，再将其传入 `--formNumber`。不能因为开发过程中没有调用过 `getEntityFields` 就忽略该参数
+- **不确定就查**：当不确定页面是否关联已有实体时，应优先通过 `queryFormsByApp` 查询确认，而不是默认不传
+- **可不传 `--formNumber` 的场景**（仅以下情况才可省略）：
+  - 明确是纯展示页、配置页、仪表盘等无关联实体的页面
+  - 页面是全新创建的，不基于任何已有实体
 
 ### 执行顺序
 
