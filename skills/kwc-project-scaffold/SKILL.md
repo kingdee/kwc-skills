@@ -345,43 +345,48 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 2. 创建工程结构（本 Skill 职责）：
    a. 对每个前端组件执行 `kd project create <ComponentName> --type kwc`
    b. 对每个后端 Controller 执行 `kd project create <ControllerName> --type controller`
-3. 补全所有元数据（本 Skill 职责，元数据先行）：
+3. **查询业务实体字段**（当 Controller 涉及实体数据操作时）：
+   - 用户提供了表单名称/编码/实体相关信息时，使用 `meta-query-api.mjs` 查询真实字段
+   - 先 `queryFormsByApp` 搜索表单，再 `getEntityFields` 获取字段结构（见「元数据查询」章节）
+   - 查询结果用于指导后续 Controller 元数据和代码编写，**禁止猜测字段名**
+4. 补全所有元数据（本 Skill 职责，元数据先行）：
    a. 补全组件元数据 `.js-meta.kwc`
    b. 补全 Controller 元数据 `.kws`（定义 URL、方法、权限配置）
-4. **移交前端代码实现**：加载框架开发 Skill 编写组件代码（*.tsx / *.vue / *.js）
-5. **移交后端代码实现**：加载 `kwc-ks-controller-development` 编写 Controller 脚本（*.ts）
-6. 回到本 Skill：创建页面元数据并补全 `<controls>`
-7. 构建前端：`npm run build:frontend`
-8. 确认或创建目标环境，完成认证
-9. 执行 `kd project deploy`
-10. 部署成功后，调用 `form-link.mjs` 输出渲染卡片（见「部署完成标准输出」章节）
+5. **移交前端代码实现**：加载框架开发 Skill 编写组件代码（*.tsx / *.vue / *.js）
+6. **移交后端代码实现**：加载 `kwc-ks-controller-development` 编写 Controller 脚本（*.ts）
+7. 回到本 Skill：创建页面元数据并补全 `<controls>`
+8. 构建前端：`npm run build:frontend`
+9. 确认或创建目标环境，完成认证
+10. 执行 `kd project deploy`
+11. 部署成功后，调用 `form-link.mjs` 输出渲染卡片（见「部署完成标准输出」章节）
 
 **关键原则**：
-- 步骤 3（元数据补全）中，组件元数据 `.kwc` + Controller 元数据 `.kws` 都由本 Skill 完成
-- 步骤 4-5（代码实现）分别移交给对应的开发 Skill，本 Skill 严禁直接编写代码
-- 步骤 6 起回到本 Skill 主导
+- 步骤 4（元数据补全）中，组件元数据 `.kwc` + Controller 元数据 `.kws` 都由本 Skill 完成
+- 步骤 5-6（代码实现）分别移交给对应的开发 Skill，本 Skill 严禁直接编写代码
+- 步骤 7 起回到本 Skill 主导
 
 ### 仅前端编排
 
 若确认不涉及后端，仅前端开发时，优先按这条顺序执行：
 
 1. 若无工程，执行 `kd project init`
-2. 对每个“会出现在页面里的组件”执行 `kd project create <ComponentName> --type kwc`
+2. 对每个"会出现在页面里的组件"执行 `kd project create <ComponentName> --type kwc`
 3. **补全组件 `.js-meta.kwc`**（本 Skill 职责）
-4. **移交代码实现**：确认当前工程 framework，**必须**加载并切换到对应框架开发 Skill（kwc-react-development / kwc-vue-development / kwc-lwc-development）
-5. **框架 Skill 实现组件代码**（*.tsx / *.vue / *.js）
-6. 代码实现完成后，回到本 Skill：执行 `kd project create <page-name> --type page`
-7. 补全页面 `app/pages/<page-name>.page-meta.kwp`
-8. 确认或创建目标环境，完成认证
-9. 构建前端：`npm run build:frontend`
-10. 若元数据有变更或需要更新环境上的静态文件，执行 `kd project deploy`（部署到开发环境时会同时上传前端静态文件）
-11. 部署后使用 `kd open -e <env> -f <page_name>` 查看环境效果
-12. 仅当用户明确要求本地联调时，才执行 `kd debug`（须后台模式，见调试约定）
+4. **查询关联业务实体**（可选，当组件涉及表单数据绑定时）：使用 `meta-query-api.mjs` 查询关联表单的字段结构，辅助组件设计（见「元数据查询」章节）
+5. **移交代码实现**：确认当前工程 framework，**必须**加载并切换到对应框架开发 Skill（kwc-react-development / kwc-vue-development / kwc-lwc-development）
+6. **框架 Skill 实现组件代码**（*.tsx / *.vue / *.js）
+7. 代码实现完成后，回到本 Skill：执行 `kd project create <page-name> --type page`
+8. 补全页面 `app/pages/<page-name>.page-meta.kwp`
+9. 确认或创建目标环境，完成认证
+10. 构建前端：`npm run build:frontend`
+11. 若元数据有变更或需要更新环境上的静态文件，执行 `kd project deploy`（部署到开发环境时会同时上传前端静态文件）
+12. 当次任务所有部署完成后，调用 `form-link.mjs` 输出渲染卡片（见「部署完成标准输出」，**不可跳过**）
+13. 仅当用户明确要求查看效果时执行 `kd open`，明确要求本地联调时执行 `kd debug`（须后台模式）
 
 **关键原则**：
 - 步骤 3（元数据补全）必须由本 Skill 完成
-- 步骤 4-5（代码实现）**必须**由框架 Skill 完成，本 Skill 严禁直接编写代码
-- 步骤 6 起（页面创建及后续）回到本 Skill 主导
+- 步骤 5-6（代码实现）**必须**由框架 Skill 完成，本 Skill 严禁直接编写代码
+- 步骤 7 起（页面创建及后续）回到本 Skill 主导
 
 如果是修改已有页面：
 
@@ -395,10 +400,12 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 
 1. 若无工程，执行 `kd project init`
 2. 执行 `kd project create <ControllerName> --type controller` 创建 Controller
-3. **补全 Controller 元数据 `.kws`**（本 Skill 职责）
-4. **移交代码实现**：**必须**加载并切换到 `kwc-ks-controller-development`
-5. **controller-development Skill 编写脚本代码**（*.ts）
-6. 代码实现完成后，回到本 Skill：执行 `kd project deploy` 部署到目标环境（Controller 无需预先 build）
+3. **查询业务实体字段**（当 Controller 涉及实体数据操作时）：使用 `meta-query-api.mjs` 先搜索表单再获取字段结构（见「元数据查询」章节），**禁止猜测字段名**
+4. **补全 Controller 元数据 `.kws`**（本 Skill 职责）
+5. **移交代码实现**：**必须**加载并切换到 `kwc-ks-controller-development`
+6. **controller-development Skill 编写脚本代码**（*.ts）
+7. 代码实现完成后，回到本 Skill：执行 `kd project deploy` 部署到目标环境（Controller 无需预先 build）
+8. 当次任务所有部署完成后，调用 `form-link.mjs` 输出渲染卡片（见「部署完成标准输出」，**不可跳过**）
 
 ## 配置环境
 
@@ -516,6 +523,54 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 5. `kd open -e dev -f kdtest_demo_page`：部署后直接打开环境上的表单查看效果（无 DNS 代理）
 6. `kd debug`：进入本地调试，通过 DNS 代理连接环境（**必须使用 `is_background: true` 运行**，仅当用户明确要求调试时使用）
 
+## 部署完成标准输出
+
+每当 AI 完成一段工作并且部署成功后，**必须**调用 `form-link.mjs` 脚本生成渲染卡片并输出给用户，展示已部署页面的访问入口。渲染卡片是用户触发预览效果的入口。
+
+关键规则：
+- **完成即输出**：每完成一段可预览的工作（该段涉及的所有 deploy 均已成功），立即输出渲染卡片。多轮对话中，每段完成的工作都应有渲染卡片输出，不要攒到最后才输出
+- **同一段工作内不重复**：如果一段工作涉及多次 deploy（如先部署组件、再部署页面、再部署 Controller），应在该段全部部署完成后输出一次，不要每执行一条 deploy 命令就输出一次
+- 适用于任何 deploy 形式：整体部署（`kd project deploy`）、指定路径部署（`-d app/kwc/...`、`-d app/pages/...`、`-d app/ks/controller/...`）
+
+### 调用命令
+
+```bash
+# 页面无关联实体时（纯展示页、配置页等）
+node "{form_link}" generate --pageMeta app/pages/<page-name>.page-meta.kwp [--env <envName>]
+
+# 页面关联了业务实体时（如销售订单、采购申请等）
+node "{form_link}" generate --pageMeta app/pages/<page-name>.page-meta.kwp --formNumber <entity-formNumber> [--env <envName>]
+```
+
+### metadata 字段判断规则
+
+- `metadata` 字段是**条件性**的，仅当页面关联了业务实体时才输出
+- `--formNumber` 传入的是**实体的 formNumber**（如 `sal_salorder`），不是页面元数据的 `<name>`
+- **必须传入 `--formNumber` 的场景**（满足任一即必须传入）：
+  - 用户需求提及了任何已有的表单、实体或元数据名称（如"销售订单"、"采购申请"等业务对象）
+  - 开发过程中使用了 `meta-query-api.mjs` 查询过表单/字段（如 `queryFormsByApp`、`getEntityFields`）
+  - Controller 配置了 `entityNumber`
+  - 用户明确提供了表单编码 / formNumber
+- **已有实体主动查询规则**：当需求涉及一个已经存在的实体、元数据或表单时，**必须**先通过 `meta-query-api.mjs` 的 `queryFormsByApp` 搜索表单获取 formNumber，再将其传入 `--formNumber`。不能因为开发过程中没有调用过 `getEntityFields` 就忽略该参数
+- **不确定就查**：当不确定页面是否关联已有实体时，应优先通过 `queryFormsByApp` 查询确认，而不是默认不传
+- **可不传 `--formNumber` 的场景**（仅以下情况才可省略）：
+  - 明确是纯展示页、配置页、仪表盘等无关联实体的页面
+  - 页面是全新创建的，不基于任何已有实体
+
+### 执行顺序
+
+```
+当段工作所有 deploy 完成 → 调用 form-link.mjs 输出渲染卡片（强制） → 询问菜单发布（可选）
+```
+
+### 强制约束
+
+- 每段工作的部署完成后**必须**输出渲染卡片，不可省略或跳过
+- 多轮对话中每段完成的工作都应输出，不要只在最终结束时才输出
+- 同一段工作内不重复输出（多条 deploy 命令属于同一段工作时，等全部完成后输出一次）
+- 脚本输出内容必须直接呈现给用户
+- 所有值从实际文件和环境中读取，禁止猜测
+
 ## 查看环境效果（kd open）
 
 > 注意：部署后默认仅输出渲染卡片（见「部署完成标准输出」），不自动执行 kd open。仅当用户明确要求查看环境效果时才使用本命令。
@@ -547,6 +602,7 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 - 已完成代码编写
 - 已执行必要的 build 命令（若修改了代码）
 - 已执行 kd project deploy（若需要部署）
+- 已输出渲染卡片（见「部署完成标准输出」，部署后必须先输出渲染卡片再执行 open/debug）
 - 环境已认证
 
 ```
@@ -557,46 +613,6 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 ```
 
 补充：环境未认证时 `kd project deploy` 会直接阻止部署。
-
-## 部署完成标准输出
-
-当次任务的所有部署完成后（所有需要 deploy 的组件、页面、Controller 均已成功部署），**必须**调用 `form-link.mjs` 脚本生成渲染卡片并输出给用户，展示已部署页面的访问入口。渲染卡片是用户触发预览效果的入口。
-
-关键规则：
-- **一次任务输出一次**：如果任务涉及多次 deploy（如先部署组件、再部署页面、再部署 Controller），应在全部部署完成后统一输出一次渲染卡片，不要每次 deploy 后都输出
-- **输出时机**：所有部署完成、效果可查看时才输出
-- 适用于任何 deploy 形式：整体部署（`kd project deploy`）、指定路径部署（`-d app/kwc/...`、`-d app/pages/...`、`-d app/ks/controller/...`）
-
-### 调用命令
-
-```bash
-# 页面无关联实体时（纯展示页、配置页等）
-node "{form_link}" generate --pageMeta app/pages/<page-name>.page-meta.kwp [--env <envName>]
-
-# 页面关联了业务实体时（如销售订单、采购申请等）
-node "{form_link}" generate --pageMeta app/pages/<page-name>.page-meta.kwp --formNumber <entity-formNumber> [--env <envName>]
-```
-
-### metadata 字段判断规则
-
-- `metadata` 字段是**条件性**的，仅当页面关联了业务实体时才输出
-- `--formNumber` 传入的是**实体的 formNumber**（如 `sal_salorder`），不是页面元数据的 `<name>`
-- AI 需根据开发上下文判断当前页面是否关联了业务实体：
-  - 若开发过程中使用了元数据查询（`getEntityFields`）、Controller 配置了 `entityNumber`、或用户明确提供了表单编码 → 传入对应的 formNumber
-  - 若页面无关联实体（纯展示页、配置页、仪表盘等） → 不传 `--formNumber`，输出中不包含 `metadata` 字段
-
-### 执行顺序
-
-```
-当次任务所有 deploy 完成 → 调用 form-link.mjs 输出渲染卡片（强制） → 询问菜单发布（可选）
-```
-
-### 强制约束
-
-- 当次任务所有部署完成后**必须**输出渲染卡片，不可省略或跳过
-- 一次任务只输出一次渲染卡片，不要每次 deploy 后重复输出
-- 脚本输出内容必须直接呈现给用户
-- 所有值从实际文件和环境中读取，禁止猜测
 
 ## 应用菜单管理
 

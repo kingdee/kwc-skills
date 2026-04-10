@@ -77,10 +77,24 @@ description: 【KWC KS Controller 开发阶段 Skill】由 kwc-orchestrator 在 
 - **Controller 常见模式和代码示例**：`reference/controller-patterns.md`
 - **前端通过 adapterApi 调用 Controller API 集成指南**：`reference/frontend-integration.md`
 - **脚本控制器开发完整指南**（位于 kingscript-code-generator 技能包）：`../kingscript-code-generator/references/docs/custom-development/脚本控制器开发指南.md`
+- **实体字段查询工具**（位于 kwc-project-scaffold 技能包）：`../kwc-project-scaffold/references/meta-query.md` — 使用 `queryFormsByApp` 搜索表单、`getEntityFields` 获取字段结构
+
+### 实体字段查询（前置步骤）
+
+当 Controller 涉及业务实体数据操作时（如读取表单数据、聚合统计字段），**必须**先通过元数据查询获取真实字段结构：
+
+1. 使用 `queryFormsByApp` 搜索目标表单（若只知名称不知编码）
+2. 使用 `getEntityFields` 获取字段结构，确认字段 key、数据类型、是否必录
+3. 将查询结果作为 Controller 脚本中字段访问的依据
+
+详细命令用法见：`../kwc-project-scaffold/references/meta-query.md`
+
+> **禁止猜测字段名**：Controller 脚本中的所有字段访问（如 `getString("fieldKey")`、`getLong("fieldKey")`）必须基于 `getEntityFields` 返回的真实字段 key。
 
 ## 输出检查清单
 
 提交代码前，请自查：
+- [ ] 已通过 `meta-query-api.mjs` 查询目标表单的实体字段结构（当 Controller 涉及实体数据操作时），字段名来自查询结果而非猜测
 - [ ] .kws 元数据必填字段完整（name/isv/app/version/url/scriptFile/methods）
 - [ ] URL 路径符合 `/{isv}/{app}/...` 规则（至少 3 级）
 - [ ] 每个 method 配置了 permission
