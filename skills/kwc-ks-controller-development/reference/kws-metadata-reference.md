@@ -16,39 +16,6 @@
 
 ---
 
-## 快速开始
-
-创建 `UserController.kws` 文件：
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<Controller>
-    <name>UserScriptController</name>
-    <isv>kingdee</isv>
-    <app>dev</app>
-    <version>1</version>
-    <url>/kd/dev/sample/users</url>
-    <scriptFile>UserScriptController.ts</scriptFile>
-    <methods>
-        <method>
-            <name>getUser</name>
-            <url>/{id}</url>
-            <httpMethod>GET</httpMethod>
-            <permission>
-                <permission>
-                    <permitAll>false</permitAll>
-                    <entityNumber>bos_user</entityNumber>
-                    <permItemId>47150e89000000ac</permItemId>
-                    <checkRightApp>dev</checkRightApp>
-                </permission>
-            </permission>
-        </method>
-    </methods>
-</Controller>
-```
-
----
-
 ## 控制器配置详解
 
 ### 3.1 必填字段清单

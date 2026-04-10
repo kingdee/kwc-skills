@@ -21,6 +21,8 @@ description: 【KWC KS Controller 开发阶段 Skill】仅当 app/ks/controller/
 - 生成或修改 `.js-meta.kwc` / `.page-meta.kwp` 元数据
 - 环境配置、构建、部署、调试（`kd env` / `npm run build` / `kd project deploy` / `kd debug`）
 
+若当前不满足上述前置条件，请立即停止并切换到 `kwc-project-scaffold` Skill。
+
 ## 标准工作流
 
 1. **确认目录存在**：Controller 目录已由 scaffold 创建（`app/ks/controller/<Name>/`）
