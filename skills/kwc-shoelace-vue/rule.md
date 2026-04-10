@@ -69,6 +69,7 @@ function handleSubmit() {
 ## 6. 扩展组件规则
 - 标准组件参考官网 [https://shoelace.style/](https://shoelace.style/)
 - KWC 扩展组件必须先阅读本地文档，严禁猜测 API
+- `sl-dialog` 扩展属性 `mask-closable` 控制点击蒙层关闭，文档：`./reference/sl-dialog.md`
 - `sl-table` 不支持 `sl-table-column`，必须使用 `columns` 属性定义列
 - 日期选择器必须使用 `sl-datepicker`，不要退回到原生日期输入控件
 - Upload 组件的对象/数组属性必须使用 `.prop` 修饰符（`:headers.prop`、`:fileList.prop`、`:beforeUpload.prop` 等）

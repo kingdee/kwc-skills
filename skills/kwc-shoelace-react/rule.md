@@ -61,6 +61,7 @@ export default function UserForm() {
 ## 5. 扩展组件规则
 - 标准组件参考官网 [https://shoelace.style/](https://shoelace.style/)
 - KWC 扩展组件必须先阅读本地文档，严禁猜测 API
+- `SlDialog` 扩展属性 `maskClosable` 控制点击蒙层关闭，文档：`./reference/sl-dialog.md`
 - 表格组件涉及自定义单元格时，使用 `@kdcloudjs/shoelace/dist/components/table/utils.js` 中的 `generateCustomSlot`
 - 日期选择器必须使用 `SlDatepicker`，不要退回到原生日期输入控件
 - Upload 组件涉及自定义渲染（`itemRender`、`iconRender`）时，需使用 `lit` 的 `html` 模板字面量返回 `TemplateResult`

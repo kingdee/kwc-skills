@@ -54,9 +54,12 @@
   - ✅ 推荐：`this.items = [...this.items, newItem];`
 
 ## 6. KWC 扩展组件文档与约束
-- **标准组件**（Button/Input/Dialog/Icon 等）：参考官网 [https://shoelace.style/](https://shoelace.style/)
+- **标准组件**（Button/Input/Icon 等）：参考官网 [https://shoelace.style/](https://shoelace.style/)
 - **扩展组件**：以下组件为 KWC 专用扩展组件（不在 Shoelace 官网），当任务涉及这些组件时，**必须立即调用 Read 工具读取并学习**对应的 reference 文档，严禁凭空猜测 API：
 
+- **对话框 (Dialog)**:
+  - 文档：`./reference/sl-dialog.md`
+  - 扩展属性：`mask-closable` 控制点击蒙层是否允许关闭
 - **表格 (Table)**:
   - 文档：`./reference/table/index.md` (**涉及表格开发时必须读取**)
   - `sl-table` 不支持 `sl-table-column`，必须通过 `columns` 属性定义列。
