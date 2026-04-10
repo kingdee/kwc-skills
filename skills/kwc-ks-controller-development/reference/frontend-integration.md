@@ -36,7 +36,7 @@ const adapter = adapterApi.doGet(({ data, error }) => {
 adapter.update({
   endpointConfig: {
     isv: config.isvId,      // 从 config 获取开发商 ID
-    app: config.app,        // 从 config 获取应用 ID
+    app: config.moduleId,   // 从 config 获取应用 ID
     source: 'myController/user/123',  // 控制器路径
     version: 'v1'
   },
@@ -64,7 +64,7 @@ const adapter = adapterApi.doPost(({ data, error }) => {
 adapter.update({
   endpointConfig: {
     isv: config.isvId,
-    app: config.app,
+    app: config.moduleId,
     source: 'myController/user',
     version: 'v1'
   },
@@ -83,7 +83,7 @@ adapter.update({
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
 | `isv` | string | 是 | 开发商 ID，从 `config.isvId` 获取 |
-| `app` | string | 是 | 应用 ID，从 `config.app` 获取 |
+| `app` | string | 是 | 应用 ID，从 `config.moduleId` 获取 |
 | `source` | string | 是 | 控制器路径，即 Controller URL 去掉 `/{isv}/{app}/` 前缀后的路径 |
 | `version` | string | 是 | API 版本，固定为 `'v1'` |
 
@@ -116,7 +116,7 @@ endpointConfig.source: myController/user/123
 | 字段 | 说明 | 示例 |
 |------|------|------|
 | `config.isvId` | 开发商 ID | `'kdtest'` |
-| `config.app` | 应用 ID | `'kdtest_catherine'` |
+| `config.moduleId` | 应用 ID | `'kdtest_catherine'` |
 | `config.pageId` | 页面 ID | `'root8b3b5a25...'` |
 | `config.formId` | 表单 ID | `'kdtest_myform'` |
 | `config.controlId` | 控件 ID | `'mycomponent'` |
@@ -133,7 +133,7 @@ import { adapterApi } from '@kdcloudjs/kwc-shared-utils/api';
 // 这里声明的就是config对象类型
 interface UserListProps {
     isvId: string;
-    app: string;
+    moduleId: string;
     pageId: string;
     formId: string;
     controlId: string;
@@ -175,7 +175,7 @@ const UserList: React.FC<UserListProps> = (config) => {
     adapterRef.current.update({
       endpointConfig: {
         isv: config.isvId,
-        app: config.app,
+        app: config.moduleId,
         source: 'sample/users',
         version: 'v1'
       },
@@ -202,7 +202,7 @@ const UserList: React.FC<UserListProps> = (config) => {
     postAdapter.update({
       endpointConfig: {
         isv: config.isvId,
-        app: config.app,
+        app: config.moduleId,
         source: 'sample/users',
         version: 'v1'
       },

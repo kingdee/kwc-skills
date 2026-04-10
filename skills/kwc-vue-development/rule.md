@@ -192,7 +192,7 @@ const items: string[] = (() => {
 
 ### 9.1 关键约束
 
-- `endpointConfig` 中的 `isv` 和 `app` **必须**从组件参数 `config.isvId` 和 `config.app` 动态获取，**禁止**硬编码
+- `endpointConfig` 中的 `isv` 和 `app` **必须**从组件参数 `config.isvId` 和 `config.moduleId` 动态获取，**禁止**硬编码
 - `source` 字段必须与 Controller XML 配置中的 URL 路径一致（去掉 `/{isv}/{app}/` 前缀）
 - `version` 固定为 `'v1'`
 - 组件卸载时**必须**调用 `adapter.disconnect()` 防止内存泄漏（在 `onUnmounted` 中处理）
@@ -221,7 +221,7 @@ function fetchData() {
   adapter.update({
     endpointConfig: {
       isv: config.isvId,
-      app: config.app,
+      app: config.moduleId,
       source: 'sample/users',   // Controller XML url 去掉 /{isv}/{app}/ 前缀
       version: 'v1',
     },

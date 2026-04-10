@@ -157,7 +157,7 @@ this.items = items;
 
 ### 10.1 关键约束
 
-- `endpointConfig` 中的 `isv` 和 `app` **必须**从 `this.config.isvId` 和 `this.config.app` 动态获取，**禁止**硬编码
+- `endpointConfig` 中的 `isv` 和 `app` **必须**从 `this.config.isvId` 和 `this.config.moduleId` 动态获取，**禁止**硬编码
 - `source` 字段必须与 Controller XML 配置中的 URL 路径一致（去掉 `/{isv}/{app}/` 前缀）
 - `version` 固定为 `'v1'`
 - 组件销毁时**必须**调用 `adapter.disconnect()` 防止内存泄漏（在 `disconnectedCallback` 中处理）
@@ -190,7 +190,7 @@ export default class MyComponent extends KingdeeElement {
     this.adapter.update({
       endpointConfig: {
         isv: this.config.isvId,
-        app: this.config.app,
+        app: this.config.moduleId,
         source: 'sample/users',   // Controller XML url 去掉 /{isv}/{app}/ 前缀
         version: 'v1',
       },
