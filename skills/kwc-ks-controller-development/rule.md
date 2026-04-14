@@ -72,20 +72,42 @@ export { kwcController };
 
 - 金蝶原厂使用 `kingdee`
 - 二开厂商使用自己的编码（如 `myisv`、`partner001`）
+- **必须从 `.kd/config.json` 的 `isv` 字段读取，禁止猜测或硬编码**
 
 ### 2.3 app 规则
 
 - 必须与当前工程 `.kd/config.json` 中的 `app` 一致
-- 常见值：`dev`、`bos`、`hr`、`fi` 等
+- **必须从 `.kd/config.json` 读取，禁止猜测或硬编码**
+- 常见值：`dev`、`bos`、`hr`、`fi` 等（原厂），二开场景可能是任意自定义值
 
-### 2.4 version 规则
+### 2.4 url 规则（强制）
+
+`<url>` 的拼装必须基于 `.kd/config.json` 中读取的真实 `isv` 和 `app` 值：
+
+```
+// .kd/config.json 示例
+{ "isv": "kdtest", "app": "kdtest_react", ... }
+
+// 拼装规则：读取 isv → 开发商前缀 → 拼装 URL
+<isv>kdtest</isv>
+<app>kdtest_react</app>
+<url>/kdtest/kdtest_react/api/sliconstest</url>
+```
+
+**执行步骤：**
+1. 读取 `.kd/config.json` 获取 `isv` 和 `app` 的真实值
+2. 若 `isv === 'kingdee'`，则 URL 前缀为 `/kd/{app}/`
+3. 若 `isv` 为其他值，则 URL 前缀为 `/{isv}/{app}/`
+4. 在前缀后拼接自定义子目录和资源名称
+
+### 2.5 version 规则
 
 - 类型：正整数（1, 2, 3...）
 - 每次部署必须递增
 - **不支持**相同版本号覆盖
 - 新 Controller 首次部署 version 设为 `1`
 
-### 2.5 scriptFile 规则
+### 2.6 scriptFile 规则
 
 - 必须与实际脚本文件名一致
 - 包含文件扩展名（`.ts`）
@@ -99,11 +121,15 @@ export { kwcController };
 ```
 
 **至少 3 级路径**：
-- ✅ `/kd/dev/sample/users`（推荐）
-- ✅ `/kd/bos/usercenter/users`
-- ✅ `/myisv/myapp/orders`
+- ✅ `/kd/dev/sample/users`（原厂示例）
+- ✅ `/kd/bos/usercenter/users`（原厂示例）
+- ✅ `/kdtest/kdtest_react/api/sliconstest`（二开示例：isv=kdtest, app=kdtest_react）
+- ✅ `/myisv/myapp/orders`（二开示例：isv=myisv, app=myapp）
+- ❌ `/api/sliconstest`（缺少开发商前缀和应用标识）
 - ❌ `/kd/dev`（缺少资源路径）
 - ❌ `/dev/sample/users`（缺少开发商前缀）
+
+> **关键**：URL 的前两级必须与 .kws 中的 `<isv>` 和 `.kd/config.json` 中的 `app` 严格对应，不能自行编造前缀。
 
 ### 3.2 开发商前缀规则
 
@@ -116,11 +142,13 @@ export { kwcController };
 
 最终访问 URL = **类 URL** + **方法 URL**
 
-| 类 URL | 方法 URL | 最终访问 URL |
-|--------|---------|-------------|
-| `/kd/dev/users` | `/{id}` | `/kd/dev/users/{id}` |
-| `/kd/dev/users` | `` (空) | `/kd/dev/users` |
-| `/kd/dev/users` | `/profile` | `/kd/dev/users/profile` |
+| 场景 | 类 URL | 方法 URL | 最终访问 URL |
+|------|--------|---------|-------------|
+| 原厂 | `/kd/dev/users` | `/{id}` | `/kd/dev/users/{id}` |
+| 原厂 | `/kd/dev/users` | `` (空) | `/kd/dev/users` |
+| 原厂 | `/kd/dev/users` | `/profile` | `/kd/dev/users/profile` |
+| 二开 | `/kdtest/kdtest_react/api/icons` | `/{id}` | `/kdtest/kdtest_react/api/icons/{id}` |
+| 二开 | `/kdtest/kdtest_react/api/icons` | `` (空) | `/kdtest/kdtest_react/api/icons` |
 
 ## 4. Method 配置约束
 
@@ -398,13 +426,14 @@ try {
 1. [ ] **类导出**：是否正确导出了 `kwcController` 实例？
 2. [ ] **方法签名**：是否使用了 `(request: any, response: any)` 参数？
 3. [ ] **.kws 元数据必填**：name/isv/app/version/url/scriptFile/methods 是否完整？
-4. [ ] **URL 路径**：是否至少 3 级路径？
-5. [ ] **权限配置**：每个 method 是否都有 permission？
-6. [ ] **参数获取**：是否使用了正确的类型方法（如 `getLongPathVariable`）？
-7. [ ] **错误处理**：是否所有异常路径都有 `throwException` 处理？
-8. [ ] **SDK 确认**：调用的 SDK 方法是否在索引中已确认存在？
-9. [ ] **响应数据类型**：返回复杂类型（数组/对象）时是否使用了 `ArrayList`/`HashMap`？简单类型可直接返回。
-10. [ ] **禁止事项**：是否未运行任何构建/部署/格式化命令？
+4. [ ] **isv/app 来源**：isv 和 app 是否从 `.kd/config.json` 读取的真实值（而非猜测或硬编码）？
+5. [ ] **URL 路径**：URL 前缀是否与 isv/app 严格对应？是否至少 3 级路径？
+6. [ ] **权限配置**：每个 method 是否都有 permission？
+7. [ ] **参数获取**：是否使用了正确的类型方法（如 `getLongPathVariable`）？
+8. [ ] **错误处理**：是否所有异常路径都有 `throwException` 处理？
+9. [ ] **SDK 确认**：调用的 SDK 方法是否在索引中已确认存在？
+10. [ ] **响应数据类型**：返回复杂类型（数组/对象）时是否使用了 `ArrayList`/`HashMap`？简单类型可直接返回。
+11. [ ] **禁止事项**：是否未运行任何构建/部署/格式化命令？
 
 ## 11. 最佳实践
 

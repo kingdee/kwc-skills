@@ -26,10 +26,11 @@ description: 【KWC KS Controller 开发阶段 Skill】仅当 app/ks/controller/
 ## 标准工作流
 
 1. **确认目录存在**：Controller 目录已由 scaffold 创建（`app/ks/controller/<Name>/`）
-2. **查询实体字段**（涉及业务实体操作时）：通过 `meta-query-api.mjs` 获取真实字段结构，**禁止猜测字段名**
-3. **编写 .kws 元数据**：定义 URL 路由、HTTP 方法和权限
-4. **编写脚本代码**：实现业务逻辑，SDK 调用前先在索引中确认存在
-5. **交付构建**：完成后通知用户回到 scaffold 进行部署
+2. **读取工程配置**（强制）：读取 `.kd/config.json`，获取 `isv`、`app` 等字段的真实值，后续 .kws 中的 `<isv>`、`<app>`、`<url>` 必须基于这些值拼装，**禁止猜测或硬编码**
+3. **查询实体字段**（涉及业务实体操作时）：通过 `meta-query-api.mjs` 获取真实字段结构，**禁止猜测字段名**
+4. **编写 .kws 元数据**：基于第 2 步读取的配置拼装 URL（`/{isv}/{app}/...`），定义 HTTP 方法和权限
+5. **编写脚本代码**：实现业务逻辑，SDK 调用前先在索引中确认存在
+6. **交付构建**：完成后通知用户回到 scaffold 进行部署
 
 ## 参考资源
 
