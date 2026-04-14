@@ -232,9 +232,9 @@ const contentType = request.getHeader('Content-Type');
 
 ## 7. 响应处理约束
 
-### 7.0 ⚠️ KS 运行时数组序列化陷阱（P0 高频问题）
+### 7.0 ⚠️ 响应数据类型约束（P0 高频问题）
 
-**已知平台限制**：KS 运行时在序列化 `response.ok(data)` 时，**可能将 JavaScript 数组 `[]` 转换为空对象 `{}`**，导致前端收到的数据类型与后端代码中定义的不一致。
+**已知平台限制**：KS 运行时在序列化 `response.ok(data)` 时，**可能将 JavaScript 原生数组 `[]` 转换为空对象 `{}`**，导致前端收到的数据类型与后端代码中定义的不一致。
 
 **典型故障链路**：
 ```
@@ -245,38 +245,59 @@ const contentType = request.getHeader('Content-Type');
 ↓ 运行时异常 → 白屏
 ```
 
-**硬性约束**：
+**硬性约束 — 复杂类型必须使用 Java 映射集合**：
 
-1. **禁止在 `response.ok()` 的顶层对象中直接放置数组字段**
-   ```typescript
-   // ❌ 危险：items 数组可能被序列化为 {}
-   response.ok({
-     title: '标题',
-     items: ['a', 'b', 'c']
-   });
+当 `response.ok()` 返回的数据包含**数组或对象结构**时，**必须**使用 Java 映射类型 `ArrayList` 和 `HashMap`，**禁止**使用 JavaScript 原生 `[]` 和 `{}`。
 
-   // ✅ 安全：将数组 JSON 序列化为字符串，前端再 parse
-   response.ok({
-     title: '标题',
-     items: JSON.stringify(['a', 'b', 'c'])
-   });
+```typescript
+import { ArrayList, HashMap } from '@cosmic/bos-script/java/util';
+```
 
-   // ✅ 安全：用逗号分隔的字符串代替数组
-   response.ok({
-     title: '标题',
-     itemsText: 'a||b||c'    // 前端用 split('||') 还原
-   });
-   ```
+> 当返回值仅为简单类型（字符串、数字、布尔值等）时，可以直接传入 `response.ok()`，无需包装。
 
-2. **如果必须返回数组，必须在注释中标注序列化风险并告知前端做防御**
-   ```typescript
-   // ⚠️ 注意：items 为数组字段，KS 运行时可能将其序列化为 {}，
-   //    前端必须用 Array.isArray() 校验后再使用。
-   response.ok({
-     title: '标题',
-     items: ['a', 'b', 'c']
-   });
-   ```
+**示例对比**：
+
+```typescript
+import { ArrayList, HashMap } from '@cosmic/bos-script/java/util';
+
+// ❌ 禁止：直接使用 JS 原生对象和数组
+response.ok({
+  title: '标题',
+  items: [
+    { id: 1, name: '张三' },
+    { id: 2, name: '李四' }
+  ]
+});
+
+// ✅ 正确：使用 HashMap 构造对象，ArrayList 构造列表
+const list = new ArrayList();
+for (const row of dataRows) {
+  const item = new HashMap();
+  item.put('id', row.getId());
+  item.put('name', row.getString('name'));
+  list.add(item);
+}
+
+const result = new HashMap();
+result.put('title', '标题');       // 简单类型直接 put
+result.put('items', list);          // 列表使用 ArrayList
+result.put('total', list.size());   // 数字直接 put
+response.ok(result);
+
+// ✅ 简单类型可直接返回
+response.ok('操作成功');            // 字符串
+response.ok(42);                    // 数字
+```
+
+**备选方案 — JSON.stringify（仅在无法使用 ArrayList/HashMap 时）**：
+
+```typescript
+// ⚠️ 备选：将数组 JSON 序列化为字符串，前端再 JSON.parse
+response.ok({
+  title: '标题',
+  items: JSON.stringify(['a', 'b', 'c'])
+});
+```
 
 ### 7.1 成功响应
 
@@ -382,7 +403,7 @@ try {
 6. [ ] **参数获取**：是否使用了正确的类型方法（如 `getLongPathVariable`）？
 7. [ ] **错误处理**：是否所有异常路径都有 `throwException` 处理？
 8. [ ] **SDK 确认**：调用的 SDK 方法是否在索引中已确认存在？
-9. [ ] **数组序列化**：响应中是否包含数组字段？如有，是否已做 JSON.stringify 或标注风险？
+9. [ ] **响应数据类型**：返回复杂类型（数组/对象）时是否使用了 `ArrayList`/`HashMap`？简单类型可直接返回。
 10. [ ] **禁止事项**：是否未运行任何构建/部署/格式化命令？
 
 ## 11. 最佳实践

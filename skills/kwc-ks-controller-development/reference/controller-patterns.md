@@ -146,18 +146,19 @@ Response (200):
 ### 2.2 TypeScript 代码
 
 ```typescript
+import { ArrayList, HashMap } from '@cosmic/bos-script/java/util';
+
 class UserController {
   // GET /kd/dev/sample/users/{id}
   getUser(request: any, response: any) {
     const userId = request.getLongPathVariable('id');
     
-    // 模拟查询用户
-    const user = {
-      id: userId,
-      name: '张三',
-      email: 'zhangsan@example.com',
-      department: '研发部'
-    };
+    // 使用 HashMap 构造返回对象
+    const user = new HashMap();
+    user.put('id', userId);
+    user.put('name', '张三');
+    user.put('email', 'zhangsan@example.com');
+    user.put('department', '研发部');
     
     response.ok(user);
   }
@@ -177,13 +178,12 @@ class UserController {
       return;
     }
     
-    // 模拟创建用户
-    const newUser = {
-      id: Date.now(),
-      name: body['name'],
-      email: body['email'],
-      department: body['department'] || '默认部门'
-    };
+    // 使用 HashMap 构造返回对象
+    const newUser = new HashMap();
+    newUser.put('id', Date.now());
+    newUser.put('name', body['name']);
+    newUser.put('email', body['email']);
+    newUser.put('department', body['department'] || '默认部门');
     
     response.of(201, newUser);
   }
@@ -193,14 +193,13 @@ class UserController {
     const userId = request.getLongPathVariable('id');
     const body = request.getMapBody();
     
-    // 模拟更新用户
-    const updatedUser = {
-      id: userId,
-      name: body['name'],
-      email: body['email'],
-      department: body['department'],
-      updatedAt: new Date().toISOString()
-    };
+    // 使用 HashMap 构造返回对象
+    const updatedUser = new HashMap();
+    updatedUser.put('id', userId);
+    updatedUser.put('name', body['name']);
+    updatedUser.put('email', body['email']);
+    updatedUser.put('department', body['department']);
+    updatedUser.put('updatedAt', new Date().toISOString());
     
     response.ok(updatedUser);
   }
@@ -209,11 +208,11 @@ class UserController {
   deleteUser(request: any, response: any) {
     const userId = request.getLongPathVariable('id');
     
-    // 模拟删除用户
-    response.ok({
-      message: '删除成功',
-      deletedId: userId
-    });
+    // 简单类型可直接返回；包含多字段时仍使用 HashMap
+    const result = new HashMap();
+    result.put('message', '删除成功');
+    result.put('deletedId', userId);
+    response.ok(result);
   }
 }
 
@@ -386,6 +385,8 @@ export { kwcController };
 ### 4.2 TypeScript 代码
 
 ```typescript
+import { ArrayList, HashMap } from '@cosmic/bos-script/java/util';
+
 class OrderController {
   // GET /kd/dev/sample/orders?page=1&size=10&status=PENDING
   listOrders(request: any, response: any) {
@@ -399,26 +400,39 @@ class OrderController {
     // 获取请求头
     const clientVersion = request.getHeader('X-Client-Version');
     
-    // 模拟分页查询
-    const orders = [
-      { id: 1001, status: 'PENDING', amount: 100.00 },
-      { id: 1002, status: 'PENDING', amount: 200.00 }
-    ];
+    // 使用 ArrayList + HashMap 构造列表数据
+    const orders = new ArrayList();
+    const order1 = new HashMap();
+    order1.put('id', 1001);
+    order1.put('status', 'PENDING');
+    order1.put('amount', 100.00);
+    orders.add(order1);
+
+    const order2 = new HashMap();
+    order2.put('id', 1002);
+    order2.put('status', 'PENDING');
+    order2.put('amount', 200.00);
+    orders.add(order2);
     
-    response.ok({
-      data: orders,
-      pagination: {
-        page: page,
-        size: size,
-        total: 100
-      },
-      filters: {
-        status: status,
-        startDate: startDate,
-        endDate: endDate
-      },
-      clientVersion: clientVersion
-    });
+    // 构造分页信息
+    const pagination = new HashMap();
+    pagination.put('page', page);
+    pagination.put('size', size);
+    pagination.put('total', 100);
+
+    // 构造过滤条件
+    const filters = new HashMap();
+    filters.put('status', status);
+    filters.put('startDate', startDate);
+    filters.put('endDate', endDate);
+
+    // 组装最终结果
+    const result = new HashMap();
+    result.put('data', orders);
+    result.put('pagination', pagination);
+    result.put('filters', filters);
+    result.put('clientVersion', clientVersion);
+    response.ok(result);
   }
   
   // POST /kd/dev/sample/orders/{id}/process
@@ -445,26 +459,15 @@ class OrderController {
       return;
     }
     
-    // 执行操作
-    if (action === 'approve') {
-      response.ok({
-        orderId: orderId,
-        status: 'APPROVED',
-        message: '订单已审批通过',
-        operator: operatorId,
-        remark: remark,
-        processedAt: new Date().toISOString()
-      });
-    } else {
-      response.ok({
-        orderId: orderId,
-        status: 'REJECTED',
-        message: '订单已驳回',
-        operator: operatorId,
-        remark: remark,
-        processedAt: new Date().toISOString()
-      });
-    }
+    // 使用 HashMap 构造返回对象
+    const result = new HashMap();
+    result.put('orderId', orderId);
+    result.put('status', action === 'approve' ? 'APPROVED' : 'REJECTED');
+    result.put('message', action === 'approve' ? '订单已审批通过' : '订单已驳回');
+    result.put('operator', operatorId);
+    result.put('remark', remark);
+    result.put('processedAt', new Date().toISOString());
+    response.ok(result);
   }
 }
 
@@ -482,6 +485,7 @@ export { kwcController };
 
 ```typescript
 import { QueryServiceHelper } from 'kd/sdk/helper';
+import { HashMap } from '@cosmic/bos-script/java/util';
 
 class UserController {
   // GET /kd/dev/sample/users/{id}
@@ -502,12 +506,12 @@ class UserController {
       }
 
       result.first();
-      const user = {
-        id: result.getLong('id'),
-        name: result.getString('name'),
-        email: result.getString('email'),
-        department: result.getString('department')
-      };
+      // 使用 HashMap 构造返回对象
+      const user = new HashMap();
+      user.put('id', result.getLong('id'));
+      user.put('name', result.getString('name'));
+      user.put('email', result.getString('email'));
+      user.put('department', result.getString('department'));
 
       response.ok(user);
     } catch (e: any) {
@@ -524,6 +528,7 @@ export { kwcController };
 
 ```typescript
 import { QueryServiceHelper } from 'kd/sdk/helper';
+import { ArrayList, HashMap } from '@cosmic/bos-script/java/util';
 
 class UserListController {
   // GET /kd/dev/sample/users?page=1&size=10&department=研发部
@@ -549,20 +554,26 @@ class UserListController {
         size
       );
 
-      const users: any[] = [];
+      // 使用 ArrayList + HashMap 构造列表
+      const users = new ArrayList();
       while (result.next()) {
-        users.push({
-          id: result.getLong('id'),
-          name: result.getString('name'),
-          email: result.getString('email'),
-          department: result.getString('department')
-        });
+        const item = new HashMap();
+        item.put('id', result.getLong('id'));
+        item.put('name', result.getString('name'));
+        item.put('email', result.getString('email'));
+        item.put('department', result.getString('department'));
+        users.add(item);
       }
 
-      response.ok({
-        data: users,
-        pagination: { page, size, total: users.length }
-      });
+      const pagination = new HashMap();
+      pagination.put('page', page);
+      pagination.put('size', size);
+      pagination.put('total', users.size());
+
+      const data = new HashMap();
+      data.put('data', users);
+      data.put('pagination', pagination);
+      response.ok(data);
     } catch (e: any) {
       response.throwException(e.message || '查询失败', 500, 'QUERY_FAILED');
     }
@@ -578,6 +589,7 @@ export { kwcController };
 ```typescript
 import { BusinessDataServiceHelper } from 'kd/sdk/helper';
 import { DynamicObject } from 'kd/sdk/datatype';
+import { HashMap } from '@cosmic/bos-script/java/util';
 
 class UserCreateController {
   // POST /kd/dev/sample/users
@@ -600,11 +612,12 @@ class UserCreateController {
       // 保存实体
       const savedObj = BusinessDataServiceHelper.save('bos_user', userObj);
 
-      response.of(201, {
-        id: savedObj.getLong('id'),
-        name: savedObj.getString('name'),
-        message: '创建成功'
-      });
+      // 使用 HashMap 构造返回对象
+      const result = new HashMap();
+      result.put('id', savedObj.getLong('id'));
+      result.put('name', savedObj.getString('name'));
+      result.put('message', '创建成功');
+      response.of(201, result);
     } catch (e: any) {
       response.throwException(e.message || '创建失败', 500, 'CREATE_FAILED');
     }
