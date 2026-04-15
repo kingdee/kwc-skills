@@ -37,10 +37,14 @@
     ```
 
 ## 2. 导入规范
-- **Shoelace 组件导入**：
-  - 必须从 `@kdcloudjs/shoelace/dist/components/[component]/[component].js` 导入。
+- **基础组件导入**：
+  - 从 `@kdcloudjs/shoelace/dist/components/[component]/[component].js` 导入。
   - 导入即注册 Web Component，无需 `Vue.use()` 或 `components: {}` 注册。
   - 示例：`import '@kdcloudjs/shoelace/dist/components/input/input.js';`
+- **业务组件导入**（`@kdcloudjs/shoelace-biz`）：
+  - 从 `@kdcloudjs/shoelace-biz/dist/components/[component]/[component].js` 导入。
+  - 当前业务组件：**Lookup (F7)**，后续可能新增其他业务组件。
+  - 示例：`import '@kdcloudjs/shoelace-biz/dist/components/lookup/lookup.js';`
 
 ## 3. 模板规范 (Template)
 - **组件标签**：必须使用 kebab-case 标签（如 `<sl-input></sl-input>`），禁止 PascalCase（`<SlInput>`）。
@@ -99,7 +103,7 @@
 
 ## 6. KWC 扩展组件文档与约束
 - **标准组件**（Button/Input/Icon 等）：参考官网 [https://shoelace.style/](https://shoelace.style/)
-- **扩展组件**：以下组件为 KWC 专用扩展组件（不在 Shoelace 官网），当任务涉及这些组件时，**必须立即调用 Read 工具读取并学习**对应的 reference 文档，严禁凭空猜测 API：
+- **扩展组件**（`@kdcloudjs/shoelace`）：以下组件为 KWC 专用扩展组件（不在 Shoelace 官网），当任务涉及这些组件时，**必须立即调用 Read 工具读取并学习**对应的 reference 文档，严禁凭空猜测 API：
 
 - **对话框 (Dialog)**:
   - 文档：`./reference/sl-dialog.md`
@@ -135,6 +139,13 @@
   - 支持点击上传、拖拽上传、粘贴上传、目录上传等多种模式
   - 支持 `beforeUpload` 校验、`customRequest` 自定义上传、`itemRender`/`iconRender` 自定义渲染
   - **对象/数组属性必须用 `.prop`**：`:headers.prop`、`:fileList.prop`、`:beforeUpload.prop` 等
+
+- **业务组件**（`@kdcloudjs/shoelace-biz`）：以下组件来自业务组件库，**导入路径为 `@kdcloudjs/shoelace-biz/dist/components/...`**，不是 `@kdcloudjs/shoelace`：
+
+- **弹出选择器 / F7 (Lookup)**:
+  - 文档：`./reference/sl-lookup.md` (**涉及 Lookup 开发时必须读取**)
+  - 导入：`import '@kdcloudjs/shoelace-biz/dist/components/lookup/lookup.js';`
+  - 远程搜索组件，必须配置 `app` + `entity`，不支持本地数据选择
 
 ## 7. 开发工具与环境约束 (Tools & Environment)
 - **严禁运行 ESLint/Prettier 修复与校验**：**绝对禁止**运行任何形式的 lint fix 命令（无论是手动还是自动，如 `eslint --fix`）。同时，**不需要**关注或修复 ESLint 格式报错。KWC Vue 的特殊语法可能与通用规则冲突，强行修复会导致代码损坏。

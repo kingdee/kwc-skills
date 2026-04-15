@@ -3,13 +3,19 @@
 所有 KWC React 开发工作必须严格遵守以下约束。违反这些规则的代码将无法运行或无法通过审查。
 
 ## 1. 导入规范 (Imports)
-- **组件源**: 必须从 React 包装器路径导入：`@kdcloudjs/shoelace/dist/react/[component]/index.js`。
-- **类型源**: 元素类型从组件源导入：`@kdcloudjs/shoelace/dist/components/[component]/[component].js`。
-- **命名**: 组件使用 PascalCase (如 `SlButton`, `SlInput`)。
+- **基础组件源**: 从 `@kdcloudjs/shoelace` 导入：`@kdcloudjs/shoelace/dist/react/[component]/index.js`。
+- **业务组件源**: 从 `@kdcloudjs/shoelace-biz` 导入：`@kdcloudjs/shoelace-biz/dist/react/[component]/index.js`。
+  - 当前业务组件：**Lookup (F7)**，后续可能新增其他业务组件。
+- **类型源**: 元素类型从对应包的组件源导入：`@kdcloudjs/shoelace(-biz)/dist/components/[component]/[component].js`。
+- **命名**: 组件使用 PascalCase (如 `SlButton`, `SlInput`, `SlLookup`)。
 - **示例**:
   ```javascript
+  // 基础组件
   import SlButton from '@kdcloudjs/shoelace/dist/react/button/index.js';
   import type SlButtonElement from '@kdcloudjs/shoelace/dist/components/button/button.js';
+
+  // 业务组件（注意包名为 shoelace-biz）
+  import SlLookup from '@kdcloudjs/shoelace-biz/dist/react/lookup/index.js';
   ```
 
 ## 2. 事件绑定 (Events)
@@ -77,7 +83,7 @@ export default StrictTemplate;
 
 ## 5. KWC 扩展组件文档与约束
 - **标准组件**（Button/Input/Icon 等）：参考官网 [https://shoelace.style/](https://shoelace.style/)
-- **扩展组件**：以下组件为 KWC 专用扩展组件（不在 Shoelace 官网），当任务涉及这些组件时，**必须立即调用 Read 工具读取并学习**对应的 reference 文档，严禁凭空猜测 API：
+- **扩展组件**（`@kdcloudjs/shoelace`）：以下组件为 KWC 专用扩展组件（不在 Shoelace 官网），当任务涉及这些组件时，**必须立即调用 Read 工具读取并学习**对应的 reference 文档，严禁凭空猜测 API：
 
 - **对话框 (Dialog)**:
   - 文档：`./reference/sl-dialog.md`
@@ -117,6 +123,13 @@ export default StrictTemplate;
   - 支持点击上传、拖拽上传、粘贴上传、目录上传等多种模式
   - 支持 `beforeUpload` 校验、`customRequest` 自定义上传、`itemRender`/`iconRender` 自定义渲染
   - 自定义渲染函数需使用 `lit` 的 `html` 模板字面量返回 `TemplateResult`
+
+- **业务组件**（`@kdcloudjs/shoelace-biz`）：以下组件来自业务组件库，**导入路径为 `@kdcloudjs/shoelace-biz/dist/react/...`**，不是 `@kdcloudjs/shoelace`：
+
+- **弹出选择器 / F7 (Lookup)**:
+  - 文档：`./reference/sl-lookup.md` (**涉及 Lookup 开发时必须读取**)
+  - 导入：`import SlLookup from '@kdcloudjs/shoelace-biz/dist/react/lookup/index.js'`
+  - 远程搜索组件，必须配置 `app` + `entity`，不支持本地数据选择
 
 ## 6. 开发工具与环境约束 (Tools & Environment)
 - **严禁运行 ESLint/Prettier 修复与校验**：**绝对禁止**运行任何形式的 lint fix 命令（无论是手动还是自动，如 `eslint --fix`）。同时，**不需要**关注或修复 ESLint 格式报错。KWC React 的特殊语法可能与通用规则冲突，强行修复会导致代码损坏。

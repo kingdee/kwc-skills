@@ -72,12 +72,14 @@ description: 【脚手架后阶段 Skill】仅在 kwc-project-scaffold 完成工
 
 ## 4. 关键约束摘要 (详细请见本 Skill 目录下的 rule.md)
 - **导入**：`import '@kdcloudjs/shoelace/dist/components/input/input.js';`
+- **业务组件导入**：`import '@kdcloudjs/shoelace-biz/dist/components/lookup/lookup.js';`（注意包名为 `shoelace-biz`）
 - **模板**：使用 `<sl-input>` (kebab-case)。
 - **事件**：使用 `@sl-change` 绑定。
 - **CSS**：样式必须使用 Shoelace Design Token（`var(--sl-color-*)`、`var(--sl-spacing-*)`、`var(--sl-font-size-*)`、`var(--sl-border-radius-*)`），禁止硬编码 hex 色值和 px 数值。详见 `./reference/css-design-tokens.md`。
 
 ## 5. 常用资源
 - **扩展组件文档**（位于本 Skill 的 `reference/` 目录下）：
+  - **基础扩展组件**（`@kdcloudjs/shoelace`）：
   - Table: `reference/table/index.md`
   - DatePicker: `reference/datepicker/index.md`
   - TimePicker: `reference/sl-timepicker.md`
@@ -104,6 +106,8 @@ description: 【脚手架后阶段 Skill】仅在 kwc-project-scaffold 完成工
   - Transfer: `reference/sl-transfer.md`
   - Popconfirm: `reference/sl-popconfirm.md`
   - Bubble: `reference/sl-bubble.md`
+  - **业务组件**（`@kdcloudjs/shoelace-biz`，导入路径为 `@kdcloudjs/shoelace-biz/dist/components/...`）：
+  - Lookup (F7): `reference/sl-lookup.md`
   - **使用前必须阅读相应文档**。
 - **标准组件文档**：[https://shoelace.style/](https://shoelace.style/)
 

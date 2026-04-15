@@ -54,6 +54,7 @@ description: 【脚手架后阶段 Skill】仅在 kwc-project-scaffold 完成工
 
 ## 3. 关键约束摘要 (详细请见本 Skill 目录下的 rule.md)
 - **导入**：`import SlInput from '@kdcloudjs/shoelace/dist/react/input/index.js';`
+- **业务组件导入**：`import SlLookup from '@kdcloudjs/shoelace-biz/dist/react/lookup/index.js';`（注意包名为 `shoelace-biz`）
 - **类型**：`import type SlInputElement from '@kdcloudjs/shoelace/dist/components/input/input.js';`
 - **JSX**：`<SlInput onSlChange={handleChange} />`
 - **事件**：必须映射为 `onSl*`，且使用 `CustomEvent` 类型断言
@@ -61,6 +62,7 @@ description: 【脚手架后阶段 Skill】仅在 kwc-project-scaffold 完成工
 
 ## 4. 常用资源
 - **扩展组件文档**（位于本 Skill 的 `reference/` 目录下）：
+  - **基础扩展组件**（`@kdcloudjs/shoelace`）：
   - Table: `reference/table/index.md`
   - DatePicker: `reference/datepicker/index.md`
   - TimePicker: `reference/sl-timepicker.md`
@@ -87,6 +89,8 @@ description: 【脚手架后阶段 Skill】仅在 kwc-project-scaffold 完成工
   - Transfer: `reference/sl-transfer.md`
   - Popconfirm: `reference/sl-popconfirm.md`
   - Bubble: `reference/sl-bubble.md`
+  - **业务组件**（`@kdcloudjs/shoelace-biz`，导入路径为 `@kdcloudjs/shoelace-biz/dist/react/...`）：
+  - Lookup (F7): `reference/sl-lookup.md`
   - **使用前必须阅读相应文档**。
 - **标准组件文档**：[https://shoelace.style/](https://shoelace.style/)
 

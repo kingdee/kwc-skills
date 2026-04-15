@@ -29,8 +29,12 @@
 - **属性命名**：属性名必须全小写（kebab-case）。
   - ❌ 禁止：`pageSize={...}`
   - ✅ 必须：`page-size={...}`
-- **导入规范**：使用组件前必须导入对应的 `.js` 定义文件。
-  - 示例：`import '@kdcloudjs/shoelace/dist/components/button/button.js';`
+- **导入规范**：
+  - **基础组件**：使用组件前必须导入对应的 `.js` 定义文件。
+    - 示例：`import '@kdcloudjs/shoelace/dist/components/button/button.js';`
+  - **业务组件**（`@kdcloudjs/shoelace-biz`）：从 `shoelace-biz` 包导入。
+    - 当前业务组件：**Lookup (F7)**，后续可能新增其他业务组件。
+    - 示例：`import '@kdcloudjs/shoelace-biz/dist/components/lookup/lookup.js';`
 
 ## 4. 事件绑定约束 (Event Binding)
 - **HTML 中仅限原生事件**：HTML 模板中只能绑定原生交互事件（`click`, `focus`, `blur`, 键盘/鼠标事件）。
@@ -55,7 +59,7 @@
 
 ## 6. KWC 扩展组件文档与约束
 - **标准组件**（Button/Input/Icon 等）：参考官网 [https://shoelace.style/](https://shoelace.style/)
-- **扩展组件**：以下组件为 KWC 专用扩展组件（不在 Shoelace 官网），当任务涉及这些组件时，**必须立即调用 Read 工具读取并学习**对应的 reference 文档，严禁凭空猜测 API：
+- **扩展组件**（`@kdcloudjs/shoelace`）：以下组件为 KWC 专用扩展组件（不在 Shoelace 官网），当任务涉及这些组件时，**必须立即调用 Read 工具读取并学习**对应的 reference 文档，严禁凭空猜测 API：
 
 - **对话框 (Dialog)**:
   - 文档：`./reference/sl-dialog.md`
@@ -92,6 +96,14 @@
   - 需导入 `@kdcloudjs/shoelace/dist/components/upload/upload.js`，标签必须加 `kwc:external`
   - 支持点击上传、拖拽上传、粘贴上传、目录上传等多种模式
   - 支持 `beforeUpload` 校验、`customRequest` 自定义上传、`itemRender`/`iconRender` 自定义渲染
+
+- **业务组件**（`@kdcloudjs/shoelace-biz`）：以下组件来自业务组件库，**导入路径为 `@kdcloudjs/shoelace-biz/dist/components/...`**，不是 `@kdcloudjs/shoelace`：
+
+- **弹出选择器 / F7 (Lookup)**:
+  - 文档：`./reference/sl-lookup.md` (**涉及 Lookup 开发时必须读取**)
+  - 导入：`import '@kdcloudjs/shoelace-biz/dist/components/lookup/lookup.js';`
+  - 远程搜索组件，必须配置 `app` + `entity`，不支持本地数据选择
+  - 标签必须加 `kwc:external`
 
 ## 7. 常见排障
 1. **构建报错 `(!) Unresolved dependencies`**：例如提示 `sl/tabPanel` 无法解析。这是因为 HTML 中 Shoelace 组件缺少 `kwc:external` 属性，导致编译器将其误判为 LWC 组件。

@@ -104,6 +104,8 @@ description: 【脚手架后阶段 Skill】仅在 kwc-project-scaffold 完成工
   - Transfer: `reference/sl-transfer.md`
   - Popconfirm: `reference/sl-popconfirm.md`
   - Bubble: `reference/sl-bubble.md`
+  - **业务组件**（`@kdcloudjs/shoelace-biz`，导入路径为 `@kdcloudjs/shoelace-biz/dist/components/...`）：
+  - Lookup (F7): `reference/sl-lookup.md`
   - **使用前必须阅读相应文档**。
 
 ## 6. 输出检查清单
