@@ -13,7 +13,13 @@
 - **自定义分隔符**：支持自定义路径分隔符（`separator`）
 - **表单集成**：支持 `name`、`required`、`form` 属性参与表单提交和验证
 - **丰富插槽**：支持前缀/后缀图标、自定义清除图标、自定义展开图标等
-- **自定义样式**：支持 `filled`、`pill`、`size` 等外观属性
+- **外观变体**：支持 `variant`（outlined/borderless/filled/underlined）和 `size` 等外观属性
+- **搜索过滤**：支持搜索过滤选项（`showSearch`），可自定义过滤、排序和数量限制
+- **异步加载**：支持数据懒加载（`loadData`）
+- **自定义渲染**：支持自定义选项渲染（`optionRender`）和显示渲染（`displayRender`）
+- **标签控制**：多选模式支持最大标签数（`max-tag-count`）和标签文本长度限制（`max-tag-text-length`）
+- **验证状态**：支持 `status` 属性设置 error/warning 状态
+- **选中策略**：多选模式支持 `show-checked-strategy` 控制显示父节点或子节点
 
 ## CascaderOption 数据结构
 
@@ -111,7 +117,7 @@ export default class CascaderBasic extends KingdeeElement {
     class="cascader-el"
     placeholder="请选择"
     multiple
-    clearable
+    allow-clear
     style="width: 400px;"
   ></sl-cascader>
 </template>
@@ -348,11 +354,11 @@ export default class CascaderFieldNames extends KingdeeElement {
 
 ## 可清除
 
-设置 `clearable` 属性，当有选中值时显示清除按钮。
+设置 `allow-clear` 属性（默认已启用），当有选中值时显示清除按钮。
 
 ```html
 <template>
-  <sl-cascader kwc:external class="cascader-el" placeholder="请选择" clearable style="width: 300px;"></sl-cascader>
+  <sl-cascader kwc:external class="cascader-el" placeholder="请选择" allow-clear style="width: 300px;"></sl-cascader>
 </template>
 ```
 
@@ -405,23 +411,27 @@ el.options = [
 </template>
 ```
 
-## Filled 样式
+## 外观变体
 
-设置 `filled` 属性使用填充样式。
+通过 `variant` 属性设置组件外观变体，支持 `outlined`（默认）、`borderless`、`filled`、`underlined`。
 
 ```html
 <template>
-  <sl-cascader kwc:external class="cascader-el" placeholder="请选择" filled style="width: 300px;"></sl-cascader>
+  <sl-cascader kwc:external class="cascader-outlined" placeholder="Outlined（默认）" style="width: 300px;"></sl-cascader>
+  <sl-cascader kwc:external class="cascader-borderless" placeholder="Borderless" variant="borderless" style="width: 300px;"></sl-cascader>
+  <sl-cascader kwc:external class="cascader-filled" placeholder="Filled" variant="filled" style="width: 300px;"></sl-cascader>
+  <sl-cascader kwc:external class="cascader-underlined" placeholder="Underlined" variant="underlined" style="width: 300px;"></sl-cascader>
 </template>
 ```
 
-## Pill 样式
+## 验证状态
 
-设置 `pill` 属性使用药丸样式（圆角边缘）。
+通过 `status` 属性设置验证状态，支持 `error` 和 `warning`。
 
 ```html
 <template>
-  <sl-cascader kwc:external class="cascader-el" placeholder="请选择" pill style="width: 300px;"></sl-cascader>
+  <sl-cascader kwc:external class="cascader-error" placeholder="Error" status="error" style="width: 300px;"></sl-cascader>
+  <sl-cascader kwc:external class="cascader-warning" placeholder="Warning" status="warning" style="width: 300px;"></sl-cascader>
 </template>
 ```
 
@@ -437,11 +447,11 @@ el.options = [
 
 ## 弹出位置
 
-通过 `placement` 属性设置菜单弹出位置。
+通过 `placement` 属性设置菜单弹出位置，支持 `bottomLeft`（默认）、`bottomRight`、`topLeft`、`topRight`。
 
 ```html
 <template>
-  <sl-cascader kwc:external class="cascader-el" placeholder="请选择" placement="top-start" style="width: 300px;"></sl-cascader>
+  <sl-cascader kwc:external class="cascader-el" placeholder="请选择" placement="topLeft" style="width: 300px;"></sl-cascader>
 </template>
 ```
 
@@ -603,30 +613,40 @@ el.setCustomValidity('');
 
 ## Properties
 
-| 属性             | 描述                                                   | 类型                                                                               | 默认值           |
-| ---------------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------- | ---------------- |
-| name             | 表单提交时的字段名                                     | `string`                                                                           | `''`             |
-| value            | 当前选中路径值数组                                     | `string[]`                                                                         | `[]`             |
-| size             | 组件尺寸                                               | `'small' \| 'medium' \| 'large'`                                                   | `'medium'`       |
-| placeholder      | 占位文本                                               | `string`                                                                           | `''`             |
-| multiple         | 是否多选                                               | `boolean`                                                                          | `false`          |
-| disabled         | 是否禁用                                               | `boolean`                                                                          | `false`          |
-| clearable        | 是否显示清除按钮                                       | `boolean`                                                                          | `false`          |
-| open             | 下拉面板是否打开                                       | `boolean`                                                                          | `false`          |
-| hoist            | 是否使用 fixed 定位策略                                | `boolean`                                                                          | `true`           |
-| filled           | 是否使用填充样式                                       | `boolean`                                                                          | `false`          |
-| pill             | 是否使用药丸样式                                       | `boolean`                                                                          | `false`          |
-| label            | 标签文本                                               | `string`                                                                           | `''`             |
-| placement        | 下拉面板弹出位置                                       | `'top-start' \| 'top' \| 'top-end' \| 'bottom-start' \| 'bottom' \| 'bottom-end'` | `'bottom-start'` |
-| help-text        | 帮助文本                                               | `string`                                                                           | `''`             |
-| required         | 是否必填                                               | `boolean`                                                                          | `false`          |
-| form             | 关联的表单 ID                                          | `string`                                                                           | `''`             |
-| options          | 级联选项数据（通过 JS 属性设置）                       | `CascaderOption[]`                                                                 | `[]`             |
-| fieldNames       | 自定义字段名映射（通过 JS 属性设置）                   | `FieldNames`                                                                       | `{ label: 'label', value: 'value', children: 'children' }` |
-| separator        | 路径分隔符                                             | `string`                                                                           | `' / '`          |
-| expand-trigger   | 子级展开触发方式                                       | `'click' \| 'hover'`                                                               | `'click'`        |
-| change-on-select | 是否选中非叶子节点即改变值                             | `boolean`                                                                          | `false`          |
-| show-full-path   | 是否在输入框中显示完整路径                             | `boolean`                                                                          | `true`           |
+| 属性                  | 描述                                                   | 类型                                                                               | 默认值           |
+| --------------------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------- | ---------------- |
+| name                  | 表单提交时的字段名                                     | `string`                                                                           | `''`             |
+| value                 | 当前选中路径值数组（单选为 `string[]`，多选为 `string[][]`） | `(string \| number)[] \| (string \| number)[][]`                                    | `[]`             |
+| size                  | 组件尺寸                                               | `'small' \| 'medium' \| 'large'`                                                   | `'medium'`       |
+| placeholder           | 占位文本                                               | `string`                                                                           | `''`             |
+| multiple              | 是否多选                                               | `boolean`                                                                          | `false`          |
+| disabled              | 是否禁用                                               | `boolean`                                                                          | `false`          |
+| allow-clear           | 是否显示清除按钮                                       | `boolean`                                                                          | `true`           |
+| open                  | 下拉面板是否打开                                       | `boolean`                                                                          | `false`          |
+| default-open          | 初始是否展开下拉面板                                   | `boolean`                                                                          | `false`          |
+| hoist                 | 是否使用 fixed 定位策略                                | `boolean`                                                                          | `true`           |
+| label                 | 标签文本                                               | `string`                                                                           | `''`             |
+| placement             | 下拉面板弹出位置                                       | `'bottomLeft' \| 'bottomRight' \| 'topLeft' \| 'topRight'`                         | `'bottomLeft'`   |
+| help-text             | 帮助文本                                               | `string`                                                                           | `''`             |
+| required              | 是否必填                                               | `boolean`                                                                          | `false`          |
+| form                  | 关联的表单 ID                                          | `string`                                                                           | `''`             |
+| options               | 级联选项数据（通过 JS 属性设置）                       | `CascaderOption[]`                                                                 | `[]`             |
+| fieldNames            | 自定义字段名映射（通过 JS 属性设置）                   | `FieldNames`                                                                       | `{ label: 'label', value: 'value', children: 'children' }` |
+| separator             | 路径分隔符                                             | `string`                                                                           | `' / '`          |
+| expand-trigger        | 子级展开触发方式                                       | `'click' \| 'hover'`                                                               | `'click'`        |
+| change-on-select      | 是否选中非叶子节点即改变值                             | `boolean`                                                                          | `false`          |
+| show-full-path        | 是否在输入框中显示完整路径                             | `boolean`                                                                          | `true`           |
+| variant               | 外观变体                                               | `'outlined' \| 'borderless' \| 'filled' \| 'underlined'`                           | `'outlined'`     |
+| status                | 验证状态                                               | `'error' \| 'warning' \| ''`                                                       | `''`             |
+| showSearch            | 是否显示搜索输入框（通过 JS 属性设置）                 | `boolean \| ShowSearchConfig`                                                      | `false`          |
+| not-found-content     | 无匹配结果时显示的内容                                 | `string`                                                                           | `'Not Found'`    |
+| loadData              | 异步加载数据函数（通过 JS 属性设置）                   | `(selectedOptions: CascaderOption[]) => void`                                      | `null`           |
+| displayRender         | 自定义已选项显示渲染（通过 JS 属性设置）               | `(labels: string[], selectedOptions: CascaderOption[]) => string`                  | `null`           |
+| optionRender          | 自定义选项渲染（通过 JS 属性设置）                     | `(option: CascaderOption) => string \| HTMLElement`                                | `null`           |
+| max-tag-count         | 多选模式下最多显示的标签数                             | `number`                                                                           | -                |
+| max-tag-placeholder   | 超出最大标签数时的占位文本                             | `string`                                                                           | `''`             |
+| max-tag-text-length   | 标签文本最大显示长度                                   | `number`                                                                           | -                |
+| show-checked-strategy | 多选模式选中项展示策略                                 | `'show-parent' \| 'show-child'`                                                    | `'show-parent'`  |
 
 ## Events
 
@@ -665,6 +685,7 @@ el.setCustomValidity('');
 | suffix      | 输入框后缀图标或元素               |
 | clear-icon  | 自定义清除图标                     |
 | expand-icon | 自定义展开/收起图标                |
+| not-found   | 无匹配结果时显示的自定义内容       |
 
 ## CSS Parts
 
@@ -685,6 +706,8 @@ el.setCustomValidity('');
 | tag                    | 单个标签                                 |
 | clear-button           | 清除按钮                                 |
 | expand-icon            | 展开图标容器                             |
+| search-input           | 搜索输入框（showSearch 启用时）          |
+| not-found              | 无匹配结果容器                           |
 
 ## 最佳实践
 
