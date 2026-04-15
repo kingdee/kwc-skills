@@ -103,6 +103,7 @@ description: 【脚手架后阶段 Skill】仅在 kwc-project-scaffold 完成工
   - Segmented: `reference/sl-segmented.md`
   - Transfer: `reference/sl-transfer.md`
   - Popconfirm: `reference/sl-popconfirm.md`
+  - Bubble: `reference/sl-bubble.md`
   - **使用前必须阅读相应文档**。
 
 ## 6. 输出检查清单
