@@ -560,6 +560,7 @@ export default class ClickableSteps extends KingdeeElement {
 | items          | -                | 步骤条数据（需通过 JS 设置）                     | `StepItem[]`                                                | `[]`           |
 | current        | `current`        | 当前步骤（从 0 开始）                            | `number`                                                    | `0`            |
 | status         | `status`         | 当前步骤的状态                                   | `'wait' \| 'process' \| 'finish' \| 'error'`                | `'process'`    |
+| direction      | `direction`      | 步骤条方向                                       | `'ltr' \| 'rtl'`                                            | `'ltr'`        |
 | initial        | `initial`        | 起始序号（显示序号 = initial + index + 1）       | `number`                                                    | `0`            |
 | percent        | `percent`        | 当前步骤进度百分比（0-100），仅 process 状态生效 | `number`                                                    | -              |
 | size           | `size`           | 尺寸                                             | `'default' \| 'small'`                                      | `'default'`    |

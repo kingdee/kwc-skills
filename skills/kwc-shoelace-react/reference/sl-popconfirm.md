@@ -284,22 +284,23 @@ export default () => (
 
 ## Properties
 
-| 属性         | 描述                                           | 类型                                                                                                                                                             | 默认值                      |
-| ------------ | ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| title        | 确认框标题                                     | `string`                                                                                                                                                         | `''`                        |
-| description  | 确认框描述                                     | `string`                                                                                                                                                         | `''`                        |
-| okText       | 确认按钮文字（HTML 属性：`ok-text`）           | `string`                                                                                                                                                         | `'确定'`                    |
-| cancelText   | 取消按钮文字（HTML 属性：`cancel-text`）       | `string`                                                                                                                                                         | `'取消'`                    |
-| placement    | 弹出位置                                       | `'top' \| 'topLeft' \| 'topRight' \| 'bottom' \| 'bottomLeft' \| 'bottomRight' \| 'left' \| 'leftTop' \| 'leftBottom' \| 'right' \| 'rightTop' \| 'rightBottom'` | `'top'`                     |
-| open         | 是否显示（reflects）                           | `boolean`                                                                                                                                                        | `false`                     |
-| disabled     | 是否禁用（reflects）                           | `boolean`                                                                                                                                                        | `false`                     |
-| icon         | 图标名称                                       | `string`                                                                                                                                                         | `'exclamation-circle-fill'` |
-| arrow        | 是否显示箭头，支持设置箭头精准指向目标元素中心 | `boolean \| { pointAtCenter: boolean }`                                                                                                                          | `true`                      |
-| okType       | 确认按钮类型（HTML 属性：`ok-type`）           | `'primary' \| 'danger' \| 'default'`                                                                                                                             | `'primary'`                 |
-| onConfirm    | 点击确认的回调，支持返回 Promise 实现异步确认  | `() => void \| Promise<void>`                                                                                                                                    | -                           |
-| onCancel     | 点击取消的回调                                 | `() => void`                                                                                                                                                     | -                           |
-| classNames   | 自定义语义化结构的 CSS 类名                    | `Partial<Record<'body' \| 'icon' \| 'title' \| 'description' \| 'footer', string>>`                                                                              | -                           |
-| customStyles | 自定义语义化结构的内联样式，支持对象或函数     | `PopconfirmStylesObject \| PopconfirmStylesFn`                                                                                                                   | -                           |
+| 属性         | 描述   | 类型    | 默认值             |
+| ------------ | ------ | ------------ | -------- |
+| title        | 确认框标题        |`string`        | `''`  |
+| description  | 确认框描述         | `string`     | `''`      |
+| okText       | 确认按钮文字（HTML 属性：`ok-text`）  | `string`    | `'确定'`     |
+| cancelText   | 取消按钮文字（HTML 属性：`cancel-text`）  | `string`    | `'取消'`  |
+| `direction` | 确认框方向 | `'ltr' \| 'rtl'` | `'ltr'` |
+| placement    | 弹出位置       | `'top' \| 'topLeft' \| 'topRight' \| 'bottom' \| 'bottomLeft' \| 'bottomRight' \| 'left' \| 'leftTop' \| 'leftBottom' \| 'right' \| 'rightTop' \| 'rightBottom'` | `'top'`         |
+| open         | 是否显示（reflects）  | `boolean` | `false`  |
+| disabled     | 是否禁用（reflects） | `boolean`  | `false`    |
+| icon         | 图标名称   | `string`  | `'exclamation-circle-fill'` |
+| arrow        | 是否显示箭头，支持设置箭头精准指向目标元素中心 | `boolean \| { pointAtCenter: boolean }`   | `true` |
+| okType       | 确认按钮类型（HTML 属性：`ok-type`）  | `'primary' \| 'danger' \| 'default'`  | `'primary'`   |
+| onConfirm    | 点击确认的回调，支持返回 Promise 实现异步确认  | `() => void \| Promise<void>` | -    |
+| onCancel     | 点击取消的回调  | `() => void`  | -  |
+| classNames   | 自定义语义化结构的 CSS 类名                    | `Partial<Record<'body' \| 'icon' \| 'title' \| 'description' \| 'footer', string>>`| -    |
+| customStyles | 自定义语义化结构的内联样式，支持对象或函数     | `PopconfirmStylesObject \| PopconfirmStylesFn`   | -        |
 
 ## Methods
 

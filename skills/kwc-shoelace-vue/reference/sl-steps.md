@@ -434,6 +434,7 @@ function handleChange(c) {
 | items          | 步骤条数据                                       | `StepItem[]`                                                | `[]`           |
 | current        | 当前步骤（从 0 开始）                            | `number`                                                    | `0`            |
 | status         | 当前步骤的状态                                   | `'wait' \| 'process' \| 'finish' \| 'error'`                | `'process'`    |
+| `direction` | 步骤条方向 | `'ltr' \| 'rtl'` | `'ltr'` |
 | initial        | 起始序号（显示序号 = initial + index + 1）       | `number`                                                    | `0`            |
 | percent        | 当前步骤进度百分比（0-100），仅 process 状态生效 | `number`                                                    | -              |
 | size           | 尺寸                                             | `'default' \| 'small'`                                      | `'default'`    |
