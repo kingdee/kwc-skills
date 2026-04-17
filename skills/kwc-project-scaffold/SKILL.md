@@ -115,6 +115,14 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 - 当 Controller 目录已创建且需要编写脚本代码 → **必须切到 `kwc-ks-controller-development`，禁止本 Skill 直接编写**
 - 当 Controller 脚本代码写完需构建或部署 → 回到 scaffold
 
+### 异常流程保护
+
+当 CLI 命令失败（如 `kd project create` 报错）而改用手动方式创建文件/目录时，代码编写阶段的 Skill 切换规则**同样适用**。手动创建目录结构不等于可以手动编写业务代码。
+
+- 只要进入 `.ts` / `.tsx` / `.vue` / `.js` 文件的编写，无论前置步骤是否通过 CLI 完成，都**必须先切换到对应的框架 Skill**
+- 典型场景：`kd project create` 失败 → 手动创建 `app/kwc/MyComponent/` 目录和 `.js-meta.kwc` → 到这里仍是 scaffold 职责 → 开始写 `MyComponent.tsx` 时 → **必须切换到框架 Skill**
+- Controller 同理：手动创建 `app/ks/controller/` 目录和 `.kws` → scaffold 职责 → 开始写 `.ts` 脚本 → **必须切换到 `kwc-ks-controller-development`**
+
 ### 框架 Skill 激活检查清单
 
 在进入代码实现阶段前，确认以下事项：

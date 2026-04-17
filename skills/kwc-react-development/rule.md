@@ -2,6 +2,21 @@
 
 所有 KWC React 开发工作必须严格遵守以下约束。违反这些规则的代码将无法运行或无法通过审查。
 
+> **⚠️ KWC 扩展组件声明（最高优先级）**
+>
+> 以下组件由 `@kdcloudjs/shoelace` 扩展提供，**开源版 Shoelace 不含这些组件**，但 KWC 版本已完整支持。AI 不得因“Shoelace 没有该组件”而使用原生 HTML 或第三方库替代。
+>
+> **禁止原生 HTML 替代**：
+>
+> | 原生 HTML（禁止） | KWC 组件（必须使用） | 文档 |
+> |---|---|---|
+> | `<table>` / 原生 HTML 表格 | `SlTable` | `./reference/table/index.md` |
+> | `<input type="date">` / 原生日期输入 | `SlDatepicker` | `./reference/datepicker/index.md` |
+>
+> **KWC 扩展组件完整清单**（均可直接使用，严禁猜测 API，必须查阅对应 reference 文档）：
+>
+> `SlTable` · `SlDatepicker` · `SlTimePicker` · `SlDateRangePicker` · `SlPagination` · `SlNav` · `SlDialog`(扩展) · `SlXMarkdown` · `SlThink` · `SlThoughtChain` · `SlSender` · `SlUpload` · `SlTreeSelect` · `SlCascader` · `SlFloatButton` · `SlSteps` · `SlGrid` · `SlNotification` · `SlRadioGroup`(扩展) · `SlSpace` · `SlSegmented` · `SlTransfer` · `SlPopconfirm` · `SlBubble` · `SlImage` · `SlLookup`(业务组件, shoelace-biz)
+
 ## 1. 导入规范 (Imports)
 - **基础组件源**: 从 `@kdcloudjs/shoelace` 导入：`@kdcloudjs/shoelace/dist/react/[component]/index.js`。
 - **业务组件源**: 从 `@kdcloudjs/shoelace-biz` 导入：`@kdcloudjs/shoelace-biz/dist/react/[component]/index.js`。
@@ -90,6 +105,7 @@ export default StrictTemplate;
   - 扩展属性：`maskClosable` 控制点击蒙层是否允许关闭
 - **表格 (Table)**:
   - 文档：`./reference/table/index.md` (**涉及表格开发时必须读取**)
+  - **严禁使用原生 HTML `<table>` 实现表格需求**，必须使用 `SlTable`（KWC 扩展组件）。开源 Shoelace 不含 Table 组件，但 `@kdcloudjs/shoelace` 已扩展提供，禁止退回原生 HTML 表格。
   - React 中需特别注意列配置 (`columns`) 和数据源 (`dataSource`) 的传递方式。
   - 使用自定义渲染时（如自定义单元格，自定义行展开等）需严格按照以下要求：
     - 导入：`import { generateCustomSlot } from '@kdcloudjs/shoelace/dist/components/table/utils.js'`
@@ -123,6 +139,23 @@ export default StrictTemplate;
   - 支持点击上传、拖拽上传、粘贴上传、目录上传等多种模式
   - 支持 `beforeUpload` 校验、`customRequest` 自定义上传、`itemRender`/`iconRender` 自定义渲染
   - 自定义渲染函数需使用 `lit` 的 `html` 模板字面量返回 `TemplateResult`
+
+- **其他扩展组件**（使用前**必须**阅读对应 reference 文档，严禁猜测 API）：
+  - ThoughtChain（思维链）: `./reference/sl-thought-chain.md`
+  - DateRangePicker（日期范围选择器）: `./reference/sl-daterangepicker.md`
+  - TreeSelect（树选择器）: `./reference/sl-tree-select.md`
+  - Cascader（级联选择器）: `./reference/sl-cascader.md`
+  - FloatButton（浮动按钮）: `./reference/sl-float-button.md`
+  - Steps（步骤条）: `./reference/sl-steps.md`
+  - Grid（栅格布局）: `./reference/sl-grid.md`
+  - Notification（通知提醒）: `./reference/sl-notification.md`
+  - RadioGroup（单选组，扩展）: `./reference/sl-radio-group.md`
+  - Space（间距）: `./reference/sl-space.md`
+  - Segmented（分段控制器）: `./reference/sl-segmented.md`
+  - Transfer（穿梭框）: `./reference/sl-transfer.md`
+  - Popconfirm（气泡确认框）: `./reference/sl-popconfirm.md`
+  - Bubble（气泡）: `./reference/sl-bubble.md`
+  - Image（图片）: `./reference/sl-image.md`
 
 - **业务组件**（`@kdcloudjs/shoelace-biz`）：以下组件来自业务组件库，**导入路径为 `@kdcloudjs/shoelace-biz/dist/react/...`**，不是 `@kdcloudjs/shoelace`：
 

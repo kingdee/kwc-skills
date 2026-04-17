@@ -484,7 +484,7 @@ export { kwcController };
 #### 查询单条记录
 
 ```typescript
-import { QueryServiceHelper } from 'kd/sdk/helper';
+import { QueryServiceHelper } from '@cosmic/bos-core/kd/bos/servicehelper';
 import { HashMap } from '@cosmic/bos-script/java/util';
 
 class UserController {
@@ -527,7 +527,7 @@ export { kwcController };
 #### 查询列表（带分页）
 
 ```typescript
-import { QueryServiceHelper } from 'kd/sdk/helper';
+import { QueryServiceHelper } from '@cosmic/bos-core/kd/bos/servicehelper';
 import { ArrayList, HashMap } from '@cosmic/bos-script/java/util';
 
 class UserListController {
@@ -587,8 +587,8 @@ export { kwcController };
 ### 5.2 业务数据保存（BusinessDataServiceHelper）
 
 ```typescript
-import { BusinessDataServiceHelper } from 'kd/sdk/helper';
-import { DynamicObject } from 'kd/sdk/datatype';
+import { BusinessDataServiceHelper } from '@cosmic/bos-core/kd/bos/servicehelper';
+import { DynamicObject } from '@cosmic/bos-core/kd/bos/dataentity/entity';
 import { HashMap } from '@cosmic/bos-script/java/util';
 
 class UserCreateController {

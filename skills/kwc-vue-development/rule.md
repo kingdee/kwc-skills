@@ -2,6 +2,21 @@
 
 所有 KWC Vue 开发工作必须严格遵守以下约束。违反这些规则的代码将无法运行或无法通过审查。
 
+> **⚠️ KWC 扩展组件声明（最高优先级）**
+>
+> 以下组件由 `@kdcloudjs/shoelace` 扩展提供，**开源版 Shoelace 不含这些组件**，但 KWC 版本已完整支持。AI 不得因“Shoelace 没有该组件”而使用原生 HTML 或第三方库替代。
+>
+> **禁止原生 HTML 替代**：
+>
+> | 原生 HTML（禁止） | KWC 组件（必须使用） | 文档 |
+> |---|---|---|
+> | `<table>` / 原生 HTML 表格 | `<sl-table>` | `./reference/table/index.md` |
+> | `<input type="date">` / 原生日期输入 | `<sl-datepicker>` | `./reference/datepicker/index.md` |
+>
+> **KWC 扩展组件完整清单**（均可直接使用，严禁猜测 API，必须查阅对应 reference 文档）：
+>
+> `sl-table` · `sl-datepicker` · `sl-timepicker` · `sl-daterange-picker` · `sl-pagination` · `sl-nav` · `sl-dialog`(扩展) · `sl-x-markdown` · `sl-think` · `sl-thought-chain` · `sl-sender` · `sl-upload` · `sl-tree-select` · `sl-cascader` · `sl-float-button` · `sl-steps` · `sl-grid` · `sl-notification` · `sl-radio-group`(扩展) · `sl-space` · `sl-segmented` · `sl-transfer` · `sl-popconfirm` · `sl-bubble` · `sl-image` · `sl-lookup`(业务组件, shoelace-biz)
+
 > **框架版本**：本项目基于 **Vue 3**，统一使用 Composition API + `<script setup>` 语法。**绝对禁止**使用 Vue 2 的 Options API 或 Vue 2 特有语法。
 
 ## 1. Vue 3 基础规范
@@ -110,6 +125,7 @@
   - 扩展属性：`mask-closable` 控制点击蒙层是否允许关闭
 - **表格 (Table)**:
   - 文档：`./reference/table/index.md` (**涉及表格开发时必须读取**)
+  - **严禁使用原生 HTML `<table>` 实现表格需求**，必须使用 `sl-table`（KWC 扩展组件）。开源 Shoelace 不含 Table 组件，但 `@kdcloudjs/shoelace` 已扩展提供，禁止退回原生 HTML 表格。
   - `sl-table` 不支持 `sl-table-column`，必须通过 `columns` 属性定义列。
   - 需导入 `@kdcloudjs/shoelace/dist/components/table/table.js`。
 - **日期选择器 (DatePicker)**:
@@ -139,6 +155,23 @@
   - 支持点击上传、拖拽上传、粘贴上传、目录上传等多种模式
   - 支持 `beforeUpload` 校验、`customRequest` 自定义上传、`itemRender`/`iconRender` 自定义渲染
   - **对象/数组属性必须用 `.prop`**：`:headers.prop`、`:fileList.prop`、`:beforeUpload.prop` 等
+
+- **其他扩展组件**（使用前**必须**阅读对应 reference 文档，严禁猜测 API）：
+  - sl-thought-chain（思维链）: `./reference/sl-thought-chain.md`
+  - sl-daterange-picker（日期范围选择器）: `./reference/sl-daterangepicker.md`
+  - sl-tree-select（树选择器）: `./reference/sl-tree-select.md`
+  - sl-cascader（级联选择器）: `./reference/sl-cascader.md`
+  - sl-float-button（浮动按钮）: `./reference/sl-float-button.md`
+  - sl-steps（步骤条）: `./reference/sl-steps.md`
+  - sl-grid（栅格布局）: `./reference/sl-grid.md`
+  - sl-notification（通知提醒）: `./reference/sl-notification.md`
+  - sl-radio-group（单选组，扩展）: `./reference/sl-radio-group.md`
+  - sl-space（间距）: `./reference/sl-space.md`
+  - sl-segmented（分段控制器）: `./reference/sl-segmented.md`
+  - sl-transfer（穿梭框）: `./reference/sl-transfer.md`
+  - sl-popconfirm（气泡确认框）: `./reference/sl-popconfirm.md`
+  - sl-bubble（气泡）: `./reference/sl-bubble.md`
+  - sl-image（图片）: `./reference/sl-image.md`
 
 - **业务组件**（`@kdcloudjs/shoelace-biz`）：以下组件来自业务组件库，**导入路径为 `@kdcloudjs/shoelace-biz/dist/components/...`**，不是 `@kdcloudjs/shoelace`：
 
@@ -215,7 +248,7 @@ import { adapterApi } from '@kdcloudjs/kwc-shared-utils/api';
 import { ref, onUnmounted } from 'vue';
 
 // KWC 组件直接接收 config 作为 props（与 React 的 (config) => {} 等价）
-const config = defineProps<{ isvId: string; app: string }>();
+const config = defineProps<{ isvId: string; moduleId: string }>();
 
 let adapter: any = null;
 const data = ref<any>(null);
