@@ -79,18 +79,14 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 
 **当任务进入"实现组件代码"阶段时，必须遵循以下强制规则：**
 
-1. **禁止直接编写代码**：本 Skill 严禁直接编写、修改任何组件实现代码（*.tsx / *.vue / *.js）
-2. **必须先加载框架 Skill**：在编写代码前，必须先调用并加载对应的框架开发 Skill（kwc-react-development / kwc-vue-development / kwc-lwc-development）
-3. **验证加载状态**：开始编码前必须确认框架 Skill 已激活，且其 rule.md 约束已生效
-4. **框架识别依据**：
+1. **禁止直接编写代码**：本 Skill 严禁直接编写、修改任何组件实现代码（*.tsx / *.vue / *.js）和 Controller 脚本代码（*.ts）
+2. **必须先加载对应 Skill**：前端代码加载框架开发 Skill（kwc-react/vue/lwc-development），Controller 代码加载 `kwc-ks-controller-development`
+3. **禁止凭通用知识自行编写**：KingScript 运行时的 request/response API 与 Node.js / Java Servlet 完全不同，凭通用经验编写的代码将部署失败
+4. **多环节任务不是例外**：即使当前任务涉及工程搭建 + 元数据 + Controller + 前端组件多个环节，每进入一个代码编写阶段都必须切换 Skill，不可"一口气"跳过
+5. **框架识别依据**：
    - 新建工程：以 `kd project init` 时用户选择的 framework 为准
    - 已有工程：以 `.kd/config.json` 中的 `framework` 字段为准
    - 若无法识别 framework，必须停止并向用户确认，禁止猜测
-
-**违反以上约束的后果**：
-- 直接编写代码将导致不符合框架规范的输出（错误的导入路径、事件绑定方式等）
-- 元数据与代码实现可能不一致
-- 无法保证组件在目标环境中的正确渲染
 
 ### 协作边界表
 
@@ -107,7 +103,7 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 | 构建 Controller | scaffold | dist/controller/ |
 | **编写 Controller 脚本代码** | **kwc-ks-controller-development** | **.ts 脚本（业务逻辑实现）** |
 
-### 切换时机
+#### 切换时机
 
 - 当任务仍处于需求拆分、脚手架命令、元数据、环境、`deploy`、`open`、`debug` 阶段时，继续由本 Skill 主导
 - 当 `kd project create` 完成后需写代码 → **必须切到框架 Skill，禁止本 Skill 直接编写**
@@ -115,7 +111,7 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 - 当 Controller 目录已创建且需要编写脚本代码 → **必须切到 `kwc-ks-controller-development`，禁止本 Skill 直接编写**
 - 当 Controller 脚本代码写完需构建或部署 → 回到 scaffold
 
-### 异常流程保护
+#### 异常流程保护
 
 当 CLI 命令失败（如 `kd project create` 报错）而改用手动方式创建文件/目录时，代码编写阶段的 Skill 切换规则**同样适用**。手动创建目录结构不等于可以手动编写业务代码。
 
@@ -123,7 +119,7 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 - 典型场景：`kd project create` 失败 → 手动创建 `app/kwc/MyComponent/` 目录和 `.js-meta.kwc` → 到这里仍是 scaffold 职责 → 开始写 `MyComponent.tsx` 时 → **必须切换到框架 Skill**
 - Controller 同理：手动创建 `app/ks/controller/` 目录和 `.kws` → scaffold 职责 → 开始写 `.ts` 脚本 → **必须切换到 `kwc-ks-controller-development`**
 
-### 框架 Skill 激活检查清单
+#### 框架 Skill 激活检查清单
 
 在进入代码实现阶段前，确认以下事项：
 
@@ -132,7 +128,7 @@ Controller 也遵循"元数据 + 代码"的二元模型：
 - [ ] 框架 Skill 的 rule.md 约束已加载并生效
 - [ ] 本 Skill 不再直接处理任何代码文件内容
 
-### 推荐规则
+#### 推荐规则
 
 1. 若是新建工程，以 `kd project init` 交互中用户选择的 framework 作为后续推荐 Skill 依据
 2. 若是已有工程，以 `.kd/config.json` 中的 `framework` 作为推荐 Skill 依据

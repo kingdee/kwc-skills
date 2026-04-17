@@ -214,49 +214,9 @@ export { kwcController };
 
 ## 6. 请求处理约束
 
-### 6.1 路径参数获取
-
-- **优先使用** `getLongPathVariable`（适用于 ID 类参数）
-- 字符串类型使用 `getPathVariable`
-
-```typescript
-// 推荐：ID 类参数使用 Long 类型
-const userId = request.getLongPathVariable('id');
-
-// 字符串类型
-const code = request.getPathVariable('code');
-```
-
-### 6.2 查询参数获取
-
-使用类型化方法：
-
-| 方法 | 返回类型 | 示例 |
-|------|---------|------|
-| `getStringQueryParam('name')` | string | 字符串参数 |
-| `getIntQueryParam('page')` | int | 整数参数 |
-| `getLongQueryParam('id')` | long | 长整型参数 |
-| `getBooleanQueryParam('active')` | boolean | 布尔参数 |
-| `getDateQueryParam('date')` | Date | 日期参数 |
-
-### 6.3 请求体获取
-
-- **优先使用** `getMapBody()` 获取 Map 类型
-- 原始字符串使用 `getStringBody()`
-- 原始对象使用 `getBody()`
-
-```typescript
-// 推荐
-const body = request.getMapBody();
-const username = body['username'];
-```
-
-### 6.4 请求头获取
-
-```typescript
-const token = request.getHeader('Authorization');
-const contentType = request.getHeader('Content-Type');
-```
+> `request` 和 `response` 是 KingScript 运行时的专有对象，完整 API 参见 `kingscript-code-generator` 技能包中的《脚本控制器开发指南》第五章（请求处理 API）和第六章（响应处理 API）。
+>
+> **禁止使用 Servlet / Express 风格 API**：`request.getParameter()` / `.getAttribute()` / `.getSession()` / `.getCookies()`（Servlet）；`request.body` / `.params` / `.query`（Express）；`response.send()` / `.json()` / `.status()` / `.setHeader()`（Express/Node.js）等方法在 KingScript 运行时**不存在**。
 
 ## 7. 响应处理约束
 
