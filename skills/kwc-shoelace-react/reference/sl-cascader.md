@@ -20,6 +20,7 @@
 - **标签控制**：多选模式支持最大标签数（`maxTagCount`）和标签文本长度限制（`maxTagTextLength`）
 - **验证状态**：支持 `status` 属性设置 error/warning 状态
 - **选中策略**：多选模式支持 `showCheckedStrategy` 控制显示父节点或子节点
+- **面板禁用**：支持禁用面板选项交互（`panelDisabled`），面板可正常打开但选项不可点击
 
 ## CascaderOption 数据结构
 
@@ -494,6 +495,7 @@ ref.current?.setCustomValidity('');
 | placeholder          | 占位文本                                               | `string`                                                                           | `''`             |
 | multiple             | 是否多选                                               | `boolean`                                                                          | `false`          |
 | disabled             | 是否禁用                                               | `boolean`                                                                          | `false`          |
+| panelDisabled        | 是否禁用面板选项交互（面板可打开但选项不可操作）       | `boolean`                                                                          | `false`          |
 | allowClear           | 是否显示清除按钮                                       | `boolean`                                                                          | `true`           |
 | open                 | 下拉面板是否打开                                       | `boolean`                                                                          | `false`          |
 | defaultOpen          | 初始是否展开下拉面板                                   | `boolean`                                                                          | `false`          |
