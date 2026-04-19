@@ -29,7 +29,7 @@ description: 【KWC KS Controller 开发阶段 Skill】仅当 app/ks/controller/
 2. **读取工程配置**（强制）：读取 `.kd/config.json`，获取 `isv`、`app` 等字段的真实值，后续 .kws 中的 `<isv>`、`<app>`、`<url>` 必须基于这些值拼装，**禁止猜测或硬编码**
 3. **查询实体字段**（涉及业务实体操作时）：通过 `meta-query-api.mjs` 获取真实字段结构，**禁止猜测字段名**
 4. **编写 .kws 元数据**：基于第 2 步读取的配置拼装 URL（`/{isv}/{app}/...`），定义 HTTP 方法和权限
-5. **编写脚本代码**：实现业务逻辑，SDK 调用前先在索引中确认存在
+5. **编写脚本代码**：开始写代码前，**必须先读取** `./reference/脚本控制器防坑指南.md`，确保不使用不存在的 API、不踩已知运行时陷阱；SDK 调用前先在索引中确认存在
 6. **交付构建**：完成后通知用户回到 scaffold 进行部署
 
 ## 参考资源
@@ -41,6 +41,7 @@ description: 【KWC KS Controller 开发阶段 Skill】仅当 app/ks/controller/
 | | 常见模式和代码示例 | `./reference/controller-patterns.md` |
 | | 前端 adapterApi 调用指南 | `./reference/frontend-integration.md` |
 | **KingScript** | 脚本控制器开发指南 | `../kingscript-code-generator/references/docs/custom-development/脚本控制器开发指南.md` |
+| | 脚本控制器防坑指南 | `./reference/脚本控制器防坑指南.md` |
 | | 语言基础 | `../kingscript-code-generator/references/language/kingscript/README.md` |
 | | SDK 类索引 | `../kingscript-code-generator/references/sdk/indexes/class-index.md` |
 | | SDK 方法索引 | `../kingscript-code-generator/references/sdk/indexes/method-index.md` |
