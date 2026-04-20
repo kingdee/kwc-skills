@@ -1,6 +1,6 @@
 ---
 name: kwc-shoelace-vue
-description: 通用 Vue 项目的组件开发专家。适用于不依赖 KWC 工程结构、仅需在 Vue 项目中使用 @kdcloudjs/shoelace 与 KWC 扩展组件的场景。负责组件代码编写、导入方式、事件绑定、属性传递、样式规范与相关 API 咨询。若当前项目已是 KWC Vue 工程，应改用 kwc-vue-development。
+description: 仅适用于非 KWC 工程的通用 Vue 项目。KWC 工程需求必须交由 kwc-project-scaffold。
 ---
 
 # Vue 组件开发专家

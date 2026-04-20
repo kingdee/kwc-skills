@@ -1,6 +1,6 @@
 ---
 name: kwc-lwc-development
-description: 【脚手架后阶段 Skill】仅在 kwc-project-scaffold 完成工程初始化、且当前目录存在 .kd/config.json 并确认 framework=lwc 时才可使用。本 Skill 不负责工程创建、元数据生成、页面配置或部署，仅专注于 LWC 组件代码的实现与修改。若任务涉及 kd CLI、.page-meta.kwp、.js-meta.kwc、环境配置或部署，必须交由 kwc-project-scaffold 处理，禁止直接使用本 Skill。
+description: 【由 kwc-project-scaffold 调度】仅负责 LWC 组件代码编写，不直接承接用户需求，不创建文件。所有 KWC 需求和文件创建必须先经 kwc-project-scaffold。
 ---
 
 # KWC LWC 开发专家
